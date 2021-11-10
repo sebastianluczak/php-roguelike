@@ -27,7 +27,7 @@ class ShopTile extends AbstractTile
         return true;
     }
 
-    public function handleLogic()
+    public function handleLogic(int $mapLevel)
     {
         return new SkillBoost();
     }

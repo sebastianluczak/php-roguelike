@@ -2,10 +2,20 @@
 
 namespace App\Service;
 
+use Faker\Factory as FakerFactory;
+use Faker\Generator;
+
 class DiceService
 {
-    public function roll(int $sides = 6)
+    protected Generator $faker;
+
+    public function __construct()
     {
-        return random_int(1, $sides);
+        $this->faker = FakerFactory::create('en_EN');
+    }
+
+    public function roll(int $sides = 6): int
+    {
+        return $this->faker->numberBetween(1, $sides);
     }
 }
