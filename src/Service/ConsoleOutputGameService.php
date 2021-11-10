@@ -30,10 +30,12 @@ class ConsoleOutputGameService
             "--== HEALTH: " . $player->getHealth() .
             " ==-- --== GOLD: " . $player->getGold() .
             "g ==-- --== KILLS: " . $player->getKillCount() .
-            " ==-- --== LEVEL: " . $player->getLevel() . " (" . $player->getExperience() . "/100)" .
+            " ==-- --== LEVEL: " . $player->getLevel() . " (" . $player->getExperience() % 100 . "/100)" .
             " ==-- --== DAMAGE: " . $player->getDamageScore() .
             " ==-- --== ARMOR: " . $player->getArmorScore() .
-            "% ==-- --== DUNGEON DEPTH: " . $this->mapService->getMapLevel() . " ==--");
+            "% ==-- --== DUNGEON DEPTH: " . $this->mapService->getMapLevel() .
+            " ==-- --== LOCATION: [" . $player->getCoordinates()->getX() . "][" . $player->getCoordinates()->getY() . "] ==--"
+        );
     }
 
     protected function printAdventureLog(AdventureLogInterface $adventureLog, \Symfony\Component\Console\Output\OutputInterface $output)
@@ -69,6 +71,34 @@ class ConsoleOutputGameService
             }
         }
         $output->writeln("+=============================================================================+</>");
+    }
+
+    protected function stty($options)
+    {
+        exec($cmd = "stty $options", $output, $el);
+        $el AND die("exec($cmd) failed");
+
+        return implode(" ", $output);
+    }
+
+    protected function getChar($echo = false): string
+    {
+        $echo = $echo ? "" : "-echo";
+
+        # Get original settings
+        $stty_settings = preg_replace("#.*; ?#s", "", $this->stty("--all"));
+
+        # Set new ones
+        $this->stty("cbreak $echo");
+
+        # Get characters until a PERIOD is typed,
+        # showing their hexidecimal ordinal values.
+        $c = fgetc(STDIN);
+
+        # Return settings
+        $this->stty($stty_settings);
+
+        return $c;
     }
 
     /**

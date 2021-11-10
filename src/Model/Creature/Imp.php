@@ -31,9 +31,9 @@ class Imp extends AbstractCreature
         return $this->health;
     }
 
-    public function handleLoot()
+    public function handleLoot(float $scale = 1)
     {
-        return new Gold();
+        return new Gold($scale);
     }
 
     public function decreaseHealth(float $playerHitDamage)

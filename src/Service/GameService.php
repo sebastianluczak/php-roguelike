@@ -6,8 +6,7 @@ use App\Exception\GameOverException;
 use App\Exception\NewLevelException;
 use App\Exception\NotValidMoveException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class GameService extends ConsoleOutputGameService
 {
@@ -48,7 +47,7 @@ class GameService extends ConsoleOutputGameService
         return $this->diceService;
     }
 
-    public function run(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output, QuestionHelper $questionHelper)
+    public function run(OutputInterface $output)
     {
         $gameOver = false;
         while (!$gameOver) {
@@ -61,19 +60,17 @@ class GameService extends ConsoleOutputGameService
             $this->printPlayerInfo($this->getPlayerService()->getPlayer(), $output);
             $this->printMap($mapObject, $output);
             $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
-            $question = new ChoiceQuestion('Direction?',
-                [ "UP" => 'w', "DOWN" => 's', "LEFT" => 'a', "RIGHT" => 'd']
-            );
-            $answer = $questionHelper->ask($input, $output, $question);
+
+            $buttonPressed = $this->getChar();
             try {
-                $this->mapService->movePlayer($this->getPlayerService()->getPlayer(), $answer);
+                $this->mapService->movePlayer($this->getPlayerService()->getPlayer(), $buttonPressed);
             } catch (NotValidMoveException $e) {
                 $output->writeln("Not valid move");
             } catch (NewLevelException $e) {
                 $this->getMapService()->increaseMapLevel();
                 $this->getMapService()->createNewLevel();
             }
-            $output->write(sprintf("\033\143"));
+            echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
         }
 
         if ($gameOver) {

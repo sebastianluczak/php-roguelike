@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Enum\MoveDirectionEnum;
 use App\Exception\MapFiniteException;
 use App\Exception\NotValidMoveException;
 use App\Model\Map;
@@ -132,31 +133,6 @@ class MapService
         return $currentCoordinates;
     }
 
-    public function getMapStatistics()
-    {
-        $emptyTiles = 0;
-        $corridorTiles = 0;
-        $spawnTiles = 0;
-        foreach ($this->getMap()->getMapInstance() as $column => $row) {
-            foreach ($row as $item => $value) {
-                $class = get_class($value);
-                switch ($class) {
-                    case CorridorTile::class:
-                        $corridorTiles++;
-                        break;
-                    case EmptyTile::class:
-                        $emptyTiles++;
-                        break;
-                    case SpawnTile::class:
-                        $spawnTiles++;
-                        break;
-                }
-            }
-        }
-
-        return [$emptyTiles, $corridorTiles, $spawnTiles];
-    }
-
     private function isTileEmpty(int $width, int $height)
     {
         $tile = $this->map->getTile($width, $height);
@@ -169,7 +145,6 @@ class MapService
 
     /**
      * @throws NotValidMoveException
-     * @throws \App\Exception\GameOverException
      * @throws \App\Exception\NewLevelException
      */
     public function movePlayer(PlayerInterface $player, string $direction)
@@ -177,29 +152,31 @@ class MapService
         $this->loggerService->log("Moving player: " . $player->getPlayerName() . " in direction: " . $direction);
         $xcoordinate = null;
         $ycoordinate = null;
+
+        // todo change to player instance
         $spawnTile = $this->getSpawnTile();
         // check if valid move
         switch ($direction) {
-            case "UP":
+            case MoveDirectionEnum::UP():
                 if ($this->isTileTraversable($spawnTile[0] - 1, $spawnTile[1])) {
                     $this->loggerService->log("MOVING UP");
                     $xcoordinate = $spawnTile[0] - 1;
                     $ycoordinate = $spawnTile[1];
                 }
                 break;
-            case "DOWN":
+            case MoveDirectionEnum::DOWN():
                 if ($this->isTileTraversable($spawnTile[0] + 1, $spawnTile[1])) {
                     $xcoordinate = $spawnTile[0] + 1;
                     $ycoordinate = $spawnTile[1];
                 }
                 break;
-            case "LEFT":
+            case MoveDirectionEnum::LEFT():
                 if ($this->isTileTraversable($spawnTile[0], $spawnTile[1] - 1)) {
                     $xcoordinate = $spawnTile[0];
                     $ycoordinate = $spawnTile[1] - 1;
                 }
                 break;
-            case "RIGHT":
+            case MoveDirectionEnum::RIGHT():
                 if ($this->isTileTraversable($spawnTile[0], $spawnTile[1] + 1)) {
                     $xcoordinate = $spawnTile[0];
                     $ycoordinate = $spawnTile[1] + 1;
@@ -214,7 +191,6 @@ class MapService
             throw new NotValidMoveException("Not valid move");
         } else {
             $player->setCoordinates(new PlayerCoordinates($xcoordinate, $ycoordinate));
-
         }
 
         // check logic of tile

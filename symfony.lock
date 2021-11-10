@@ -5,6 +5,9 @@
     "monolog/monolog": {
         "version": "2.3.5"
     },
+    "myclabs/php-enum": {
+        "version": "1.8.3"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },

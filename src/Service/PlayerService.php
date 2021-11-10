@@ -42,7 +42,6 @@ class PlayerService
     }
 
     /**
-     * @throws GameOverException
      * @throws NewLevelException
      */
     public function handleTileLogic(AbstractTile $tile, PlayerInterface $player)

@@ -31,9 +31,9 @@ class Golem extends AbstractCreature
         return $this->health;
     }
 
-    public function handleLoot()
+    public function handleLoot(float $scale = 1)
     {
-        return new Gold(1.5);
+        return new Gold(1.5 * $scale);
     }
 
     public function decreaseHealth(float $playerHitDamage)

@@ -25,8 +25,9 @@ class GameCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $input->setInteractive(false);
         $this->clearScreen();
-        $this->gameService->run($input, $output, $this->getHelper('question'));
+        $this->gameService->run($output);
 
         return Command::SUCCESS;
     }
