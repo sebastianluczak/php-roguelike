@@ -2,6 +2,9 @@
 
 namespace App\Model\AdventureLog;
 
+// todo change to repository (it's not stupid idea after all)
+use App\Service\LoggerService;
+
 class AdventureLog implements AdventureLogInterface
 {
     /**
@@ -9,12 +12,15 @@ class AdventureLog implements AdventureLogInterface
      */
     protected array $messages;
 
-    public function __construct()
+    protected LoggerService $loggerService;
+
+    public function __construct(LoggerService $loggerService)
     {
+        $this->loggerService = $loggerService;
         $this->messages = [];
     }
 
-    public function getNewLines(): int
+    public function getLines(): int
     {
         return count($this->messages);
     }
@@ -24,18 +30,26 @@ class AdventureLog implements AdventureLogInterface
      */
     public function getNewMessages(): array
     {
+        $this->loggerService->log("Getting new messages. Messages count: " . count($this->messages));
         $messages = $this->messages;
-        $this->messages = [];
+
+        if (count($this->messages) > 8) {
+            $this->loggerService->log("Message count over limit, shifting array");
+            $this->loggerService->log("First element of the array is: ///->  " . $this->messages[0]->getMessage());
+            $this->loggerService->log("Last element of the array is: ///->  " . end($this->messages)->getMessage());
+
+            array_shift($this->messages);
+
+            $this->loggerService->log("Array shifted. Current count of messages: " . count($this->messages));
+            $this->loggerService->log("First element of the array is: ///->  " . $this->messages[0]->getMessage());
+            $this->loggerService->log("Last element of the array is: ///->  " . end($this->messages)->getMessage());
+        }
 
         return $messages;
     }
 
     public function addMessage(AdventureLogMessageInterface $message)
     {
-        if (count($this->messages) > 3) {
-            throw new \Exception("Ehmmk");
-        }
-
         $this->messages[] = $message;
     }
 }

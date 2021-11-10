@@ -30,18 +30,17 @@ class MapService
         $this->loggerService = $loggerService;
 
         if ($this->map == null) {
-            $this->map = new Map();
-            $this->generateMap();
+            $this->createNewLevel();
         }
     }
 
-    public function createNewLevel()
+    public function createNewLevel(): void
     {
         $this->map = new Map();
         $this->generateMap();
     }
 
-    public function generateMap()
+    public function generateMap(): void
     {
         $spawnTileCoordinates = [random_int(0, $this->map->getHeight()), random_int(0, $this->map->getWidth())];
         // spawn tile
@@ -59,7 +58,7 @@ class MapService
         return $this->map;
     }
 
-    protected function generateMaze(array $spawnTileCoordinates)
+    protected function generateMaze(array $spawnTileCoordinates): void
     {
         $currentCoordinates = $spawnTileCoordinates;
         // look for next available coordinates
@@ -79,7 +78,7 @@ class MapService
     protected function getNextPossibleTile(array $currentCoordinates, int $tries = 0): array
     {
         $tries++;
-        if ($tries > 4) {
+        if ($tries > 6) {
             throw new MapFiniteException();
         }
         $direction = random_int(0, 3); // UP, RIGHT, DOWN, LEFT
@@ -147,7 +146,7 @@ class MapService
      * @throws NotValidMoveException
      * @throws \App\Exception\NewLevelException
      */
-    public function movePlayer(PlayerInterface $player, string $direction)
+    public function movePlayer(PlayerInterface $player, string $direction, int $mapLevel)
     {
         $this->loggerService->log("Moving player: " . $player->getPlayerName() . " in direction: " . $direction);
         $xcoordinate = null;
@@ -159,7 +158,6 @@ class MapService
         switch ($direction) {
             case MoveDirectionEnum::UP():
                 if ($this->isTileTraversable($spawnTile[0] - 1, $spawnTile[1])) {
-                    $this->loggerService->log("MOVING UP");
                     $xcoordinate = $spawnTile[0] - 1;
                     $ycoordinate = $spawnTile[1];
                 }
@@ -196,7 +194,7 @@ class MapService
         // check logic of tile
         $tile = $this->getMap()->getTile($xcoordinate, $ycoordinate);
         if ($tile->hasLogic()) {
-            $this->playerService->handleTileLogic($tile, $player);
+            $this->playerService->handleTileLogic($tile, $player, $mapLevel);
         }
         // remove player from previous tile
         $this->getMap()->replaceTile(new CorridorTile(), $spawnTile[0], $spawnTile[1]);

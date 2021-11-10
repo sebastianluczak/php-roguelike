@@ -9,5 +9,5 @@ interface TileInterface
     public function isSpawn(): bool;
     public function draw(): string;
     public function hasLogic(): bool;
-    public function handleLogic();
+    public function handleLogic(int $mapLevel);
 }

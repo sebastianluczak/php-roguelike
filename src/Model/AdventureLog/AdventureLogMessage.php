@@ -8,7 +8,8 @@ class AdventureLogMessage implements AdventureLogMessageInterface
 
     public function __construct(string $message)
     {
-        $this->message = $message;
+        $timestamp = new \DateTime();
+        $this->message = "[" . $timestamp->format(DATE_W3C) . "] " . $message;
     }
 
     public function getMessage(): string

@@ -43,9 +43,9 @@ class PlayerService
     /**
      * @throws NewLevelException
      */
-    public function handleTileLogic(AbstractTile $tile, PlayerInterface $player)
+    public function handleTileLogic(AbstractTile $tile, PlayerInterface $player, int $mapLevel)
     {
-        $tileLogic = $tile->handleLogic();
+        $tileLogic = $tile->handleLogic($mapLevel);
         if ($tile->hasLogic()) {
             if ($tile instanceof ChestTile) {
                 $this->player->addGoldAmount($tileLogic->getAmount());
