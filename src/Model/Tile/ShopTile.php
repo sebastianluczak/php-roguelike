@@ -34,6 +34,6 @@ class ShopTile extends AbstractTile
 
     public function draw(): string
     {
-        return "$";
+        return "<fg=yellow>$</>";
     }
 }

@@ -24,7 +24,7 @@ class CreatureEncounteredHandler implements MessageHandlerInterface
         try {
             $this->creatureService->handleFight($message->getCreature(), $message->getPlayer());
         } catch (GameOverException $e) {
-            $this->gameService->handleGameOver($e);
+            $this->gameService->handleGameOver($e, $message->getPlayer());
         }
     }
 }

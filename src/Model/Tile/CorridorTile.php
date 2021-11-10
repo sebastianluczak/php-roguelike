@@ -30,7 +30,7 @@ class CorridorTile extends AbstractTile
 
     public function handleLogic()
     {
-        $roll = random_int(0, 100);
+        $roll = random_int(0, 700);
         if ($roll <= 1) {
             return new Dragon();
         } else if ($roll <= 5) {
@@ -44,6 +44,6 @@ class CorridorTile extends AbstractTile
 
     public function draw(): string
     {
-        return ".";
+        return "<fg=gray>.</>";
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Exception\GameOverException;
 use App\Exception\NewLevelException;
 use App\Message\AddAdventureLogMessage;
 use App\Message\CreatureEncounteredMessage;
@@ -38,7 +37,7 @@ class PlayerService
     {
         $this->messageBus = $messageBus;
         $this->loggerService = $loggerService;
-        $this->player = new Player("SebixKurwix", New PlayerCoordinates(0, 0));
+        $this->player = new Player("Adventurer", New PlayerCoordinates(0, 0));
     }
 
     /**
