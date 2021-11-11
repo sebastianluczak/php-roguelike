@@ -5,6 +5,8 @@ namespace App\Model\Tile;
 use App\Model\Loot\Gold;
 use App\Model\Loot\Weapon\Shield;
 use App\Model\Loot\Weapon\Sword;
+use App\Model\Tile\TileLogic\RareChestTileLogic;
+use App\Model\Tile\TileLogic\TileLogicInterface;
 
 class RareChestTile extends AbstractTile
 {
@@ -28,19 +30,13 @@ class RareChestTile extends AbstractTile
         return true;
     }
 
-    public function handleLogic(int $mapLevel)
+    public function handleLogic(int $mapLevel): TileLogicInterface
     {
-        $roll = random_int(0, 1000);
-        if ($roll >= 400) {
-            // todo add mapLevel to drops
-            return new Sword();
-        } else {
-            return new Shield();
-        }
+        return new RareChestTileLogic($mapLevel);
     }
 
     public function draw(): string
     {
-        return "#";
+        return "<fg=bright-white>#</>";
     }
 }

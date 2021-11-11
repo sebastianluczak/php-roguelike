@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Model\AdventureLog\AdventureLog;
 use App\Model\AdventureLog\AdventureLogInterface;
 use App\Model\AdventureLog\AdventureLogMessageInterface;
 use App\Model\Map;
@@ -76,53 +77,33 @@ class ConsoleOutputGameService
             " ==-- --== 🗡️ " . $player->getDamageScore() .
             " ==-- --== 🛡️ " . $player->getArmorScore() .
             "% ==-- --== 🌡️ " . $this->mapService->getMapLevel() .
-            " ==-- --== 🗺️ [" . $player->getCoordinates()->getX() . "][" . $player->getCoordinates()->getY() . "] ==--" .
-            " --== ⏲ " . str_replace("before", "", $this->internalClockService->getGameStartTime()->diffForHumans(new \DateTime())) .  "</>"
+            " ==-- --== 🗺️ [" . $player->getCoordinates()->getX() . "][" . $player->getCoordinates()->getY() .
+            " ==-- --== 💊 " . $this->internalClockService->getActiveGameEventsCount() ." ==--" .
+            " --== ⏲ " . str_replace("before", "", $this->internalClockService->getGameStartTime()->diffForHumans(new \DateTime())) .  " ==--</>"
         );
     }
 
     protected function printAdventureLog(AdventureLogInterface $adventureLog, OutputInterface $output)
     {
         $lines = $adventureLog->getLines();
-
-        $colorHexHashTable = [
-            'bright-green',
-            'green',
-            'green',
-            'green',
-            'green',
-            'green',
-            'green',
-            'green',
-            'green',
-            'green',
-            'green',
-            'green'
-        ];
-
         $output->writeln('<fg=green>');
         $output->writeln("+=+                                                       -=  Adventure Log =-                                                      +=+");
         $output->writeln("+=+=================================================================================================================================+=+</>");
 
         if ($lines == 0) {
-            for ($i = 0; $i < 7; $i++) {
+            for ($i = 0; $i <= AdventureLog::MAX_NUMBER_OF_MESSAGES; $i++) {
                 $output->writeln("");
             }
         } else {
             /** @var AdventureLogMessageInterface $newMessage */
             $linesPrinted = 0;
             foreach ($adventureLog->getNewMessages() as $newMessage) {
-                if ($linesPrinted == 0) {
-                    $msg = "<fg=$colorHexHashTable[$linesPrinted];options=bold> " . $newMessage->getMessage() . "</>";
-                } else {
-                    $msg = "<fg=$colorHexHashTable[$linesPrinted]> " . $newMessage->getMessage() . "</>";
-                }
-                $output->writeln($msg);
+                $output->writeln($newMessage->getMessage());
                 $linesPrinted++;
             }
 
-            if ($linesPrinted <= 7) {
-                for ($j = $linesPrinted; $j <= 7; $j++) {
+            if ($linesPrinted <= AdventureLog::MAX_NUMBER_OF_MESSAGES) {
+                for ($j = $linesPrinted; $j <= AdventureLog::MAX_NUMBER_OF_MESSAGES; $j++) {
                     $output->writeln("");
                 }
             }

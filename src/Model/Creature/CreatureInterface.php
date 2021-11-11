@@ -9,6 +9,7 @@ interface CreatureInterface
     public function getArmor(): int;
     public function getHealth(): int;
     public function handleLoot();
-    public function decreaseHealth(float $playerHitDamage);
+    public function decreaseHealth(int $playerHitDamage);
     public function getExperience(): int;
+    public function getScale(): int;
 }

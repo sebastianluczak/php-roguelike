@@ -5,8 +5,11 @@ namespace App\Service;
 use App\Enum\MessageClassEnum;
 use App\Enum\MoveDirectionEnum;
 use App\Exception\MapFiniteException;
+use App\Exception\NewLevelException;
 use App\Exception\NotValidMoveException;
 use App\Message\AddAdventureLogMessage;
+use App\Message\CreatureEncounteredMessage;
+use App\Message\TileLogicMessage;
 use App\Model\Map;
 use App\Model\Player\PlayerCoordinates;
 use App\Model\Player\PlayerInterface;
@@ -211,7 +214,7 @@ class MapService
         // check logic of tile
         $tile = $this->getMap()->getTile($xcoordinate, $ycoordinate);
         if ($tile->hasLogic()) {
-            $this->playerService->handleTileLogic($tile, $player, $mapLevel);
+            $this->handleTileLogic($tile, $player, $mapLevel);
         }
         // remove player from previous tile
         $this->getMap()->replaceTile(new CorridorTile(), $spawnTile[0], $spawnTile[1]);
@@ -317,6 +320,28 @@ class MapService
         }
 
         return false;
+    }
+
+    /**
+     * @throws NewLevelException
+     */
+    public function handleTileLogic(AbstractTile $tile, PlayerInterface $player, int $mapLevel)
+    {
+        $tileLogic = $tile->handleLogic($mapLevel + $player->getLevel());
+
+        if ($tile->hasLogic()) {
+            $this->messageBus->dispatch(new TileLogicMessage($player, $tileLogic));
+
+            if ($tileLogic->hasEncounter()) {
+                $this->messageBus->dispatch(new CreatureEncounteredMessage($tileLogic->getEncounteredCreature(), $player));
+            }
+
+            if ($tile instanceof ExitTile) {
+                $this->messageBus->dispatch(new AddAdventureLogMessage("You've reached new dungeon level", MessageClassEnum::SUCCESS()));
+
+                throw new NewLevelException();
+            }
+        }
     }
 
     public function resetErrors()

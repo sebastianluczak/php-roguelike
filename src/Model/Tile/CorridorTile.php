@@ -5,6 +5,8 @@ namespace App\Model\Tile;
 use App\Model\Creature\Dragon;
 use App\Model\Creature\Golem;
 use App\Model\Creature\Imp;
+use App\Model\Tile\TileLogic\CorridorTileLogic;
+use App\Model\Tile\TileLogic\TileLogicInterface;
 
 class CorridorTile extends AbstractTile
 {
@@ -28,20 +30,9 @@ class CorridorTile extends AbstractTile
         return true;
     }
 
-    public function handleLogic(int $mapLevel)
+    public function handleLogic(int $mapLevel): TileLogicInterface
     {
-        $scale = 1 + $mapLevel * 0.1;
-
-        $roll = random_int(0, 700);
-        if ($roll <= 1) {
-            return new Dragon($scale);
-        } else if ($roll <= 5) {
-            return new Golem($scale);
-        } else if ($roll <= 100) {
-            return new Imp($scale);
-        }
-
-        return null;
+        return new CorridorTileLogic($mapLevel);
     }
 
     public function draw(): string
