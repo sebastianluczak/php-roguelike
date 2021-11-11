@@ -2,6 +2,7 @@
 
 namespace App\MessageHandler;
 
+use App\Enum\MessageClassEnum;
 use App\Message\AddAdventureLogMessage;
 use App\Model\AdventureLog\AdventureLogMessage;
 use App\Service\AdventureLogService;
@@ -26,10 +27,19 @@ class AdventureLogMessageHandler implements MessageHandlerInterface
     {
         try {
             $gameStartTime = $this->gameService->getInternalClockService()->getGameStartTime();
+            $isDevMode = $this->gameService->isDevMode();
 
-            $this->adventureLogService->getAdventureLog()->addMessage(
-                new AdventureLogMessage($message->getMessage(), $gameStartTime, $message->getMessageClass())
-            );
+            if ($message->getMessageClass() == MessageClassEnum::DEVELOPER()) {
+                if ($isDevMode) {
+                    $this->adventureLogService->getAdventureLog()->addMessage(
+                        new AdventureLogMessage($message->getMessage(), $gameStartTime, $message->getMessageClass())
+                    );
+                }
+            } else {
+                $this->adventureLogService->getAdventureLog()->addMessage(
+                    new AdventureLogMessage($message->getMessage(), $gameStartTime, $message->getMessageClass())
+                );
+            }
         } catch (\Exception $e) {
             // do nothing
         }

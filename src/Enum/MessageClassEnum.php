@@ -9,6 +9,7 @@ use MyCLabs\Enum\Enum;
  * @method static IMPORTANT()
  * @method static SUCCESS()
  * @method static LOOT()
+ * @method static DEVELOPER()
  */
 class MessageClassEnum extends Enum
 {
@@ -16,4 +17,5 @@ class MessageClassEnum extends Enum
     private const IMPORTANT = 'bright-red';
     private const SUCCESS = 'bright-green';
     private const LOOT = 'bright-yellow';
+    private const DEVELOPER = 'bright-blue';
 }

@@ -37,6 +37,7 @@ class ConsoleOutputGameService
         $this->messageBus = $messageBus;
         $this->leaderboardService = $leaderboardService;
         $this->internalClockService = $internalClockService;
+        $this->devMode = $_ENV['GAME_DEBUG'];
     }
 
     /**

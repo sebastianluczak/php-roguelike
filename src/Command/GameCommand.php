@@ -21,13 +21,16 @@ class GameCommand extends Command
 
     protected function configure(): void
     {
-        $this->setHelp('Worst Roguelike/ARPG in history, play it now.')
-            ->addArgument('dev', InputArgument::OPTIONAL, 'Activate developer mode?', false);
+        $this->setHelp('Worst Roguelike/ARPG in history, play it now.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $devMode = $input->getArgument('dev');
+        if ($_ENV['GAME_DEBUG'] == "false") {
+            $devMode = false;
+        } else {
+            $devMode = true;
+        }
         $input->setInteractive(false);
         $this->clearScreen();
         $this->gameService->run($output, $devMode);
