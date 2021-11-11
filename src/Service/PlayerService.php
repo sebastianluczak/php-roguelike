@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Enum\MessageClassEnum;
 use App\Exception\NewLevelException;
 use App\Message\AddAdventureLogMessage;
 use App\Message\CreatureEncounteredMessage;
@@ -49,14 +50,14 @@ class PlayerService
         if ($tile->hasLogic()) {
             if ($tile instanceof ChestTile) {
                 $this->player->addGoldAmount($tileLogic->getAmount());
-                $this->messageBus->dispatch(new AddAdventureLogMessage("Picked up " . $tileLogic->getAmount() . " gold."));
+                $this->messageBus->dispatch(new AddAdventureLogMessage("You've picked up 💰 " . $tileLogic->getAmount() . "g.", MessageClassEnum::LOOT()));
             }
             if ($tile instanceof RareChestTile) {
                 $this->addToInventory($player, $tileLogic);
                 if ($tileLogic instanceof Sword) {
-                    $this->messageBus->dispatch(new AddAdventureLogMessage("You've picked up " . $tileLogic->getName() . "+" . $tileLogic->getDamage()));
+                    $this->messageBus->dispatch(new AddAdventureLogMessage("You've picked up 🗡️ " . $tileLogic->getName() . "+" . $tileLogic->getDamage(), MessageClassEnum::LOOT()));
                 } elseif ($tileLogic instanceof Shield) {
-                    $this->messageBus->dispatch(new AddAdventureLogMessage("You've picked up " . $tileLogic->getName() . "+" . $tileLogic->getArmor()));
+                    $this->messageBus->dispatch(new AddAdventureLogMessage("You've picked up 🛡️ " . $tileLogic->getName() . "+" . $tileLogic->getArmor(), MessageClassEnum::LOOT()));
                 }
             }
             if ($tile instanceof CorridorTile) {
@@ -67,14 +68,13 @@ class PlayerService
             }
             if ($tile instanceof ShopTile) {
                 if ($player->getGold() >= 100) {
-                    $this->messageBus->dispatch(new AddAdventureLogMessage("You're much more skillfully"));
-
+                    $this->messageBus->dispatch(new AddAdventureLogMessage("🧍 You feel rush of energy after paying some gold to strange man", MessageClassEnum::SUCCESS()));
                     $this->handleSkillBoost($player, $tileLogic);
                     $player->decreaseGoldAmount(100);
                 }
             }
             if ($tile instanceof ExitTile) {
-                $this->messageBus->dispatch(new AddAdventureLogMessage("You've reached new dungeon level"));
+                $this->messageBus->dispatch(new AddAdventureLogMessage("You've reached new dungeon level", MessageClassEnum::SUCCESS()));
 
                 throw new NewLevelException();
             }

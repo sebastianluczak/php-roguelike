@@ -32,6 +32,9 @@ class AdventureLog implements AdventureLogInterface
     {
         if (count($this->messages) > 8) {
             array_shift($this->messages);
+
+            // experimental todo check if works
+            return $this->getNewMessages();
         }
 
         return array_reverse($this->messages);
@@ -40,5 +43,7 @@ class AdventureLog implements AdventureLogInterface
     public function addMessage(AdventureLogMessageInterface $message)
     {
         $this->messages[] = $message;
+
+        $this->loggerService->log("[IMPORTANCE: ".$message->getImportance()."][NEW MESSAGE] -> " . $message->getMessage());
     }
 }

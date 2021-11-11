@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Enum\MessageClassEnum;
 use App\Exception\GameOverException;
 use App\Message\AddAdventureLogMessage;
 use App\Message\CreatureGetsKilledMessage;
@@ -26,7 +27,7 @@ class CreatureService
     public function handleFight(CreatureInterface $creature, PlayerInterface $player): void
     {
         $this->loggerService->logFight($creature, $player);
-        $this->messageBus->dispatch(new AddAdventureLogMessage("Creature: " . $creature->getName() . " fights player: " . $player->getPlayerName()));
+        $this->messageBus->dispatch(new AddAdventureLogMessage("🗡️ " . $creature->getName() . " fights player: " . $player->getPlayerName(), MessageClassEnum::IMPORTANT()));
 
         while ($creature->getHealth() >= 0) {
             if ($player->getHealth() <= 0) {
