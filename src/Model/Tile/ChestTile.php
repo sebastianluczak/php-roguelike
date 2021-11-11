@@ -3,6 +3,8 @@
 namespace App\Model\Tile;
 
 use App\Model\Loot\Gold;
+use App\Model\Tile\TileLogic\ChestTileLogic;
+use App\Model\Tile\TileLogic\TileLogicInterface;
 
 class ChestTile extends AbstractTile
 {
@@ -26,11 +28,9 @@ class ChestTile extends AbstractTile
         return true;
     }
 
-    public function handleLogic(int $mapLevel)
+    public function handleLogic(int $mapLevel): TileLogicInterface
     {
-        $scale = 1 + $mapLevel * 0.1;
-
-        return new Gold($scale);
+        return new ChestTileLogic($mapLevel);
     }
 
     public function draw(): string

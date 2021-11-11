@@ -13,7 +13,7 @@ class Player implements PlayerInterface
     protected int $experience;
     protected PlayerCoordinatesInterface $coordinates;
 
-    public function __construct(string $name, PlayerCoordinatesInterface $coordinates, int $damageScore = 1, int $armorScore = 1, int $health = 100, int $gold = 0, int $experience = 0)
+    public function __construct(string $name, PlayerCoordinatesInterface $coordinates, int $damageScore = 2, int $armorScore = 5, int $health = 100, int $gold = 0, int $experience = 0)
     {
         $this->name = $name;
         $this->damageScore = $damageScore;
@@ -25,13 +25,17 @@ class Player implements PlayerInterface
         $this->coordinates = $coordinates;
     }
 
-    public function decreaseHealth(float $healthAmount)
+    public function decreaseHealth(int $healthAmount)
     {
         $this->health = $this->health - $healthAmount;
     }
 
     public function getArmorScore(): int
     {
+        if ($this->armorScore >= 80) {
+            return 80;
+        }
+
         return $this->armorScore;
     }
 
@@ -161,6 +165,6 @@ class Player implements PlayerInterface
 
     public function draw(): string
     {
-        return "<color=red>@</color>";
+        return "<color=bright-red>@</color>";
     }
 }

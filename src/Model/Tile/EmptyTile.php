@@ -2,6 +2,9 @@
 
 namespace App\Model\Tile;
 
+use App\Model\Tile\TileLogic\NoLogic;
+use App\Model\Tile\TileLogic\TileLogicInterface;
+
 class EmptyTile extends AbstractTile
 {
     public function isInteractable(): bool
@@ -24,9 +27,9 @@ class EmptyTile extends AbstractTile
         return false;
     }
 
-    public function handleLogic(int $mapLevel)
+    public function handleLogic(int $mapLevel): TileLogicInterface
     {
-        // TODO: Implement handleLogic() method.
+        return new NoLogic();
     }
 
     public function draw(): string

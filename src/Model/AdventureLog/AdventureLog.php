@@ -7,6 +7,8 @@ use App\Service\LoggerService;
 
 class AdventureLog implements AdventureLogInterface
 {
+    public const MAX_NUMBER_OF_MESSAGES = 12;
+
     /**
      * @var AdventureLogMessage[]
      */
@@ -30,10 +32,9 @@ class AdventureLog implements AdventureLogInterface
      */
     public function getNewMessages(): array
     {
-        if (count($this->messages) > 8) {
+        if (count($this->messages) >= self::MAX_NUMBER_OF_MESSAGES) {
             array_shift($this->messages);
 
-            // experimental todo check if works
             return $this->getNewMessages();
         }
 
@@ -43,7 +44,5 @@ class AdventureLog implements AdventureLogInterface
     public function addMessage(AdventureLogMessageInterface $message)
     {
         $this->messages[] = $message;
-
-        $this->loggerService->log("[IMPORTANCE: ".$message->getImportance()."][NEW MESSAGE] -> " . $message->getMessage());
     }
 }

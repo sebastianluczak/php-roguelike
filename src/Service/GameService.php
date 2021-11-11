@@ -23,6 +23,9 @@ class GameService extends ConsoleOutputGameService
         $this->messageBus->dispatch(new AddAdventureLogMessage("DEVELOPER MODE IS ACTIVE", MessageClassEnum::DEVELOPER()));
 
         while (true) {
+            // todo test
+            $this->internalClockService->tick();
+
             $player = $this->getPlayerService()->getPlayer();
             if ($player->getHealth() <= 0) {
                 break;

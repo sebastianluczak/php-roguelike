@@ -9,7 +9,7 @@ interface PlayerInterface
     public function getDamageScore(): int;
     public function setDamageScore(int $damageScore): PlayerInterface;
     public function increaseHealth(int $healthAmount);
-    public function decreaseHealth(float $healthAmount);
+    public function decreaseHealth(int $healthAmount);
     public function getPlayerName(): string;
     public function setGold(int $gold): PlayerInterface;
     public function getGold(): int;

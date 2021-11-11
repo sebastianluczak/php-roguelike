@@ -11,7 +11,7 @@ class Map
     protected int $height;
     protected array $mapInstance;
 
-    public function __construct(int $width = 150, int $height = 48)
+    public function __construct(int $width = 140, int $height = 44)
     {
         $this->width = $width;
         $this->height = $height;
