@@ -28,15 +28,17 @@ class CorridorTile extends AbstractTile
         return true;
     }
 
-    public function handleLogic()
+    public function handleLogic(int $mapLevel)
     {
+        $scale = 1 + $mapLevel * 0.1;
+
         $roll = random_int(0, 700);
         if ($roll <= 1) {
-            return new Dragon();
+            return new Dragon($scale);
         } else if ($roll <= 5) {
-            return new Golem();
+            return new Golem($scale);
         } else if ($roll <= 100) {
-            return new Imp();
+            return new Imp($scale);
         }
 
         return null;

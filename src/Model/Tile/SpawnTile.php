@@ -24,7 +24,7 @@ class SpawnTile extends AbstractTile
         return false;
     }
 
-    public function handleLogic()
+    public function handleLogic(int $mapLevel)
     {
         // TODO: Implement handleLogic() method.
     }

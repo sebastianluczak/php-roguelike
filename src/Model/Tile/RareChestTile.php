@@ -28,10 +28,11 @@ class RareChestTile extends AbstractTile
         return true;
     }
 
-    public function handleLogic()
+    public function handleLogic(int $mapLevel)
     {
         $roll = random_int(0, 1000);
         if ($roll >= 400) {
+            // todo add mapLevel to drops
             return new Sword();
         } else {
             return new Shield();

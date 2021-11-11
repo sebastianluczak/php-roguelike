@@ -18,6 +18,7 @@ class ConsoleOutputGameService
     protected AdventureLogService $adventureLogService;
     protected MessageBusInterface $messageBus;
     protected LeaderboardService $leaderboardService;
+    protected InternalClockService $internalClockService;
 
     public function __construct(
         MapService $mapService,
@@ -25,7 +26,8 @@ class ConsoleOutputGameService
         DiceService $diceService,
         AdventureLogService $adventureLogService,
         MessageBusInterface $messageBus,
-        LeaderboardService $leaderboardService
+        LeaderboardService $leaderboardService,
+        InternalClockService $internalClockService
     ) {
         $this->mapService = $mapService;
         $this->playerService = $playerService;
@@ -33,6 +35,7 @@ class ConsoleOutputGameService
         $this->adventureLogService = $adventureLogService;
         $this->messageBus = $messageBus;
         $this->leaderboardService = $leaderboardService;
+        $this->internalClockService = $internalClockService;
     }
 
     protected function printMap(Map $map, OutputInterface $output)
@@ -51,50 +54,73 @@ class ConsoleOutputGameService
     protected function printPlayerInfo(PlayerInterface $player, OutputInterface $output)
     {
         $output->writeln(
-            "<fg=blue>--== HEALTH: " . $player->getHealth() .
+            "<fg=bright-blue>--== HEALTH: " . $player->getHealth() .
             " ==-- --== GOLD: " . $player->getGold() .
             "g ==-- --== KILLS: " . $player->getKillCount() .
             " ==-- --== LEVEL: " . $player->getLevel() . " (" . $player->getExperience() % 100 . "/100)" .
             " ==-- --== DAMAGE: " . $player->getDamageScore() .
             " ==-- --== ARMOR: " . $player->getArmorScore() .
             "% ==-- --== DUNGEON DEPTH: " . $this->mapService->getMapLevel() .
-            " ==-- --== LOCATION: [" . $player->getCoordinates()->getX() . "][" . $player->getCoordinates()->getY() . "] ==--</>"
+            " ==-- --== LOCATION: [" . $player->getCoordinates()->getX() . "][" . $player->getCoordinates()->getY() . "] ==--" .
+            " --== TIME: " . $this->internalClockService->getGameStartTime()->diffForHumans(new \DateTime()) .  "</>"
         );
     }
 
     protected function printAdventureLog(AdventureLogInterface $adventureLog, OutputInterface $output)
     {
-        $lines = $adventureLog->getNewLines();
+        $lines = $adventureLog->getLines();
+
+        $colorHexHashTable = [
+            'bright-green',
+            'green',
+            'green',
+            'green',
+            'green',
+            'green',
+            'green',
+            'green',
+            'green',
+            'green',
+            'green',
+            'green'
+        ];
 
         $output->writeln('<fg=green>');
-        $output->writeln("+=============================================================================+");
+        $output->writeln("+=+                                                       -=  Adventure Log =-                                                      +=+");
+        $output->writeln("+=====================================================================================================================================+</>");
         if ($lines == 0) {
-            for ($i = 0; $i <= 3; $i++) {
-                $output->writeln("|                                                                             |");
+            for ($i = 0; $i < 7; $i++) {
+                $output->writeln(
+                    "<fg=green>|                                                                                                                                         |</>"
+                );
             }
         } else {
             /** @var AdventureLogMessageInterface $newMessage */
             $linesPrinted = 0;
             foreach ($adventureLog->getNewMessages() as $newMessage) {
-                $charCount = 77;
+                $charCount = 133;
                 $charNumberOfMessage = $newMessage->getChars();
                 $charsLeft = $charCount - $charNumberOfMessage;
-                $msg = "| " . $newMessage->getMessage();
+                if ($linesPrinted == 0) {
+                    $msg = "<fg=green>|</><fg=$colorHexHashTable[$linesPrinted];options=bold> " . $newMessage->getMessage();
+                } else {
+                    $msg = "<fg=green>|</><fg=$colorHexHashTable[$linesPrinted]> " . $newMessage->getMessage();
+                }
                 for ($j = 0; $j <= $charsLeft - 2; $j++) {
                     $msg .= " ";
                 }
-                $msg .= "|";
+                $msg .= "</><fg=green>|</>";
                 $output->writeln($msg);
                 $linesPrinted++;
             }
 
-            if ($linesPrinted < 4) {
-                for ($j = $linesPrinted; $j < 4; $j++) {
-                    $output->writeln("|                                                                             |");
+            if ($linesPrinted <= 7) {
+                for ($j = $linesPrinted; $j <= 7; $j++) {
+                    $output->writeln("<fg=$colorHexHashTable[$j]>|                                                                                                                                     |</>");
                 }
             }
         }
-        $output->writeln("+=============================================================================+</>");
+        $output->writeln("<fg=green>+=====================================================================================================================================+</>");
     }
 
     protected function printGameOverScreen(PlayerInterface $player, OutputInterface $output)
@@ -172,5 +198,13 @@ class ConsoleOutputGameService
     public function getLeaderboardService(): LeaderboardService
     {
         return $this->leaderboardService;
+    }
+
+    /**
+     * @return InternalClockService
+     */
+    public function getInternalClockService(): InternalClockService
+    {
+        return $this->internalClockService;
     }
 }

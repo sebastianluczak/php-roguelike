@@ -24,13 +24,13 @@ class ExitTile extends AbstractTile
         return true;
     }
 
-    public function handleLogic()
+    public function handleLogic(int $mapLevel)
     {
         return true;
     }
 
     public function draw(): string
     {
-        return "<fg=magenta>!</>";
+        return "<fg=bright-cyan>&</>";
     }
 }

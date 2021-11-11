@@ -26,9 +26,11 @@ class ChestTile extends AbstractTile
         return true;
     }
 
-    public function handleLogic()
+    public function handleLogic(int $mapLevel)
     {
-        return new Gold();
+        $scale = 1 + $mapLevel * 0.1;
+
+        return new Gold($scale);
     }
 
     public function draw(): string

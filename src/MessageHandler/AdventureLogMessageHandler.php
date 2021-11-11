@@ -21,8 +21,12 @@ class AdventureLogMessageHandler implements MessageHandlerInterface
 
     public function __invoke(AddAdventureLogMessage $message)
     {
-        $this->adventureLogService->getAdventureLog()->addMessage(
-            new AdventureLogMessage($message->getMessage())
-        );
+        try {
+            $this->adventureLogService->getAdventureLog()->addMessage(
+                new AdventureLogMessage($message->getMessage())
+            );
+        } catch (\Exception $e) {
+            // do nothing
+        }
     }
 }
