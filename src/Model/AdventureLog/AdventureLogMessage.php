@@ -2,14 +2,29 @@
 
 namespace App\Model\AdventureLog;
 
+use App\Enum\MessageClassEnum;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+
 class AdventureLogMessage implements AdventureLogMessageInterface
 {
     protected string $message;
+    protected string $rawMessage;
+    protected ?string $messageClass;
 
-    public function __construct(string $message)
+    public function __construct(string $message, CarbonImmutable $gameStartTime, string $messageClass = null)
     {
-        $timestamp = new \DateTime();
-        $this->message = "[" . $timestamp->format(DATE_W3C) . "] " . $message;
+        $timestamp = Carbon::now();
+        $this->messageClass = $messageClass;
+        if ($this->messageClass == null) {
+            $this->messageClass = MessageClassEnum::STANDARD();
+        }
+        $diff = $gameStartTime->diff($timestamp);
+        $this->rawMessage = "[" . $diff->format("%H:%I:%S") . "] " . $message . " ";
+
+        $styleBegin = "<fg=" . $this->getImportance() . '>';
+        $styleEnd = "</>";
+        $this->message = $styleBegin . "[" . $diff->format("%H:%I:%S") . "] " . $message . $styleEnd;
     }
 
     public function getMessage(): string
@@ -19,6 +34,19 @@ class AdventureLogMessage implements AdventureLogMessageInterface
 
     public function getChars(): int
     {
-        return strlen($this->message);
+        return strlen($this->rawMessage);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMessageClass(): string
+    {
+        return $this->messageClass;
+    }
+
+    public function getImportance(): string
+    {
+        return $this->getMessageClass();
     }
 }

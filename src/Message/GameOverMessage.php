@@ -12,10 +12,12 @@ use App\Model\Player\PlayerInterface;
 class GameOverMessage
 {
     protected PlayerInterface $player;
+    protected string $reason;
 
-    public function __construct(PlayerInterface $player)
+    public function __construct(PlayerInterface $player, string $reason)
     {
         $this->player = $player;
+        $this->reason = $reason;
     }
 
     /**
@@ -24,5 +26,13 @@ class GameOverMessage
     public function getPlayer(): PlayerInterface
     {
         return $this->player;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReason(): string
+    {
+        return $this->reason;
     }
 }

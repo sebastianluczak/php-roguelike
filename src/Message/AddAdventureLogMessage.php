@@ -2,6 +2,8 @@
 
 namespace App\Message;
 
+use App\Enum\MessageClassEnum;
+
 /**
  * Used at:
  * AdventureLogMessageHandler::__invoke()
@@ -9,10 +11,12 @@ namespace App\Message;
 class AddAdventureLogMessage
 {
     protected string $message;
+    protected ?string $messageClass;
 
-    public function __construct(string $message)
+    public function __construct(string $message, string $messageClass = null)
     {
         $this->message = $message;
+        $this->messageClass = $messageClass;
     }
 
     /**
@@ -21,5 +25,13 @@ class AddAdventureLogMessage
     public function getMessage(): string
     {
         return $this->message;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMessageClass(): ?string
+    {
+        return $this->messageClass;
     }
 }

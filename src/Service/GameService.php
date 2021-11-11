@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Enum\MessageClassEnum;
 use App\Exception\GameOverException;
 use App\Exception\NewLevelException;
 use App\Exception\NotValidMoveException;
@@ -14,10 +15,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GameService extends ConsoleOutputGameService
 {
-    public function run(OutputInterface $output)
+    public function run(OutputInterface $output, bool $devMode)
     {
+        $this->devMode = $devMode;
         $this->messageBus->dispatch(new AddAdventureLogMessage("Game started at " . $this->getInternalClockService()->getGameStartTime()->toDateTimeLocalString()));
 
+        if ($devMode) {
+            $this->messageBus->dispatch(new AddAdventureLogMessage("DEVELOPER MODE IS ACTIVE", MessageClassEnum::IMPORTANT()));
+        }
         while (true) {
             $player = $this->getPlayerService()->getPlayer();
             if ($player->getHealth() <= 0) {
@@ -57,7 +62,6 @@ class GameService extends ConsoleOutputGameService
 
     public function handleGameOver(GameOverException $e, PlayerInterface $player)
     {
-        $this->adventureLogService->createGameOverLog($e);
-        $this->messageBus->dispatch(new GameOverMessage($player));
+        $this->messageBus->dispatch(new GameOverMessage($player, $e->getReason()));
     }
 }

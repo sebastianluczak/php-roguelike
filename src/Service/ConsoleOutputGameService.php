@@ -19,6 +19,7 @@ class ConsoleOutputGameService
     protected MessageBusInterface $messageBus;
     protected LeaderboardService $leaderboardService;
     protected InternalClockService $internalClockService;
+    protected bool $devMode;
 
     public function __construct(
         MapService $mapService,
@@ -38,6 +39,14 @@ class ConsoleOutputGameService
         $this->internalClockService = $internalClockService;
     }
 
+    /**
+     * @return bool
+     */
+    public function isDevMode(): bool
+    {
+        return $this->devMode;
+    }
+
     protected function printMap(Map $map, OutputInterface $output)
     {
         foreach ($map->getMapInstance() as $row => $column) {
@@ -53,16 +62,21 @@ class ConsoleOutputGameService
 
     protected function printPlayerInfo(PlayerInterface $player, OutputInterface $output)
     {
+        $devModeSymbol = "";
+        if ($this->devMode) {
+            $devModeSymbol = "🦄";
+        }
+
         $output->writeln(
-            "<fg=bright-blue>--== HEALTH: " . $player->getHealth() .
-            " ==-- --== GOLD: " . $player->getGold() .
-            "g ==-- --== KILLS: " . $player->getKillCount() .
-            " ==-- --== LEVEL: " . $player->getLevel() . " (" . $player->getExperience() % 100 . "/100)" .
-            " ==-- --== DAMAGE: " . $player->getDamageScore() .
-            " ==-- --== ARMOR: " . $player->getArmorScore() .
-            "% ==-- --== DUNGEON DEPTH: " . $this->mapService->getMapLevel() .
-            " ==-- --== LOCATION: [" . $player->getCoordinates()->getX() . "][" . $player->getCoordinates()->getY() . "] ==--" .
-            " --== TIME: " . $this->internalClockService->getGameStartTime()->diffForHumans(new \DateTime()) .  "</>"
+            $devModeSymbol . " <fg=bright-blue>--== 💗 " . $player->getHealth() .
+            " ==-- --== 💰 " . $player->getGold() .
+            "g ==-- --== ☠️ " . $player->getKillCount() .
+            " ==-- --== 🧍 " . $player->getLevel() . " (" . $player->getExperience() % 100 . "/100)" .
+            " ==-- --== 🗡️ " . $player->getDamageScore() .
+            " ==-- --== 🛡️ " . $player->getArmorScore() .
+            "% ==-- --== 🌡️ " . $this->mapService->getMapLevel() .
+            " ==-- --== 🗺️ [" . $player->getCoordinates()->getX() . "][" . $player->getCoordinates()->getY() . "] ==--" .
+            " --== ⏲ " . str_replace("before", "", $this->internalClockService->getGameStartTime()->diffForHumans(new \DateTime())) .  "</>"
         );
     }
 
@@ -87,40 +101,31 @@ class ConsoleOutputGameService
 
         $output->writeln('<fg=green>');
         $output->writeln("+=+                                                       -=  Adventure Log =-                                                      +=+");
-        $output->writeln("+=====================================================================================================================================+</>");
+        $output->writeln("+=+=================================================================================================================================+=+</>");
+
         if ($lines == 0) {
             for ($i = 0; $i < 7; $i++) {
-                $output->writeln(
-                    "<fg=green>|                                                                                                                                         |</>"
-                );
+                $output->writeln("");
             }
         } else {
             /** @var AdventureLogMessageInterface $newMessage */
             $linesPrinted = 0;
             foreach ($adventureLog->getNewMessages() as $newMessage) {
-                $charCount = 133;
-                $charNumberOfMessage = $newMessage->getChars();
-                $charsLeft = $charCount - $charNumberOfMessage;
                 if ($linesPrinted == 0) {
-                    $msg = "<fg=green>|</><fg=$colorHexHashTable[$linesPrinted];options=bold> " . $newMessage->getMessage();
+                    $msg = "<fg=$colorHexHashTable[$linesPrinted];options=bold> " . $newMessage->getMessage() . "</>";
                 } else {
-                    $msg = "<fg=green>|</><fg=$colorHexHashTable[$linesPrinted]> " . $newMessage->getMessage();
+                    $msg = "<fg=$colorHexHashTable[$linesPrinted]> " . $newMessage->getMessage() . "</>";
                 }
-                for ($j = 0; $j <= $charsLeft - 2; $j++) {
-                    $msg .= " ";
-                }
-                $msg .= "</><fg=green>|</>";
                 $output->writeln($msg);
                 $linesPrinted++;
             }
 
             if ($linesPrinted <= 7) {
                 for ($j = $linesPrinted; $j <= 7; $j++) {
-                    $output->writeln("<fg=$colorHexHashTable[$j]>|                                                                                                                                     |</>");
+                    $output->writeln("");
                 }
             }
         }
-        $output->writeln("<fg=green>+=====================================================================================================================================+</>");
     }
 
     protected function printGameOverScreen(PlayerInterface $player, OutputInterface $output)
