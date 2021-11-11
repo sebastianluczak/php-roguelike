@@ -4,6 +4,7 @@ namespace App\Model\Tile\TileLogic;
 
 use App\Model\Creature\CreatureInterface;
 use App\Model\Creature\Dragon;
+use App\Model\Creature\Goblin;
 use App\Model\Creature\Golem;
 use App\Model\Creature\Imp;
 use App\Model\Player\PlayerInterface;
@@ -26,7 +27,9 @@ class CorridorTileLogic implements TileLogicInterface
         if ($roll <= 1) {
             $this->creature = new Dragon($scale);
         } else if ($roll <= 5) {
-            $this->creature =  new Golem($scale);
+            $this->creature = new Golem($scale);
+        } else if ($roll <= 50) {
+            $this->creature = new Goblin($scale);
         } else if ($roll <= 100) {
             $this->creature = new Imp($scale);
         } else {
