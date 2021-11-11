@@ -8,6 +8,7 @@ use App\Exception\NewLevelException;
 use App\Exception\NotValidMoveException;
 use App\Message\AddAdventureLogMessage;
 use App\Message\GameOverMessage;
+use App\Message\RegenerateMapMessage;
 use App\Model\Player\PlayerInterface;
 use Carbon\Carbon;
 use Symfony\Component\Console\Command\Command;
@@ -19,10 +20,8 @@ class GameService extends ConsoleOutputGameService
     {
         $this->devMode = $devMode;
         $this->messageBus->dispatch(new AddAdventureLogMessage("Game started at " . $this->getInternalClockService()->getGameStartTime()->toDateTimeLocalString()));
+        $this->messageBus->dispatch(new AddAdventureLogMessage("DEVELOPER MODE IS ACTIVE", MessageClassEnum::DEVELOPER()));
 
-        if ($devMode) {
-            $this->messageBus->dispatch(new AddAdventureLogMessage("DEVELOPER MODE IS ACTIVE", MessageClassEnum::IMPORTANT()));
-        }
         while (true) {
             $player = $this->getPlayerService()->getPlayer();
             if ($player->getHealth() <= 0) {
@@ -40,6 +39,14 @@ class GameService extends ConsoleOutputGameService
                 echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
 
                 break;
+            }
+            if ($this->devMode) {
+                if ($buttonPressed == "r") {
+                    $this->messageBus->dispatch(new AddAdventureLogMessage("Map regenerated at " . Carbon::now(), MessageClassEnum::DEVELOPER()));
+                    $this->messageBus->dispatch(new RegenerateMapMessage());
+
+                    echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+                }
             }
             try {
                 $this->mapService->movePlayer($player, $buttonPressed, $this->mapService->getMapLevel());

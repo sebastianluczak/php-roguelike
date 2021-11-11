@@ -2,9 +2,11 @@
 
 namespace App\Service;
 
+use App\Enum\MessageClassEnum;
 use App\Enum\MoveDirectionEnum;
 use App\Exception\MapFiniteException;
 use App\Exception\NotValidMoveException;
+use App\Message\AddAdventureLogMessage;
 use App\Model\Map;
 use App\Model\Player\PlayerCoordinates;
 use App\Model\Player\PlayerInterface;
@@ -16,18 +18,25 @@ use App\Model\Tile\ExitTile;
 use App\Model\Tile\RareChestTile;
 use App\Model\Tile\ShopTile;
 use App\Model\Tile\SpawnTile;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MapService
 {
     protected ?Map $map = null;
+    protected ValidatorInterface $validator;
     protected PlayerService $playerService;
     protected LoggerService $loggerService;
     protected int $mapLevel = 1;
+    protected MessageBusInterface $messageBus;
+    protected array $mapErrors;
 
-    public function __construct(PlayerService $playerService, LoggerService $loggerService)
+    public function __construct(PlayerService $playerService, LoggerService $loggerService, MessageBusInterface $messageBus)
     {
         $this->playerService = $playerService;
         $this->loggerService = $loggerService;
+        $this->messageBus = $messageBus;
+        $this->mapErrors = [];
 
         if ($this->map == null) {
             $this->createNewLevel();
@@ -38,6 +47,14 @@ class MapService
     {
         $this->map = new Map();
         $this->generateMap();
+
+        $mapValid = $this->isMapValid();
+        if (!$mapValid) {
+            $this->messageBus->dispatch(new AddAdventureLogMessage("Map regenerated due to errors: " . implode(", ", $this->mapErrors), MessageClassEnum::DEVELOPER()));
+            $this->createNewLevel();;
+        } else {
+            $this->mapErrors = [];
+        }
     }
 
     public function generateMap(): void
@@ -263,5 +280,47 @@ class MapService
     public function getMapLevel(): int
     {
         return $this->mapLevel;
+    }
+
+    private function isMapValid(): bool
+    {
+        $this->mapErrors = [];
+        $mapTileStatistics = [];
+        $allTiles = 0;
+        foreach ($this->getMap()->getMapInstance() as $xcoordinate => $arrayOfTiles) {
+            foreach ($arrayOfTiles as $ycoordinate => $mapTile) {
+                $mapTileStatistics[get_class($mapTile)] = (isset($mapTileStatistics[get_class($mapTile)]))?$mapTileStatistics[get_class($mapTile)] + 1:1;
+                $allTiles++;
+            }
+        }
+        $mapTileStatistics["count"] = $allTiles;
+
+        try {
+            $percentageOfEmptyTiles = round($mapTileStatistics[EmptyTile::class] / $allTiles * 100, 2);
+            $numberOfSpawnTiles = $mapTileStatistics[SpawnTile::class];
+        } catch (\Exception $e) {
+            $this->mapErrors[] = "Mandatory tiles not found";
+
+            return false;
+        }
+
+        if ($percentageOfEmptyTiles > 88) {
+            $this->mapErrors[] = "Playable area too small: " . $percentageOfEmptyTiles . "%";
+        }
+
+        if ($numberOfSpawnTiles != 1) {
+            $this->mapErrors[] = "Wrong SpawnTile count: " . $numberOfSpawnTiles . ", expecting 1";
+        }
+
+        if (count($this->mapErrors) == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function resetErrors()
+    {
+        $this->mapErrors = [];
     }
 }
