@@ -57,6 +57,7 @@ class MapService
             $this->createNewLevel();;
         } else {
             $this->mapErrors = [];
+            $this->playerService->getPlayer()->setMapLevel($this->mapLevel);
         }
     }
 

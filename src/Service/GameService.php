@@ -19,7 +19,7 @@ class GameService extends ConsoleOutputGameService
     public function run(OutputInterface $output, bool $devMode)
     {
         $this->devMode = $devMode;
-        $this->messageBus->dispatch(new AddAdventureLogMessage("Game started at " . $this->getInternalClockService()->getGameStartTime()->toDateTimeLocalString()));
+        $this->messageBus->dispatch(new AddAdventureLogMessage("Game started at " . $this->getInternalClockService()->getGameStartTime()->toFormattedDateString()));
         $this->messageBus->dispatch(new AddAdventureLogMessage("DEVELOPER MODE IS ACTIVE", MessageClassEnum::DEVELOPER()));
 
         while (true) {
@@ -38,7 +38,7 @@ class GameService extends ConsoleOutputGameService
 
             $buttonPressed = $this->getPlayerCommand();
             if ($buttonPressed == "q") {
-                $this->messageBus->dispatch(new AddAdventureLogMessage("Game exit at " . Carbon::now()));
+                $this->messageBus->dispatch(new AddAdventureLogMessage("Game exit at " . Carbon::now()->toFormattedDateString()));
                 echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
 
                 break;
@@ -50,12 +50,18 @@ class GameService extends ConsoleOutputGameService
 
                     echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
                 }
+                if ($buttonPressed == "l") {
+                    $this->printLeaderBoards($player);
+
+                    echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+                }
             }
             try {
                 $this->mapService->movePlayer($player, $buttonPressed, $this->mapService->getMapLevel());
             } catch (NotValidMoveException $e) {
                 $this->messageBus->dispatch(new AddAdventureLogMessage("You can't move in this direction"));
             } catch (NewLevelException $e) {
+                // todo move to dispatch queue
                 $this->getMapService()->increaseMapLevel();
                 $this->getMapService()->createNewLevel();
             }
@@ -64,8 +70,8 @@ class GameService extends ConsoleOutputGameService
 
         $this->printPlayerInfo($player, $output);
         $this->printMap($mapObject, $output);
+        $this->printLeaderBoards($player);
         $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
-        $this->printGameOverScreen($player, $output);
 
         return Command::SUCCESS;
     }

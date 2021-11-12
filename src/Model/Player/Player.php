@@ -12,6 +12,7 @@ class Player implements PlayerInterface
     protected int $killCount;
     protected int $experience;
     protected PlayerCoordinatesInterface $coordinates;
+    protected int $mapLevel = 1;
 
     public function __construct(string $name, PlayerCoordinatesInterface $coordinates, int $damageScore = 2, int $armorScore = 5, int $health = 100, int $gold = 0, int $experience = 0)
     {
@@ -159,6 +160,18 @@ class Player implements PlayerInterface
     public function setCoordinates(PlayerCoordinatesInterface $coordinates): Player
     {
         $this->coordinates = $coordinates;
+
+        return $this;
+    }
+
+    public function getMapLevel(): int
+    {
+        return $this->mapLevel;
+    }
+
+    public function setMapLevel(int $mapLevel): PlayerInterface
+    {
+        $this->mapLevel = $mapLevel;
 
         return $this;
     }

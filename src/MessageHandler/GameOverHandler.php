@@ -5,9 +5,9 @@ namespace App\MessageHandler;
 use App\Enum\MessageClassEnum;
 use App\Message\AddAdventureLogMessage;
 use App\Message\GameOverMessage;
-use App\Model\AdventureLog\AdventureLogMessage;
 use App\Service\LeaderboardService;
 use App\Service\PlayerService;
+use Carbon\Carbon;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -26,9 +26,12 @@ class GameOverHandler implements MessageHandlerInterface
 
     public function __invoke(GameOverMessage $message)
     {
-        $this->messageBus->dispatch(new AddAdventureLogMessage("GAME OVER", MessageClassEnum::IMPORTANT()));
+        $player = $message->getPlayer();
+        $this->leaderboardService->addEntry($player);
+        $this->messageBus->dispatch(new AddAdventureLogMessage(
+            $player->getPlayerName() . " -> 🗺️ " . $player->getMapLevel() . " 🧍 " . $player->getLevel() . " ☠️ " . $player->getKillCount() . " 💰 " . $player->getGold() . " ⏲ " . Carbon::now()->format(DATE_RFC822), MessageClassEnum::IMPORTANT())
+        );
         $this->messageBus->dispatch(new AddAdventureLogMessage($message->getReason(), MessageClassEnum::IMPORTANT()));
-
-        $this->leaderboardService->addEntry($message->getPlayer());
+        $this->messageBus->dispatch(new AddAdventureLogMessage(" -- GAME OVER -- ", MessageClassEnum::IMPORTANT()));
     }
 }

@@ -20,26 +20,18 @@ class LeaderboardService
     }
 
     /**
-     * @return array|Leaderboard[]
+     * @return Leaderboard[]|array
      */
-    public function getEntries(): array
+    public function getBestScores(): array
     {
-        $query = $this->em->createQuery(
-            'SELECT l
-            FROM App\Entity\Leaderboard l
-            ORDER BY l.playerLevel DESC'
-        );
-
-        // todo move to repository
-        // returns an array of Leaderboard objects
-        return $query->getResult();
+        return $this->repository->getBest();
     }
 
     public function addEntry(PlayerInterface $player)
     {
         $leaderboard = new Leaderboard();
         $leaderboard->setCreatedAt(\DateTimeImmutable::createFromMutable(new DateTime()));
-        $leaderboard->setDungeonLevel(1);
+        $leaderboard->setDungeonLevel($player->getMapLevel());
         $leaderboard->setGoldAmount($player->getGold());
         $leaderboard->setKills($player->getKillCount());
         $leaderboard->setPlayerLevel($player->getLevel());

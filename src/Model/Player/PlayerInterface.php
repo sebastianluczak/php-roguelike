@@ -26,4 +26,6 @@ interface PlayerInterface
     public function draw(): string;
     public function setCoordinates(PlayerCoordinatesInterface $coordinates): PlayerInterface;
     public function getCoordinates(): PlayerCoordinatesInterface;
+    public function setMapLevel(int $mapLevel): PlayerInterface;
+    public function getMapLevel(): int;
 }

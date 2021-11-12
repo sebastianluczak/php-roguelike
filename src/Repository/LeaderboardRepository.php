@@ -19,32 +19,18 @@ class LeaderboardRepository extends ServiceEntityRepository
         parent::__construct($registry, Leaderboard::class);
     }
 
-    // /**
-    //  * @return Leaderboard[] Returns an array of Leaderboard objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return array|Leaderboard[]
+     */
+    public function getBest(): array
     {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $query = $this->createQueryBuilder('l')
+            ->addOrderBy('l.playerLevel', 'DESC')
+            ->addOrderBy('l.kills', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery();
 
-    /*
-    public function findOneBySomeField($value): ?Leaderboard
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        // returns an array of Leaderboard objects, sorted
+        return $query->getResult();
     }
-    */
 }
