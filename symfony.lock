@@ -91,6 +91,9 @@
     "fzaninotto/faker": {
         "version": "v1.9.2"
     },
+    "irfa/php-gatcha": {
+        "version": "v2.1"
+    },
     "laminas/laminas-code": {
         "version": "4.4.3"
     },

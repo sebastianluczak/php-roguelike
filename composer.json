@@ -14,6 +14,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.10",
         "fzaninotto/faker": "^1.9",
+        "irfa/php-gatcha": "^2.1",
         "myclabs/php-enum": "^1.8",
         "nesbot/carbon": "^2.54",
         "porthou/dicebag": "^0.1.0",

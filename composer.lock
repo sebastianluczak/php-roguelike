@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "700a3482330d6bb481dbdf3e34e2a2a6",
+    "content-hash": "5f5fff9ecdeb82c6f2c6fdcef3e21381",
     "packages": [
         {
             "name": "andreasindal/rpgfaker",
@@ -1615,6 +1615,66 @@
             },
             "abandoned": true,
             "time": "2020-12-11T09:56:16+00:00"
+        },
+        {
+            "name": "irfa/php-gatcha",
+            "version": "v2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/irfaardy/php-gacha.git",
+                "reference": "4f055264b941b80479e6ad46c95ecb135383df05"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/irfaardy/php-gacha/zipball/4f055264b941b80479e6ad46c95ecb135383df05",
+                "reference": "4f055264b941b80479e6ad46c95ecb135383df05",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.4.0"
+            },
+            "type": "package",
+            "autoload": {
+                "psr-4": {
+                    "Irfa\\Gatcha\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Irfa A",
+                    "email": "irfa.backend@protonmail.com"
+                }
+            ],
+            "description": "Simple Items Gatcha with PHP",
+            "keywords": [
+                "SSR",
+                "gacha",
+                "game",
+                "php",
+                "php-gatcha",
+                "probability",
+                "roulette",
+                "spin"
+            ],
+            "funding": [
+                {
+                    "type": "buymeacoffee"
+                },
+                {
+                    "url": "https://github.com/irfaardy",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/irfa",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-07-06T15:53:11+00:00"
         },
         {
             "name": "laminas/laminas-code",
