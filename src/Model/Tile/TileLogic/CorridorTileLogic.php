@@ -16,9 +16,9 @@ class CorridorTileLogic implements TileLogicInterface
     protected ?CreatureInterface $creature;
     protected RandomEventInterface $event;
 
-    public function __construct(int $mapLevel)
+    public function __construct(int $scale)
     {
-        $scale = ceil(1 + ceil($mapLevel * 0.6));
+        $scale = ceil(1 + ceil($scale * 0.5));
 
         // allows more creatures to be spawned on later levels
         // should make SMALL difference

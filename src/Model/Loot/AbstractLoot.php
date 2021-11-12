@@ -6,6 +6,7 @@ use App\Enum\Loot\LootClassEnum;
 
 abstract class AbstractLoot implements LootInterface
 {
+    protected string $dice;
     protected string $name;
     protected LootClassEnum $lootClass;
     protected $isWeapon;

@@ -2,6 +2,8 @@
 
 namespace App\Model\Player;
 
+use App\Model\Player\Health\PlayerHealth;
+use App\Model\Player\Health\PlayerHealthInterface;
 use App\Model\Player\Inventory\PlayerInventory;
 use App\Model\Player\Inventory\PlayerInventoryInterface;
 use App\Model\Stats\Stats;
@@ -12,12 +14,12 @@ class Player implements PlayerInterface
     protected string $name;
     protected int $damageScore;
     protected int $armorScore;
-    protected int $health;
     protected int $gold;
     protected int $killCount;
     protected int $experience;
     protected PlayerCoordinatesInterface $coordinates;
     protected int $mapLevel = 1;
+    protected PlayerHealthInterface $health;
     protected StatsInterface $stats;
     protected PlayerInventoryInterface $inventory;
 
@@ -26,18 +28,13 @@ class Player implements PlayerInterface
         $this->name = $name;
         $this->damageScore = $damageScore;
         $this->armorScore = $armorScore;
-        $this->health = $health;
+        $this->health = new PlayerHealth($health);
         $this->gold = $gold;
         $this->killCount = 0;
         $this->experience = $experience;
         $this->coordinates = $coordinates;
         $this->stats = new Stats();
         $this->inventory = new PlayerInventory();
-    }
-
-    public function decreaseHealth(int $healthAmount)
-    {
-        $this->health = $this->health - $healthAmount;
     }
 
     public function getArmorScore(): int
@@ -66,11 +63,6 @@ class Player implements PlayerInterface
         $this->damageScore = $damageScore;
 
         return $this;
-    }
-
-    public function increaseHealth(int $healthAmount)
-    {
-        $this->health = $this->health + $healthAmount;
     }
 
     public function getPlayerName(): string
@@ -126,7 +118,7 @@ class Player implements PlayerInterface
         return $this;
     }
 
-    public function getHealth(): int
+    public function getHealth(): PlayerHealthInterface
     {
         return $this->health;
     }

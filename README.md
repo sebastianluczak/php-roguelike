@@ -8,7 +8,7 @@ Worst game on the planet.
 > 
 > Meanwhile, ADOM at home:
 
-![Screenshot](docs/images/screenshot.png?raw=true "Title")
+![Screenshot](docs/images/screenshot.png)
 
 ## Run & build
 
