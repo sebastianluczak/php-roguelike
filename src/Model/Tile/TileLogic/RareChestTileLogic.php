@@ -33,9 +33,13 @@ class RareChestTileLogic implements TileLogicInterface
     public function process(PlayerInterface $player)
    {
        if ($this->loot->isWeapon()) {
+           $player->getInventory()->handleLoot($this->loot);
+            // soon becomes deprecated
            $player->increaseDamage($this->loot->getDamage());
        }
        if ($this->loot->isArmor() && $player->getArmorScore() <= 80) {
+           $player->getInventory()->handleLoot($this->loot);
+           // soon becomes deprecated
            $player->increaseArmor($this->loot->getArmor());
        }
    }

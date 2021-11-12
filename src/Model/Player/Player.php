@@ -2,6 +2,8 @@
 
 namespace App\Model\Player;
 
+use App\Model\Player\Inventory\PlayerInventory;
+use App\Model\Player\Inventory\PlayerInventoryInterface;
 use App\Model\Stats\Stats;
 use App\Model\Stats\StatsInterface;
 
@@ -17,6 +19,7 @@ class Player implements PlayerInterface
     protected PlayerCoordinatesInterface $coordinates;
     protected int $mapLevel = 1;
     protected StatsInterface $stats;
+    protected PlayerInventoryInterface $inventory;
 
     public function __construct(string $name, PlayerCoordinatesInterface $coordinates, int $damageScore = 2, int $armorScore = 7, int $health = 100, int $gold = 0, int $experience = 0)
     {
@@ -29,6 +32,7 @@ class Player implements PlayerInterface
         $this->experience = $experience;
         $this->coordinates = $coordinates;
         $this->stats = new Stats();
+        $this->inventory = new PlayerInventory();
     }
 
     public function decreaseHealth(int $healthAmount)
@@ -184,6 +188,11 @@ class Player implements PlayerInterface
     public function getStats(): StatsInterface
     {
         return $this->stats;
+    }
+
+    public function getInventory(): PlayerInventoryInterface
+    {
+        return $this->inventory;
     }
 
     public function draw(): string

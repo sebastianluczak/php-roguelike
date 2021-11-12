@@ -1,4 +1,7 @@
 {
+    "andreasindal/rpgfaker": {
+        "version": "v1.1.0"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.4"
     },
@@ -102,6 +105,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.13.1"
+    },
+    "porthou/dicebag": {
+        "version": "V0.1.0"
     },
     "psr/cache": {
         "version": "1.0.1"

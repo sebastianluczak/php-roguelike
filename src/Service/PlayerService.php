@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Model\Player\Player;
 use App\Model\Player\PlayerCoordinates;
 use App\Model\Player\PlayerInterface;
+use RPGFaker\RPGFaker;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class PlayerService
@@ -16,9 +17,10 @@ class PlayerService
 
     public function __construct(MessageBusInterface $messageBus, LoggerService $loggerService)
     {
+        $rpgFaker = new RPGFaker(['count' => 1, 'race' => 'human']);
         $this->messageBus = $messageBus;
         $this->loggerService = $loggerService;
-        $this->player = new Player('Adventurer', New PlayerCoordinates(0, 0));
+        $this->player = new Player($rpgFaker->name, New PlayerCoordinates(0, 0));
     }
 
     /**

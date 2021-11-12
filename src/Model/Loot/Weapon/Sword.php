@@ -8,6 +8,8 @@ class Sword extends AbstractWeapon
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->damage = random_int(1, 3);
     }
 

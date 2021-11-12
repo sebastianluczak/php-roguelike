@@ -2,6 +2,7 @@
 
 namespace App\Model\Player;
 
+use App\Model\Player\Inventory\PlayerInventoryInterface;
 use App\Model\Stats\StatsInterface;
 
 interface PlayerInterface
@@ -31,4 +32,5 @@ interface PlayerInterface
     public function setMapLevel(int $mapLevel): PlayerInterface;
     public function getMapLevel(): int;
     public function getStats(): StatsInterface;
+    public function getInventory(): PlayerInventoryInterface;
 }

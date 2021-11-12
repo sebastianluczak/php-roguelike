@@ -6,6 +6,7 @@ use App\Model\Stats\Stats;
 use App\Model\Stats\StatsInterface;
 use Faker\Factory as FakerFactory;
 use Faker\Generator;
+use RPGFaker\RPGFaker;
 
 abstract class AbstractCreature implements CreatureInterface
 {
@@ -21,8 +22,9 @@ abstract class AbstractCreature implements CreatureInterface
 
     public function __construct()
     {
+        $nameFaker = new RPGFaker(['count' => 1]);
         $this->faker = FakerFactory::create('ja_JP');
-        $this->rawName = $this->faker->kanaName;
+        $this->rawName = $nameFaker->name;
         $this->stats = new Stats();
     }
 

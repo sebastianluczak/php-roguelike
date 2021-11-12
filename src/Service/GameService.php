@@ -9,6 +9,7 @@ use App\Exception\NotValidMoveException;
 use App\Message\AddAdventureLogMessage;
 use App\Message\GameOverMessage;
 use App\Message\RegenerateMapMessage;
+use App\Message\ShowPlayerInventoryMessage;
 use App\Model\Player\PlayerInterface;
 use Carbon\Carbon;
 use Symfony\Component\Console\Command\Command;
@@ -22,7 +23,6 @@ class GameService extends ConsoleOutputGameService
         $this->messageBus->dispatch(new AddAdventureLogMessage("DEVELOPER MODE IS ACTIVE", MessageClassEnum::DEVELOPER()));
 
         while (true) {
-            // todo test
             $this->internalClockService->tick();
 
             $player = $this->getPlayerService()->getPlayer();
@@ -36,16 +36,16 @@ class GameService extends ConsoleOutputGameService
             $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
 
             $buttonPressed = $this->getPlayerCommand();
-            $this->handleUncommonButtonPresses($buttonPressed);
-
-            try {
-                $this->mapService->movePlayer($player, $buttonPressed, $this->mapService->getMapLevel());
-            } catch (NotValidMoveException $e) {
-                $this->messageBus->dispatch(new AddAdventureLogMessage("You can't move in this direction"));
-            } catch (NewLevelException $e) {
-                // todo move to dispatch queue
-                $this->getMapService()->increaseMapLevel();
-                $this->getMapService()->createNewLevel();
+            if (!$this->handleUncommonButtonPresses($buttonPressed)) {
+                try {
+                    $this->mapService->movePlayer($player, $buttonPressed, $this->mapService->getMapLevel());
+                } catch (NotValidMoveException $e) {
+                    $this->messageBus->dispatch(new AddAdventureLogMessage("You can't move in this direction"));
+                } catch (NewLevelException $e) {
+                    // todo move to dispatch queue
+                    $this->getMapService()->increaseMapLevel();
+                    $this->getMapService()->createNewLevel();
+                }
             }
             echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
         }
@@ -71,12 +71,25 @@ class GameService extends ConsoleOutputGameService
         }
     }
 
-    private function handleUncommonButtonPresses(string $buttonPressed)
+    private function handleUncommonButtonPresses(string $buttonPressed): bool
     {
         if ($buttonPressed == "q") {
             $this->messageBus->dispatch(new AddAdventureLogMessage("Game exit at " . Carbon::now()->toFormattedDateString()));
-            $this->messageBus->dispatch(new GameOverMessage($this->playerService->getPlayer(), "Game exit"));
-            echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+            $this->playerService->getPlayer()->decreaseHealth($this->playerService->getPlayer()->getHealth()); // essentialy kill player
+            $this->messageBus->dispatch(
+                new GameOverMessage(
+                    $this->playerService->getPlayer(),
+                    "Suicide by " . $this->playerService->getPlayer()->getInventory()->getWeaponSlot()->getName()
+                )
+            );
+
+            return true;
+        }
+
+        if ($buttonPressed == "i") {
+            $this->messageBus->dispatch(new ShowPlayerInventoryMessage($this->playerService->getPlayer()));
+
+            return true;
         }
 
         if ($buttonPressed == "p") {
@@ -89,6 +102,8 @@ class GameService extends ConsoleOutputGameService
             $this->setDevMode($devMode);
             $this->messageBus->dispatch(new AddAdventureLogMessage("Dev mode changed at " . Carbon::now()));
             $this->messageBus->dispatch(new AddAdventureLogMessage("DEV MODE STATUS: " . $this->isDevMode()));
+
+            return true;
         }
 
         if ($this->isDevMode()) {
@@ -97,12 +112,18 @@ class GameService extends ConsoleOutputGameService
                 $this->messageBus->dispatch(new RegenerateMapMessage());
 
                 echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+
+                return true;
             }
             if ($buttonPressed == "l") {
                 $this->printLeaderBoards($this->getPlayerService()->getPlayer());
 
                 echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+
+                return true;
             }
         }
+
+        return false;
     }
 }
