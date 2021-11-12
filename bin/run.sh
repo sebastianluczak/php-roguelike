@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-docker run -it php-roguelike
+docker-compose exec app php /app/bin/console game:start

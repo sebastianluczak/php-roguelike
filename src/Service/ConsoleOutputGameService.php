@@ -2,12 +2,16 @@
 
 namespace App\Service;
 
+use App\Entity\Leaderboard;
+use App\Enum\MessageClassEnum;
+use App\Message\AddAdventureLogMessage;
 use App\Model\AdventureLog\AdventureLog;
 use App\Model\AdventureLog\AdventureLogInterface;
 use App\Model\AdventureLog\AdventureLogMessageInterface;
 use App\Model\Map;
 use App\Model\Player\PlayerInterface;
 use App\Model\Tile\AbstractTile;
+use Carbon\Carbon;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -76,8 +80,7 @@ class ConsoleOutputGameService
             " ==-- --== 🧍 " . $player->getLevel() . " (" . $player->getExperience() % 100 . "/100)" .
             " ==-- --== 🗡️ " . $player->getDamageScore() .
             " ==-- --== 🛡️ " . $player->getArmorScore() .
-            "% ==-- --== 🌡️ " . $this->mapService->getMapLevel() .
-            " ==-- --== 🗺️ [" . $player->getCoordinates()->getX() . "][" . $player->getCoordinates()->getY() .
+            "% ==-- --== 🗺️ " . $player->getMapLevel() .
             " ==-- --== 💊 " . $this->internalClockService->getActiveGameEventsCount() ." ==--" .
             " --== ⏲ " . str_replace("before", "", $this->internalClockService->getGameStartTime()->diffForHumans(new \DateTime())) .  " ==--</>"
         );
@@ -110,14 +113,20 @@ class ConsoleOutputGameService
         }
     }
 
-    protected function printGameOverScreen(PlayerInterface $player, OutputInterface $output)
+    protected function printLeaderBoards(PlayerInterface $player)
     {
-        $output->writeln("SORRY " . $player->getPlayerName() . ", YOU DIED.");
-        $output->writeln(" --- LEADERBOARDS --- ");
-        $entries = $this->leaderboardService->getEntries();
-        foreach ($entries as $entry) {
-            $output->writeln("Player: " . $entry->getPlayerName() . " with level: " . $player->getLevel() . " with kills: " . $entry->getKills() . " played at: " . $entry->getCreatedAt()->format(DATE_ISO8601));
+        $entries = array_reverse($this->leaderboardService->getBestScores());
+        /**
+         * @var int $key
+         * @var Leaderboard $entry
+         */
+        $entriesCount = count($entries);
+        foreach ($entries as $key => $entry) {
+            $this->messageBus->dispatch(new AddAdventureLogMessage(
+                $entriesCount - $key . ". " . $entry->getPlayerName() . " -> 🗺️ " . $entry->getDungeonLevel() . " 🧍 " . $entry->getPlayerLevel() . " ☠️ " . $entry->getKills() . " 💰 " . $entry->getGoldAmount() . " ⏲ " . Carbon::createFromImmutable($entry->getCreatedAt())->format(DATE_RFC822), MessageClassEnum::IMPORTANT())
+            );
         }
+        $this->messageBus->dispatch(new AddAdventureLogMessage(" --- Leaderboards --- ", MessageClassEnum::IMPORTANT()));
     }
 
     protected function stty($options)
