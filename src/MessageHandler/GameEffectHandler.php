@@ -22,7 +22,7 @@ class GameEffectHandler implements MessageHandlerInterface
 
     public function __invoke(GameEffectMessage $message)
     {
-        $this->messageBus->dispatch(new AddAdventureLogMessage($message->getEvent()->getDescription(), MessageClassEnum::IMPORTANT()));
+        $this->messageBus->dispatch(new AddAdventureLogMessage($message->getEvent()->getDescription(), MessageClassEnum::LOOT()));
         $this->internalClockService->addGameEventToEventLoop($message->getEvent());
     }
 }

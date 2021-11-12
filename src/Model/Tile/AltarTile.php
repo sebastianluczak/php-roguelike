@@ -2,14 +2,17 @@
 
 namespace App\Model\Tile;
 
-use App\Model\Tile\TileLogic\NoLogic;
+use App\Model\Creature\Imp;
+use App\Model\Loot\SkillBoost;
+use App\Model\Tile\TileLogic\AltarTileLogic;
+use App\Model\Tile\TileLogic\ShopTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
 
-class ExitTile extends AbstractTile
+class AltarTile extends AbstractTile
 {
     public function isInteractable(): bool
     {
-        return false;
+        return true;
     }
 
     public function isPassable(): bool
@@ -29,11 +32,11 @@ class ExitTile extends AbstractTile
 
     public function handleLogic(int $mapLevel): TileLogicInterface
     {
-        return new NoLogic();
+        return new AltarTileLogic();
     }
 
     public function draw(): string
     {
-        return "<fg=bright-blue>&</>";
+        return "<fg=gray>o</>";
     }
 }

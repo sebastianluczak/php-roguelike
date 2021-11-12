@@ -18,11 +18,14 @@ class CorridorTileLogic implements TileLogicInterface
 
     public function __construct(int $mapLevel)
     {
-        $scale = ceil(1 + ceil($mapLevel * 0.2));
+        $scale = ceil(1 + ceil($mapLevel * 0.6));
 
         // allows more creatures to be spawned on later levels
         // should make SMALL difference
         $maxChance = 700 - $scale;
+        if ($maxChance <= 100) {
+            $maxChance = 100;
+        }
         $roll = random_int(0, $maxChance);
         if ($roll <= 1) {
             $this->creature = new Dragon($scale);

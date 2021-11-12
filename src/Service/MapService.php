@@ -14,6 +14,7 @@ use App\Model\Map;
 use App\Model\Player\PlayerCoordinates;
 use App\Model\Player\PlayerInterface;
 use App\Model\Tile\AbstractTile;
+use App\Model\Tile\AltarTile;
 use App\Model\Tile\ChestTile;
 use App\Model\Tile\CorridorTile;
 use App\Model\Tile\EmptyTile;
@@ -259,6 +260,8 @@ class MapService
 
         if ($roll <= 1) {
             return new ShopTile();
+        } else if ($roll <= 2) {
+            return new AltarTile();
         } else if ($roll <= 5) {
             return new RareChestTile();
         } else if ($roll <= 10) {

@@ -11,9 +11,9 @@ class SkillBoost
 
     public function __construct(int $mapLevel)
     {
-        $this->armorAmount = random_int(1, 5);
-        $this->damageAmount = random_int(1, 5);
-        $this->healthAmount = random_int(1, 20);
+        $this->armorAmount = random_int(1, 2 * $mapLevel);
+        $this->damageAmount = random_int(1, 2 * $mapLevel);
+        $this->healthAmount = random_int(1 * $mapLevel, 10 * $mapLevel);
         $this->experience = random_int(10, 100);
     }
 
