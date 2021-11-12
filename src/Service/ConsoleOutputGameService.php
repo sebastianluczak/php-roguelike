@@ -13,6 +13,7 @@ use App\Model\Map;
 use App\Model\Player\PlayerInterface;
 use App\Model\Tile\AbstractTile;
 use Carbon\Carbon;
+use DateTime;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -82,7 +83,7 @@ class ConsoleOutputGameService
             " ==-- --== " . GameIconEnum::SHIELD() . " " . $player->getArmorScore() .
             "% ==-- --== " . GameIconEnum::MAP() . " " . $player->getMapLevel() .
             " ==-- --== " . GameIconEnum::BUFFS() . " " . $this->internalClockService->getActiveGameEventsCount() ." ==--" .
-            " --== " . GameIconEnum::TIME() . " " . str_replace("before", "", $this->internalClockService->getGameStartTime()->diffForHumans(new \DateTime())) .  " ==--</>"
+            " --== " . GameIconEnum::STATS() . " " . $player->getStats()->getFormattedStats() .  " ==--</>"
         );
     }
 
@@ -123,7 +124,7 @@ class ConsoleOutputGameService
         $entriesCount = count($entries);
         foreach ($entries as $key => $entry) {
             $this->messageBus->dispatch(new AddAdventureLogMessage(
-                $entriesCount - $key . ". " . $entry->getPlayerName() . " -> 🗺️ " . $entry->getDungeonLevel() . " 🧍 " . $entry->getPlayerLevel() . " ☠️ " . $entry->getKills() . " 💰 " . $entry->getGoldAmount() . " ⏲ " . Carbon::createFromImmutable($entry->getCreatedAt())->format(DATE_RFC822), MessageClassEnum::IMPORTANT())
+                $entriesCount - $key . ". " . $entry->getPlayerName() . " -> " . GameIconEnum::MAP() . " " . $entry->getDungeonLevel() . " 🧍 " . $entry->getPlayerLevel() . " ☠️ " . $entry->getKills() . " 💰 " . $entry->getGoldAmount() . " ⏲ " . Carbon::createFromImmutable($entry->getCreatedAt())->format(DATE_RFC822), MessageClassEnum::IMPORTANT())
             );
         }
         $this->messageBus->dispatch(new AddAdventureLogMessage(" --- Leaderboards --- ", MessageClassEnum::IMPORTANT()));

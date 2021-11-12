@@ -40,11 +40,11 @@ class CreatureService
             // calculate creature hit damage
             // todo check those values
             $playerDamageReduction = $player->getArmorScore() / 100;
-            $creatureHitDamage = round($creature->getDamage() - ($playerDamageReduction * $creature->getDamage()), 0);
+            $creatureHitDamage = round($creature->getDamage() - ($playerDamageReduction * $creature->getDamage()));
             // calculate player damage
             // todo check those values
             $creatureDamageReduction = $creature->getArmor() / 100;
-            $playerHitDamage = round($player->getDamageScore() - ($creatureDamageReduction * $player->getDamageScore()), 0);
+            $playerHitDamage = round($player->getDamageScore() - ($creatureDamageReduction * $player->getDamageScore()));
 
             // todo add items bypassing % armor
             // take damage first

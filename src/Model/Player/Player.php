@@ -2,6 +2,9 @@
 
 namespace App\Model\Player;
 
+use App\Model\Stats\Stats;
+use App\Model\Stats\StatsInterface;
+
 class Player implements PlayerInterface
 {
     protected string $name;
@@ -13,8 +16,9 @@ class Player implements PlayerInterface
     protected int $experience;
     protected PlayerCoordinatesInterface $coordinates;
     protected int $mapLevel = 1;
+    protected StatsInterface $stats;
 
-    public function __construct(string $name, PlayerCoordinatesInterface $coordinates, int $damageScore = 2, int $armorScore = 5, int $health = 100, int $gold = 0, int $experience = 0)
+    public function __construct(string $name, PlayerCoordinatesInterface $coordinates, int $damageScore = 2, int $armorScore = 7, int $health = 100, int $gold = 0, int $experience = 0)
     {
         $this->name = $name;
         $this->damageScore = $damageScore;
@@ -24,6 +28,7 @@ class Player implements PlayerInterface
         $this->killCount = 0;
         $this->experience = $experience;
         $this->coordinates = $coordinates;
+        $this->stats = new Stats();
     }
 
     public function decreaseHealth(int $healthAmount)
@@ -174,6 +179,11 @@ class Player implements PlayerInterface
         $this->mapLevel = $mapLevel;
 
         return $this;
+    }
+
+    public function getStats(): StatsInterface
+    {
+        return $this->stats;
     }
 
     public function draw(): string

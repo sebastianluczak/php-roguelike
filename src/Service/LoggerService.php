@@ -2,6 +2,9 @@
 
 namespace App\Service;
 
+use App\Message\CreatureGetsKilledMessage;
+use App\Model\Creature\CreatureInterface;
+use App\Model\Player\PlayerInterface;
 use Psr\Log\LoggerInterface;
 
 class LoggerService
@@ -18,13 +21,13 @@ class LoggerService
         $this->logger->info($message);
     }
 
-    public function logMessage(\App\Message\CreatureGetsKilledMessage $message)
+    public function logMessage(CreatureGetsKilledMessage $message)
     {
         $this->writeLogHeader("LogMessage");
         $this->log("[" . get_class($message) . "]: Creature " . $message->getCreature()->getName() . " killed by player: " . $message->getPlayer()->getPlayerName());
     }
 
-    public function logFight(\App\Model\Creature\CreatureInterface $creature, \App\Model\Player\PlayerInterface $player)
+    public function logFight(CreatureInterface $creature, PlayerInterface $player)
     {
         $this->writeLogHeader("FIGHT");
         $this->log("Creature: " . $creature->getName() . " fights player: " . $player->getPlayerName());

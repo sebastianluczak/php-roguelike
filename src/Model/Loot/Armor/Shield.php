@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Model\Loot\Weapon;
+namespace App\Model\Loot\Armor;
 
-use App\Model\Loot\AbstractLoot;
-
-class Shield extends AbstractLoot
+class Shield extends AbstractArmor
 {
     protected int $armor;
 
@@ -19,16 +17,6 @@ class Shield extends AbstractLoot
     public function getArmor(): int
     {
         return $this->armor;
-    }
-
-    public function isArmor(): bool
-    {
-        return true;
-    }
-
-    public function isWeapon(): bool
-    {
-        return false;
     }
 
     public function getName(): string

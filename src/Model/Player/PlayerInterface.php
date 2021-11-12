@@ -2,6 +2,8 @@
 
 namespace App\Model\Player;
 
+use App\Model\Stats\StatsInterface;
+
 interface PlayerInterface
 {
     public function getArmorScore(): int;
@@ -28,4 +30,5 @@ interface PlayerInterface
     public function getCoordinates(): PlayerCoordinatesInterface;
     public function setMapLevel(int $mapLevel): PlayerInterface;
     public function getMapLevel(): int;
+    public function getStats(): StatsInterface;
 }

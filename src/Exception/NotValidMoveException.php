@@ -2,7 +2,9 @@
 
 namespace App\Exception;
 
-class NotValidMoveException extends \Exception
+use Exception;
+
+class NotValidMoveException extends Exception
 {
     
 }

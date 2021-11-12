@@ -5,7 +5,7 @@ namespace App\Model\Tile\TileLogic;
 use App\Enum\MessageClassEnum;
 use App\Model\Creature\CreatureInterface;
 use App\Model\Loot\LootInterface;
-use App\Model\Loot\Weapon\Shield;
+use App\Model\Loot\Armor\Shield;
 use App\Model\Loot\Weapon\Sword;
 use App\Model\Player\PlayerInterface;
 use App\Model\RandomEvent\RandomEventInterface;

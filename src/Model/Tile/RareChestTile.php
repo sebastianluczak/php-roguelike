@@ -3,7 +3,7 @@
 namespace App\Model\Tile;
 
 use App\Model\Loot\Gold;
-use App\Model\Loot\Weapon\Shield;
+use App\Model\Loot\Armor\Shield;
 use App\Model\Loot\Weapon\Sword;
 use App\Model\Tile\TileLogic\RareChestTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;

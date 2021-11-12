@@ -2,7 +2,9 @@
 
 namespace App\Exception;
 
-class NewLevelException extends \Exception
+use Exception;
+
+class NewLevelException extends Exception
 {
 
 }

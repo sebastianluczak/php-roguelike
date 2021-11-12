@@ -22,6 +22,7 @@ use App\Model\Tile\ExitTile;
 use App\Model\Tile\RareChestTile;
 use App\Model\Tile\ShopTile;
 use App\Model\Tile\SpawnTile;
+use Exception;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -55,7 +56,7 @@ class MapService
         $mapValid = $this->isMapValid();
         if (!$mapValid) {
             $this->messageBus->dispatch(new AddAdventureLogMessage("Map regenerated due to errors: " . implode(", ", $this->mapErrors), MessageClassEnum::DEVELOPER()));
-            $this->createNewLevel();;
+            $this->createNewLevel();
         } else {
             $this->mapErrors = [];
             $this->playerService->getPlayer()->setMapLevel($this->mapLevel);
@@ -71,7 +72,7 @@ class MapService
 
         try {
             $this->generateMaze($spawnTileCoordinates);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
     }
 
@@ -95,7 +96,7 @@ class MapService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getNextPossibleTile(array $currentCoordinates, int $tries = 0): array
     {
@@ -166,7 +167,7 @@ class MapService
 
     /**
      * @throws NotValidMoveException
-     * @throws \App\Exception\NewLevelException
+     * @throws NewLevelException
      */
     public function movePlayer(PlayerInterface $player, string $direction, int $mapLevel)
     {
@@ -305,7 +306,7 @@ class MapService
         try {
             $percentageOfEmptyTiles = round($mapTileStatistics[EmptyTile::class] / $allTiles * 100, 2);
             $numberOfSpawnTiles = $mapTileStatistics[SpawnTile::class];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->mapErrors[] = "Mandatory tiles not found";
 
             return false;

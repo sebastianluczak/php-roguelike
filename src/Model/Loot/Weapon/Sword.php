@@ -2,9 +2,7 @@
 
 namespace App\Model\Loot\Weapon;
 
-use App\Model\Loot\AbstractLoot;
-
-class Sword extends AbstractLoot
+class Sword extends AbstractWeapon
 {
     protected int $damage;
 
@@ -19,16 +17,6 @@ class Sword extends AbstractLoot
     public function getDamage(): int
     {
         return $this->damage;
-    }
-
-    public function isArmor(): bool
-    {
-        return false;
-    }
-
-    public function isWeapon(): bool
-    {
-        return true;
     }
 
     public function getName(): string

@@ -2,7 +2,9 @@
 
 namespace App\Exception;
 
-class MapFiniteException extends \Exception
+use Exception;
+
+class MapFiniteException extends Exception
 {
 
 }

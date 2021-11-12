@@ -6,6 +6,7 @@ use App\Entity\Leaderboard;
 use App\Model\Player\PlayerInterface;
 use App\Repository\LeaderboardRepository;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LeaderboardService
@@ -30,7 +31,7 @@ class LeaderboardService
     public function addEntry(PlayerInterface $player)
     {
         $leaderboard = new Leaderboard();
-        $leaderboard->setCreatedAt(\DateTimeImmutable::createFromMutable(new DateTime()));
+        $leaderboard->setCreatedAt(DateTimeImmutable::createFromMutable(new DateTime()));
         $leaderboard->setDungeonLevel($player->getMapLevel());
         $leaderboard->setGoldAmount($player->getGold());
         $leaderboard->setKills($player->getKillCount());
