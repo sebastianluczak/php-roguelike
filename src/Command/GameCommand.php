@@ -26,14 +26,10 @@ class GameCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($_ENV['GAME_DEBUG'] == "false") {
-            $devMode = false;
-        } else {
-            $devMode = true;
-        }
+        $this->gameService->setDevMode($_ENV['GAME_DEBUG']);
         $input->setInteractive(false);
         $this->clearScreen();
-        $this->gameService->run($output, $devMode);
+        $this->gameService->run($output);
 
         return Command::SUCCESS;
     }

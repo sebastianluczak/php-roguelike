@@ -14,6 +14,7 @@ use MyCLabs\Enum\Enum;
  * @method static BUFFS()
  * @method static PLAYER()
  * @method static MAP()
+ * @method static TIME()
  */
 class GameIconEnum extends Enum
 {

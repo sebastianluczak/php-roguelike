@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Leaderboard;
+use App\Enum\GameIconEnum;
 use App\Enum\MessageClassEnum;
 use App\Message\AddAdventureLogMessage;
 use App\Model\AdventureLog\AdventureLog;
@@ -42,7 +43,6 @@ class ConsoleOutputGameService
         $this->messageBus = $messageBus;
         $this->leaderboardService = $leaderboardService;
         $this->internalClockService = $internalClockService;
-        $this->devMode = $_ENV['GAME_DEBUG'];
     }
 
     /**
@@ -50,7 +50,7 @@ class ConsoleOutputGameService
      */
     public function isDevMode(): bool
     {
-        return $this->devMode;
+        return $this->devMode??(bool)$_ENV['GAME_DEBUG'];
     }
 
     protected function printMap(Map $map, OutputInterface $output)
@@ -69,20 +69,20 @@ class ConsoleOutputGameService
     protected function printPlayerInfo(PlayerInterface $player, OutputInterface $output)
     {
         $devModeSymbol = "";
-        if ($this->devMode) {
-            $devModeSymbol = "🦄";
+        if ($this->isDevMode()) {
+            $devModeSymbol = GameIconEnum::DEV_MODE();
         }
 
         $output->writeln(
-            $devModeSymbol . " <fg=bright-blue>--== 💗 " . $player->getHealth() .
-            " ==-- --== 💰 " . $player->getGold() .
-            "g ==-- --== ☠️ " . $player->getKillCount() .
-            " ==-- --== 🧍 " . $player->getLevel() . " (" . $player->getExperience() % 100 . "/100)" .
-            " ==-- --== 🗡️ " . $player->getDamageScore() .
-            " ==-- --== 🛡️ " . $player->getArmorScore() .
-            "% ==-- --== 🗺️ " . $player->getMapLevel() .
-            " ==-- --== 💊 " . $this->internalClockService->getActiveGameEventsCount() ." ==--" .
-            " --== ⏲ " . str_replace("before", "", $this->internalClockService->getGameStartTime()->diffForHumans(new \DateTime())) .  " ==--</>"
+            $devModeSymbol . " <fg=bright-blue>--== " . GameIconEnum::HEALTH() . " " . $player->getHealth() .
+            " ==-- --== " . GameIconEnum::GOLD() . " " . $player->getGold() .
+            "g ==-- --== " . GameIconEnum::KILLS() . " " . $player->getKillCount() .
+            " ==-- --== " . GameIconEnum::PLAYER() . " " . $player->getLevel() . " (" . $player->getExperience() % 100 . "/100)" .
+            " ==-- --== " . GameIconEnum::WEAPON() . " " . $player->getDamageScore() .
+            " ==-- --== " . GameIconEnum::SHIELD() . " " . $player->getArmorScore() .
+            "% ==-- --== " . GameIconEnum::MAP() . " " . $player->getMapLevel() .
+            " ==-- --== " . GameIconEnum::BUFFS() . " " . $this->internalClockService->getActiveGameEventsCount() ." ==--" .
+            " --== " . GameIconEnum::TIME() . " " . str_replace("before", "", $this->internalClockService->getGameStartTime()->diffForHumans(new \DateTime())) .  " ==--</>"
         );
     }
 

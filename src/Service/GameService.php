@@ -16,9 +16,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GameService extends ConsoleOutputGameService
 {
-    public function run(OutputInterface $output, bool $devMode)
+    public function run(OutputInterface $output)
     {
-        $this->devMode = $devMode;
         $this->messageBus->dispatch(new AddAdventureLogMessage("Game started at " . $this->getInternalClockService()->getGameStartTime()->toFormattedDateString()));
         $this->messageBus->dispatch(new AddAdventureLogMessage("DEVELOPER MODE IS ACTIVE", MessageClassEnum::DEVELOPER()));
 
@@ -37,25 +36,8 @@ class GameService extends ConsoleOutputGameService
             $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
 
             $buttonPressed = $this->getPlayerCommand();
-            if ($buttonPressed == "q") {
-                $this->messageBus->dispatch(new AddAdventureLogMessage("Game exit at " . Carbon::now()->toFormattedDateString()));
-                echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+            $this->handleUncommonButtonPresses($buttonPressed);
 
-                break;
-            }
-            if ($this->devMode) {
-                if ($buttonPressed == "r") {
-                    $this->messageBus->dispatch(new AddAdventureLogMessage("Map regenerated at " . Carbon::now(), MessageClassEnum::DEVELOPER()));
-                    $this->messageBus->dispatch(new RegenerateMapMessage());
-
-                    echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
-                }
-                if ($buttonPressed == "l") {
-                    $this->printLeaderBoards($player);
-
-                    echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
-                }
-            }
             try {
                 $this->mapService->movePlayer($player, $buttonPressed, $this->mapService->getMapLevel());
             } catch (NotValidMoveException $e) {
@@ -79,5 +61,48 @@ class GameService extends ConsoleOutputGameService
     public function handleGameOver(GameOverException $e, PlayerInterface $player)
     {
         $this->messageBus->dispatch(new GameOverMessage($player, $e->getReason()));
+    }
+
+    public function setDevMode(string $devMode = "false")
+    {
+        $this->devMode = true;
+        if ($devMode == "false") {
+            $this->devMode = false;
+        }
+    }
+
+    private function handleUncommonButtonPresses(string $buttonPressed)
+    {
+        if ($buttonPressed == "q") {
+            $this->messageBus->dispatch(new AddAdventureLogMessage("Game exit at " . Carbon::now()->toFormattedDateString()));
+            $this->messageBus->dispatch(new GameOverMessage($this->playerService->getPlayer(), "Game exit"));
+            echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+        }
+
+        if ($buttonPressed == "p") {
+            $this->messageBus->dispatch(new AddAdventureLogMessage("DEV MODE STATUS: " . $this->isDevMode()));
+            if ($this->isDevMode()) {
+                $devMode = "false";
+            } else {
+                $devMode = "true";
+            }
+            $this->setDevMode($devMode);
+            $this->messageBus->dispatch(new AddAdventureLogMessage("Dev mode changed at " . Carbon::now()));
+            $this->messageBus->dispatch(new AddAdventureLogMessage("DEV MODE STATUS: " . $this->isDevMode()));
+        }
+
+        if ($this->isDevMode()) {
+            if ($buttonPressed == "r") {
+                $this->messageBus->dispatch(new AddAdventureLogMessage("Map regenerated at " . Carbon::now(), MessageClassEnum::DEVELOPER()));
+                $this->messageBus->dispatch(new RegenerateMapMessage());
+
+                echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+            }
+            if ($buttonPressed == "l") {
+                $this->printLeaderBoards($this->getPlayerService()->getPlayer());
+
+                echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+            }
+        }
     }
 }
