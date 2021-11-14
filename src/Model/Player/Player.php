@@ -6,6 +6,8 @@ use App\Model\Player\Health\PlayerHealth;
 use App\Model\Player\Health\PlayerHealthInterface;
 use App\Model\Player\Inventory\PlayerInventory;
 use App\Model\Player\Inventory\PlayerInventoryInterface;
+use App\Model\Player\Level\PlayerLevel;
+use App\Model\Player\Level\PlayerLevelInterface;
 use App\Model\Stats\Stats;
 use App\Model\Stats\StatsInterface;
 
@@ -14,27 +16,27 @@ class Player implements PlayerInterface
     protected string $name;
     protected int $damageScore;
     protected int $armorScore;
-    protected int $gold;
-    protected int $killCount;
-    protected int $experience;
-    protected PlayerCoordinatesInterface $coordinates;
+    protected int $gold = 0;
+    protected int $killCount = 0;
     protected int $mapLevel = 1;
+
+    protected PlayerCoordinatesInterface $coordinates;
     protected PlayerHealthInterface $health;
     protected StatsInterface $stats;
     protected PlayerInventoryInterface $inventory;
+    protected PlayerLevelInterface $level;
 
-    public function __construct(string $name, PlayerCoordinatesInterface $coordinates, int $damageScore = 2, int $armorScore = 7, int $health = 100, int $gold = 0, int $experience = 0)
+    public function __construct(string $name, PlayerCoordinatesInterface $coordinates, int $damageScore = 2, int $armorScore = 7, int $health = 100)
     {
         $this->name = $name;
+        // todo remove
         $this->damageScore = $damageScore;
         $this->armorScore = $armorScore;
         $this->health = new PlayerHealth($health);
-        $this->gold = $gold;
-        $this->killCount = 0;
-        $this->experience = $experience;
+        $this->level = new PlayerLevel();
         $this->coordinates = $coordinates;
         $this->stats = new Stats();
-        $this->inventory = new PlayerInventory();
+        $this->inventory = new PlayerInventory($this->stats);
     }
 
     public function getArmorScore(): int
@@ -123,9 +125,6 @@ class Player implements PlayerInterface
         return $this->health;
     }
 
-    /**
-     * @return int
-     */
     public function getKillCount(): int
     {
         return $this->killCount;
@@ -138,19 +137,9 @@ class Player implements PlayerInterface
         return $this->killCount;
     }
 
-    public function getLevel(): int
+    public function getLevel(): PlayerLevelInterface
     {
-        return ceil((int)($this->experience / 100)) + 1;
-    }
-
-    public function getExperience(): int
-    {
-        return $this->experience;
-    }
-
-    public function increaseExperience(int $amount)
-    {
-        $this->experience = $this->experience + $amount;
+        return $this->level;
     }
 
     public function getCoordinates(): PlayerCoordinatesInterface

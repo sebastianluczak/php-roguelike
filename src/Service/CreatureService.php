@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Enum\MessageClassEnum;
+use App\Enum\Player\Health\HealthActionEnum;
 use App\Exception\GameOverException;
 use App\Message\AddAdventureLogMessage;
 use App\Message\CreatureGetsKilledMessage;
@@ -26,7 +27,6 @@ class CreatureService
      */
     public function handleFight(CreatureInterface $creature, PlayerInterface $player): void
     {
-        $this->loggerService->logFight($creature, $player);
         $this->messageBus->dispatch(new AddAdventureLogMessage(
             "☠️ Encountered " . $creature->getName() . " 💗" . $creature->getHealth() . "/🗡️" . $creature->getDamage() . "/🛡️" . $creature->getArmor(),
             MessageClassEnum::IMPORTANT()
@@ -34,13 +34,14 @@ class CreatureService
 
         $turn = 1;
         while ($creature->getHealth() >= 0) {
-            if ($player->getHealth() <= 0) {
+            if ($player->getHealth()->getHealth() <= 0) {
                 throw new GameOverException($creature);
             }
             // calculate creature hit damage
             // todo check those values
             $playerDamageReduction = $player->getArmorScore() / 100;
             $creatureHitDamage = round($creature->getDamage() - ($playerDamageReduction * $creature->getDamage()));
+
             // calculate player damage
             // todo check those values
             $creatureDamageReduction = $creature->getArmor() / 100;
@@ -49,8 +50,15 @@ class CreatureService
             // todo add items bypassing % armor
             // take damage first
             // todo initiative rolls
-            $this->messageBus->dispatch(new AddAdventureLogMessage("🗡️ Turn " . $turn . " - " . $creature->getName() . " (💗" . $creature->getHealth() . "/🗡".$creatureHitDamage.") vs. " . $player->getPlayerName() . " (💗" . $player->getHealth() . "/🗡".$playerHitDamage.")", MessageClassEnum::STANDARD()));
-            $player->decreaseHealth($creatureHitDamage);
+            $this->messageBus->dispatch(
+                new AddAdventureLogMessage(
+                    "🗡️ Turn " . $turn . " - " . $creature->getName() . " (💗" . $creature->getHealth() . "/🗡".$creatureHitDamage.") vs. " . $player->getPlayerName() . " (💗" . $player->getHealth()->getHealth() . "/🗡".$playerHitDamage.")",
+                    MessageClassEnum::STANDARD()
+                )
+            );
+            $player->getHealth()->modifyHealth($creatureHitDamage, HealthActionEnum::DECREASE());
+
+            // todo creature health interface
             $creature->decreaseHealth($playerHitDamage);
             $turn++;
         }

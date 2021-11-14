@@ -2,6 +2,8 @@
 
 namespace App\Model\Loot;
 
+use App\Model\Stats\StatsInterface;
+
 class SkillBoost
 {
     protected int $armorAmount;
@@ -9,12 +11,12 @@ class SkillBoost
     protected int $healthAmount;
     protected int $experience;
 
-    public function __construct(int $mapLevel)
+    public function __construct(int $mapLevel, StatsInterface $stats)
     {
-        $this->armorAmount = random_int(1, 2 * $mapLevel);
-        $this->damageAmount = random_int(1, 2 * $mapLevel);
-        $this->healthAmount = random_int(1 * $mapLevel, 10 * $mapLevel);
-        $this->experience = random_int(10, 100);
+        $this->armorAmount = random_int(1, 2 * $mapLevel + $stats->getLuck());
+        $this->damageAmount = random_int(1, 2 * $mapLevel + $stats->getLuck());
+        $this->healthAmount = random_int(1 * $mapLevel, 10 * $mapLevel + $stats->getLuck());
+        $this->experience = random_int(10 + $stats->getIntelligence(), 100 * sqrt($stats->getIntelligence()));
     }
 
     public function getArmorAmount(): int

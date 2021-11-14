@@ -25,7 +25,7 @@ class AltarTileLogic implements TileLogicInterface
            $this->rawMessage = "🧍 You've thrown " . GameIconEnum::GOLD() . " " . $thrownGold . " gold into the altar.";
            $this->messageClass = MessageClassEnum::LOOT();
 
-           $roll = random_int(1, 10);
+           $roll = random_int(1, 10) + sqrt($player->getStats()->getIntelligence());
            if ($roll >= 5) {
                $this->event = new AltarPrayerGameEvent($player);
            }

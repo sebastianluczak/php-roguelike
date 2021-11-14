@@ -3,6 +3,7 @@
 namespace App\MessageHandler;
 
 use App\Enum\MessageClassEnum;
+use App\Enum\Player\Health\HealthActionEnum;
 use App\Message\AddAdventureLogMessage;
 use App\Message\PlayerLevelUpMessage;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -25,7 +26,9 @@ class PlayerLevelUpHandler implements MessageHandlerInterface
         $statChosen = $this->specialStats[array_rand($this->specialStats)];
         $randomSkillBoostMethod = 'modify' . $statChosen;
         $player->getStats()->{$randomSkillBoostMethod}(1);
-        $player->getHealth()->increaseHealth($player->getHealth()->getMaxHealth());
+
+        $player->getHealth()->increaseMaxHealth(10);
+        $player->getHealth()->modifyHealth($player->getHealth()->getMaxHealth(), HealthActionEnum::INCREASE());
         $this->messageBus->dispatch(new AddAdventureLogMessage("Player skill leveled up: " . $statChosen, MessageClassEnum::LOOT()));
     }
 }

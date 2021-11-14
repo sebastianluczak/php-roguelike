@@ -4,6 +4,7 @@ namespace App\Model\Player;
 
 use App\Model\Player\Health\PlayerHealthInterface;
 use App\Model\Player\Inventory\PlayerInventoryInterface;
+use App\Model\Player\Level\PlayerLevelInterface;
 use App\Model\Stats\StatsInterface;
 
 interface PlayerInterface
@@ -22,9 +23,7 @@ interface PlayerInterface
     public function getHealth(): PlayerHealthInterface;
     public function getKillCount(): int;
     public function increaseKillCount(): int;
-    public function getLevel(): int;
-    public function increaseExperience(int $amount);
-    public function getExperience(): int;
+    public function getLevel(): PlayerLevelInterface;
     public function draw(): string;
     public function setCoordinates(PlayerCoordinatesInterface $coordinates): PlayerInterface;
     public function getCoordinates(): PlayerCoordinatesInterface;

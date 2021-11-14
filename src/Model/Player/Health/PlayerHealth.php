@@ -2,6 +2,8 @@
 
 namespace App\Model\Player\Health;
 
+use App\Enum\Player\Health\HealthActionEnum;
+
 class PlayerHealth implements PlayerHealthInterface
 {
     protected int $health;
@@ -13,23 +15,38 @@ class PlayerHealth implements PlayerHealthInterface
         $this->maxHealth = $playerHealth;
     }
 
-    public function modifyHealth(int $amount): PlayerHealthInterface
+    public function modifyHealth(int $amount, HealthActionEnum $action): PlayerHealthInterface
     {
-        if ($amount > 0) {
-            if ($amount + $this->health >= $this->maxHealth) {
-                $this->health = $this->maxHealth; // heal completely
-            } else {
-                $this->health = $this->health + $amount;
-            }
-        } else if ($amount < 0) {
-            if ($this->health - $amount <= 0) {
-                $this->health = 0; // player death
-            } else {
-                $this->health = $this->health + $amount;
-            }
+        switch ($action) {
+            case HealthActionEnum::INCREASE():
+                if ($amount + $this->health >= $this->maxHealth) {
+                    $this->health = $this->maxHealth; // heal completely
+                } else {
+                    $this->health = $this->health + $amount;
+                }
+                break;
+            case HealthActionEnum::DECREASE():
+                if ($this->health - $amount <= 0) {
+                    $this->health = 0; // player death
+                } else {
+                    $this->health = $this->health - $amount;
+                }
+                break;
         }
 
         return $this;
+    }
+
+    public function increaseMaxHealth(int $amount): PlayerHealthInterface
+    {
+        $this->maxHealth = $this->maxHealth + $amount;
+
+        return $this;
+    }
+
+    public function getWarningThreshold(): int
+    {
+        return ceil($this->getMaxHealth() / 4);
     }
 
     public function getHealth(): int

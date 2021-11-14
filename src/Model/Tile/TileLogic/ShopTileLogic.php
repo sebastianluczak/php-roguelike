@@ -3,6 +3,8 @@
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\MessageClassEnum;
+use App\Enum\Player\Health\HealthActionEnum;
+use App\Enum\Player\Level\LevelActionEnum;
 use App\Message\AddAdventureLogMessage;
 use App\Model\Creature\CreatureInterface;
 use App\Model\Loot\Gold;
@@ -10,6 +12,7 @@ use App\Model\Loot\SkillBoost;
 use App\Model\Player\PlayerInterface;
 use App\Model\RandomEvent\PleasedTheGodsGameEvent;
 use App\Model\RandomEvent\RandomEventInterface;
+use App\Model\Stats\StatsInterface;
 
 class ShopTileLogic implements TileLogicInterface
 {
@@ -18,22 +21,27 @@ class ShopTileLogic implements TileLogicInterface
     protected string $messageClass;
     protected RandomEventInterface $event;
 
-    public function __construct(int $scale)
+    public function __construct(int $scale, StatsInterface $stats)
     {
-        $this->skillBoost = new SkillBoost($scale);
+        $this->skillBoost = new SkillBoost($scale, $stats);
     }
 
     public function process(PlayerInterface $player)
    {
-       if ($player->getGold() >= 100) {
-           $this->rawMessage = "🧍 You feel rush of energy after paying some gold to strange man";
+       $amountRequired = $player->getLevel()->getLevel() * random_int(
+           50 - (sqrt($player->getStats()->getCharisma() + 2)), 150 - (sqrt($player->getStats()->getCharisma() + 2))
+       );
+       
+       if ($player->getGold() >= $amountRequired) {
+           $this->rawMessage = "🧍 You feel rush of energy after paying " . $amountRequired . " gold to strange man";
            $this->messageClass = MessageClassEnum::SUCCESS();
 
+           // todo delete damage and armor
            $player->increaseDamage($this->skillBoost->getDamageAmount());
            $player->increaseArmor($this->skillBoost->getArmorAmount());
-           $player->increaseHealth($this->skillBoost->getHealthAmount());
-           $player->increaseExperience($this->skillBoost->getExperience());
-           $player->decreaseGoldAmount(100);
+           $player->getHealth()->modifyHealth($this->skillBoost->getHealthAmount(), HealthActionEnum::INCREASE());
+           $player->getLevel()->modifyExperience($this->skillBoost->getExperience(), LevelActionEnum::INCREASE());
+           $player->decreaseGoldAmount($amountRequired);
        } else {
            $this->event = new PleasedTheGodsGameEvent($player);
        }

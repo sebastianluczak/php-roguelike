@@ -3,6 +3,7 @@
 namespace App\Model\Loot\Armor;
 
 use App\Enum\Loot\LootClassEnum;
+use App\Model\Stats\Stats;
 use DiceBag\DiceBag;
 
 class Shield extends AbstractArmor
@@ -24,13 +25,13 @@ class Shield extends AbstractArmor
         'Belus’ Shield'
     ];
 
-    public function __construct()
+    public function __construct(Stats $playerStats)
     {
         parent::__construct();
         $this->armor = random_int(1, 3);
 
         $roll = DiceBag::factory('1d6+4');
-        if ($roll->getTotal() > 8) { // unique loot handler
+        if ($roll->getTotal() > 8 - $playerStats->getLuck()) { // unique loot handler
             $this->lootClass = LootClassEnum::S();
             $this->name = $this->uniqueNames[array_rand($this->uniqueNames)];
             $diceRoll = DiceBag::factory('2d8+' . (5 - $this->lootClass->getValue()));

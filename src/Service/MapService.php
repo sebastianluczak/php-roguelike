@@ -23,6 +23,8 @@ use App\Model\Tile\RareChestTile;
 use App\Model\Tile\ShopTile;
 use App\Model\Tile\SpawnTile;
 use Exception;
+use Irfa\Gatcha\Roll;
+use Symfony\Component\Console\Terminal;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -35,6 +37,13 @@ class MapService
     protected int $mapLevel = 1;
     protected MessageBusInterface $messageBus;
     protected array $mapErrors;
+    private array $tilesAvailableToSpawnWithChances = [
+        ShopTile::class => 2,
+        AltarTile::class => 3,
+        RareChestTile::class => 5,
+        ChestTile::class => 5,
+        CorridorTile::class => 1500
+    ];
 
     public function __construct(PlayerService $playerService, LoggerService $loggerService, MessageBusInterface $messageBus)
     {
@@ -50,7 +59,7 @@ class MapService
 
     public function createNewLevel(): void
     {
-        $this->map = new Map();
+        $this->map = new Map((new Terminal())->getWidth() - 48, (new Terminal())->getHeight() - 18);
         $this->generateMap();
 
         $mapValid = $this->isMapValid();
@@ -90,6 +99,8 @@ class MapService
             $nextMapTileCoordinates = $this->getNextPossibleTile($currentCoordinates);
         } catch (MapFiniteException $e) {
             $this->addExitTileToMap($currentCoordinates);
+
+            throw new MapFiniteException();
         }
         $this->map->addTile($this->createRandomTile(), $nextMapTileCoordinates[0], $nextMapTileCoordinates[1]);
         $this->generateMaze($nextMapTileCoordinates);
@@ -101,7 +112,7 @@ class MapService
     protected function getNextPossibleTile(array $currentCoordinates, int $tries = 0): array
     {
         $tries++;
-        if ($tries > 6) {
+        if ($tries > 8) {
             throw new MapFiniteException();
         }
         $direction = random_int(0, 3); // UP, RIGHT, DOWN, LEFT
@@ -257,19 +268,9 @@ class MapService
 
     private function createRandomTile(): AbstractTile
     {
-        $roll = random_int(0, 1000);
+        $tileRolled = Roll::put($this->tilesAvailableToSpawnWithChances)->spin();
 
-        if ($roll <= 1) {
-            return new ShopTile();
-        } else if ($roll <= 2) {
-            return new AltarTile();
-        } else if ($roll <= 5) {
-            return new RareChestTile();
-        } else if ($roll <= 10) {
-            return new ChestTile();
-        }
-
-        return new CorridorTile();
+        return new $tileRolled;
     }
 
     public function increaseMapLevel()
@@ -295,8 +296,8 @@ class MapService
         $this->mapErrors = [];
         $mapTileStatistics = [];
         $allTiles = 0;
-        foreach ($this->getMap()->getMapInstance() as $xcoordinate => $arrayOfTiles) {
-            foreach ($arrayOfTiles as $ycoordinate => $mapTile) {
+        foreach ($this->getMap()->getMapInstance() as $arrayOfTiles) {
+            foreach ($arrayOfTiles as $mapTile) {
                 $mapTileStatistics[get_class($mapTile)] = (isset($mapTileStatistics[get_class($mapTile)]))?$mapTileStatistics[get_class($mapTile)] + 1:1;
                 $allTiles++;
             }
@@ -332,7 +333,9 @@ class MapService
      */
     public function handleTileLogic(AbstractTile $tile, PlayerInterface $player, int $mapLevel)
     {
-        $tileLogic = $tile->handleLogic($mapLevel + $player->getLevel());
+        $scale = $mapLevel + $player->getLevel()->getLevel();
+
+        $tileLogic = $tile->handleLogic($scale, $player->getStats());
 
         if ($tile->hasLogic()) {
             $this->messageBus->dispatch(new TileLogicMessage($player, $tileLogic));

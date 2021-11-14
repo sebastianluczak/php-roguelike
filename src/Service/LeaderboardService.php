@@ -25,7 +25,13 @@ class LeaderboardService
      */
     public function getBestScores(): array
     {
-        return $this->repository->getBest();
+        try {
+            $records = $this->repository->getBest();
+        } catch (\Exception $e) {
+            $records = [];
+        }
+
+        return $records;
     }
 
     public function addEntry(PlayerInterface $player)
@@ -35,7 +41,7 @@ class LeaderboardService
         $leaderboard->setDungeonLevel($player->getMapLevel());
         $leaderboard->setGoldAmount($player->getGold());
         $leaderboard->setKills($player->getKillCount());
-        $leaderboard->setPlayerLevel($player->getLevel());
+        $leaderboard->setPlayerLevel($player->getLevel()->getLevel());
         $leaderboard->setPlayerName($player->getPlayerName());
 
         $this->em->persist($leaderboard);

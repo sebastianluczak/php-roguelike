@@ -6,6 +6,7 @@ use App\Enum\Loot\LootTypeEnum;
 use App\Model\Loot\Armor\Shield;
 use App\Model\Loot\LootInterface;
 use App\Model\Loot\Weapon\Sword;
+use App\Model\Stats\Stats;
 
 class PlayerInventory implements PlayerInventoryInterface
 {
@@ -13,10 +14,11 @@ class PlayerInventory implements PlayerInventoryInterface
     protected LootInterface $armorSlot;
     protected LootInterface $keyStone;
 
-    public function __construct()
+    public function __construct(Stats $stats)
     {
-        $this->weaponSlot = new Sword();
-        $this->armorSlot = new Shield();
+        $this->weaponSlot = new Sword($stats);
+        // todo luckModifier from stats, do it other way, factory?
+        $this->armorSlot = new Shield($stats);
     }
 
     public function getWeaponSlot(): LootInterface

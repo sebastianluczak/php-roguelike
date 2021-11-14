@@ -4,12 +4,50 @@ namespace App\Model\Stats;
 
 class Stats implements StatsInterface
 {
+    /**
+     *  Affects:
+     *  - @TODO base dmg (melee + weapons based of melee)
+     *  - @TODO carrying weight
+     */
     protected int $strength = 1;
+
+    /**
+     *  Affects:
+     *  - @TODO currently nothing
+     */
     protected int $perception = 1;
+
+    /**
+     *  Affects:
+     *  - @TODO currently nothing
+     */
     protected int $endurance = 1;
+
+    /**
+     *  Affects:
+     *  - price of shop/strange-man
+     */
     protected int $charisma = 1;
+
+    /**
+     *  Affects:
+     *  - @TODO scrolls requirements
+     *  - strength of Game Effects
+     *  - SkillBoost
+     */
     protected int $intelligence = 1;
+
+    /**
+     *  Affects:
+     *  - @TODO currently nothing
+     */
     protected int $agility = 1;
+
+    /**
+     *  Affects:
+     *  - chance of getting better loot
+     *  - @TODO chance of getting additional loot
+     */
     protected int $luck = 1;
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Model\Tile;
 
+use App\Model\Stats\StatsInterface;
 use App\Model\Tile\TileLogic\NoLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
 
@@ -27,7 +28,7 @@ class EmptyTile extends AbstractTile
         return false;
     }
 
-    public function handleLogic(int $mapLevel): TileLogicInterface
+    public function handleLogic(int $scale, StatsInterface $stats): TileLogicInterface
     {
         return new NoLogic();
     }

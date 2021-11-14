@@ -2,6 +2,7 @@
 
 namespace App\Model\RandomEvent\Effect;
 
+use App\Enum\Player\Health\HealthActionEnum;
 use App\Model\Player\PlayerInterface;
 
 class RegenHealthEffect implements GameEffectInterface
@@ -17,6 +18,6 @@ class RegenHealthEffect implements GameEffectInterface
 
     public function apply(): void
     {
-        $this->player->increaseHealth($this->intensity);
+        $this->player->getHealth()->modifyHealth($this->intensity, HealthActionEnum::INCREASE());
     }
 }

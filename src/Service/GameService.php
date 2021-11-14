@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Enum\MessageClassEnum;
+use App\Enum\Player\Health\HealthActionEnum;
 use App\Exception\GameOverException;
 use App\Exception\NewLevelException;
 use App\Exception\NotValidMoveException;
@@ -23,12 +24,11 @@ class GameService extends ConsoleOutputGameService
         $this->messageBus->dispatch(new AddAdventureLogMessage("DEVELOPER MODE IS ACTIVE", MessageClassEnum::DEVELOPER()));
 
         while (true) {
-            $this->internalClockService->tick();
-
             $player = $this->getPlayerService()->getPlayer();
-            if ($player->getHealth() <= 0) {
+            if ($player->getHealth()->getHealth() <= 0) {
                 break;
             }
+            $this->internalClockService->tick();
 
             $mapObject = $this->mapService->getMap();
             $this->printPlayerInfo($player, $output);
@@ -52,7 +52,7 @@ class GameService extends ConsoleOutputGameService
 
         $this->printPlayerInfo($player, $output);
         $this->printMap($mapObject, $output);
-        $this->printLeaderBoards($player);
+        $this->printLeaderBoards();
         $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
 
         return Command::SUCCESS;
@@ -75,7 +75,10 @@ class GameService extends ConsoleOutputGameService
     {
         if ($buttonPressed == "q") {
             $this->messageBus->dispatch(new AddAdventureLogMessage("Game exit at " . Carbon::now()->toFormattedDateString()));
-            $this->playerService->getPlayer()->decreaseHealth($this->playerService->getPlayer()->getHealth()); // essentialy kill player
+            $this->playerService->getPlayer()->getHealth()->modifyHealth(
+                $this->playerService->getPlayer()->getHealth()->getHealth(),
+                HealthActionEnum::DECREASE()
+            ); // essentialy kill player
             $this->messageBus->dispatch(
                 new GameOverMessage(
                     $this->playerService->getPlayer(),
@@ -106,17 +109,18 @@ class GameService extends ConsoleOutputGameService
             return true;
         }
 
+        if ($buttonPressed == "l") {
+            $this->printLeaderBoards();
+
+            echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+
+            return true;
+        }
+
         if ($this->isDevMode()) {
             if ($buttonPressed == "r") {
                 $this->messageBus->dispatch(new AddAdventureLogMessage("Map regenerated at " . Carbon::now(), MessageClassEnum::DEVELOPER()));
                 $this->messageBus->dispatch(new RegenerateMapMessage());
-
-                echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
-
-                return true;
-            }
-            if ($buttonPressed == "l") {
-                $this->printLeaderBoards($this->getPlayerService()->getPlayer());
 
                 echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
 

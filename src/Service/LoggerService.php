@@ -27,14 +27,6 @@ class LoggerService
         $this->log("[" . get_class($message) . "]: Creature " . $message->getCreature()->getName() . " killed by player: " . $message->getPlayer()->getPlayerName());
     }
 
-    public function logFight(CreatureInterface $creature, PlayerInterface $player)
-    {
-        $this->writeLogHeader("FIGHT");
-        $this->log("Creature: " . $creature->getName() . " fights player: " . $player->getPlayerName());
-        $this->log("Creature Health: " . $creature->getHealth() . " | Player Health: " . $player->getHealth());
-        $this->log("Creature Damage: " . $creature->getDamage() . " | Player Damage: " . $player->getDamageScore());
-    }
-
     private function writeLogHeader(string $string)
     {
         $this->log("#=-- " . $string . " --=#");
