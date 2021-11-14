@@ -1,5 +1,11 @@
 version: '3'
 services:
+  # redis
+  redis:
+    image: redis:alpine
+    volumes:
+      - ./db/redis/:/data/redis
+
   # database
   mysql:
     image: mysql:5.7
@@ -21,8 +27,10 @@ services:
     tty: true
     depends_on:
       - mysql
+      - redis
     links:
       - mysql
+      - redis
     command: tail -f /app/var/log/dev.log
 
 volumes:

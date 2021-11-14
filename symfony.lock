@@ -1,4 +1,7 @@
 {
+    "andreasindal/rpgfaker": {
+        "version": "v1.1.0"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.4"
     },
@@ -88,6 +91,9 @@
     "fzaninotto/faker": {
         "version": "v1.9.2"
     },
+    "irfa/php-gatcha": {
+        "version": "v2.1"
+    },
     "laminas/laminas-code": {
         "version": "4.4.3"
     },
@@ -102,6 +108,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.13.1"
+    },
+    "porthou/dicebag": {
+        "version": "V0.1.0"
     },
     "psr/cache": {
         "version": "1.0.1"

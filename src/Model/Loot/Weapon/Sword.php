@@ -2,15 +2,17 @@
 
 namespace App\Model\Loot\Weapon;
 
-use App\Model\Loot\AbstractLoot;
+use App\Model\Stats\Stats;
 
-class Sword extends AbstractLoot
+class Sword extends AbstractWeapon
 {
     protected int $damage;
 
-    public function __construct()
+    public function __construct(Stats $playerStats)
     {
-        $this->damage = random_int(1, 3);
+        parent::__construct();
+
+        $this->damage = random_int(1, 3 + $playerStats->getLuck());
     }
 
     /**
@@ -19,16 +21,6 @@ class Sword extends AbstractLoot
     public function getDamage(): int
     {
         return $this->damage;
-    }
-
-    public function isArmor(): bool
-    {
-        return false;
-    }
-
-    public function isWeapon(): bool
-    {
-        return true;
     }
 
     public function getName(): string

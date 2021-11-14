@@ -12,7 +12,7 @@ class Imp extends AbstractCreature
 
         $this->scale = $scale;
         $this->name = "Imp - " . $this->getRawName();
-        $this->damage = $this->createRandomNumberInRangeWithScale(1, 2, $scale);
+        $this->damage = $this->createRandomNumberInRangeWithScale(1, 1, $scale);
         $this->armor = $this->createRandomNumberInRangeWithScale(0, 1, $scale);
         $this->health = $this->createRandomNumberInRangeWithScale(3, 5, $scale);
         $this->experience = $this->createRandomNumberInRangeWithScale(5, 7, $scale);

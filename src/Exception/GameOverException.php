@@ -3,9 +3,10 @@
 namespace App\Exception;
 
 use App\Model\Creature\CreatureInterface;
+use Exception;
 use Throwable;
 
-class GameOverException extends \Exception
+class GameOverException extends Exception
 {
     protected string $reason;
     protected CreatureInterface $creature;

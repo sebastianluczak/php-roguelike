@@ -8,6 +8,7 @@ use App\Model\AdventureLog\AdventureLogMessage;
 use App\Service\AdventureLogService;
 use App\Service\GameService;
 use App\Service\LoggerService;
+use Exception;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class AdventureLogMessageHandler implements MessageHandlerInterface
@@ -40,7 +41,7 @@ class AdventureLogMessageHandler implements MessageHandlerInterface
                     new AdventureLogMessage($message->getMessage(), $gameStartTime, $message->getMessageClass())
                 );
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // do nothing
         }
     }

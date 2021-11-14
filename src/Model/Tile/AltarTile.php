@@ -4,6 +4,7 @@ namespace App\Model\Tile;
 
 use App\Model\Creature\Imp;
 use App\Model\Loot\SkillBoost;
+use App\Model\Stats\StatsInterface;
 use App\Model\Tile\TileLogic\AltarTileLogic;
 use App\Model\Tile\TileLogic\ShopTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
@@ -30,7 +31,7 @@ class AltarTile extends AbstractTile
         return true;
     }
 
-    public function handleLogic(int $mapLevel): TileLogicInterface
+    public function handleLogic(int $scale, StatsInterface $stats): TileLogicInterface
     {
         return new AltarTileLogic();
     }

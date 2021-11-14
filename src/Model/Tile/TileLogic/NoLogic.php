@@ -12,7 +12,6 @@ class NoLogic implements TileLogicInterface
 
     public function process(PlayerInterface $player)
     {
-        return;
     }
 
     public function hasAdventureLogMessage(): bool

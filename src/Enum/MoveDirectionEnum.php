@@ -4,6 +4,12 @@ namespace App\Enum;
 
 use MyCLabs\Enum\Enum;
 
+/**
+ * @method static UP()
+ * @method static DOWN()
+ * @method static LEFT()
+ * @method static RIGHT()
+ */
 class MoveDirectionEnum extends Enum
 {
     private const UP = 'w';

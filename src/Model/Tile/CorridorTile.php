@@ -5,6 +5,7 @@ namespace App\Model\Tile;
 use App\Model\Creature\Dragon;
 use App\Model\Creature\Golem;
 use App\Model\Creature\Imp;
+use App\Model\Stats\StatsInterface;
 use App\Model\Tile\TileLogic\CorridorTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
 
@@ -30,9 +31,9 @@ class CorridorTile extends AbstractTile
         return true;
     }
 
-    public function handleLogic(int $mapLevel): TileLogicInterface
+    public function handleLogic(int $scale, StatsInterface $stats): TileLogicInterface
     {
-        return new CorridorTileLogic($mapLevel);
+        return new CorridorTileLogic($scale);
     }
 
     public function draw(): string

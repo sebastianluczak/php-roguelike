@@ -19,6 +19,9 @@ class LootPickupHandler implements MessageHandlerInterface
 
     public function __invoke(CreatureGetsKilledMessage $message)
     {
+        $player = $message->getPlayer();
+        $creature = $message->getCreature();
+
         $this->messageBus->dispatch(new AddAdventureLogMessage("[DEBUG] Creature current scale " . $message->getCreature()->getScale(), MessageClassEnum::DEVELOPER()));
     }
 }

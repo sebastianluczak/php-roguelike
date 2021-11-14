@@ -6,6 +6,7 @@ use App\Entity\Leaderboard;
 use App\Model\Player\PlayerInterface;
 use App\Repository\LeaderboardRepository;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LeaderboardService
@@ -24,17 +25,23 @@ class LeaderboardService
      */
     public function getBestScores(): array
     {
-        return $this->repository->getBest();
+        try {
+            $records = $this->repository->getBest();
+        } catch (\Exception $e) {
+            $records = [];
+        }
+
+        return $records;
     }
 
     public function addEntry(PlayerInterface $player)
     {
         $leaderboard = new Leaderboard();
-        $leaderboard->setCreatedAt(\DateTimeImmutable::createFromMutable(new DateTime()));
+        $leaderboard->setCreatedAt(DateTimeImmutable::createFromMutable(new DateTime()));
         $leaderboard->setDungeonLevel($player->getMapLevel());
         $leaderboard->setGoldAmount($player->getGold());
         $leaderboard->setKills($player->getKillCount());
-        $leaderboard->setPlayerLevel($player->getLevel());
+        $leaderboard->setPlayerLevel($player->getLevel()->getLevel());
         $leaderboard->setPlayerName($player->getPlayerName());
 
         $this->em->persist($leaderboard);

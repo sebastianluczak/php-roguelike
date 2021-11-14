@@ -3,8 +3,9 @@
 namespace App\Model\Tile;
 
 use App\Model\Loot\Gold;
-use App\Model\Loot\Weapon\Shield;
+use App\Model\Loot\Armor\Shield;
 use App\Model\Loot\Weapon\Sword;
+use App\Model\Stats\StatsInterface;
 use App\Model\Tile\TileLogic\RareChestTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
 
@@ -30,9 +31,9 @@ class RareChestTile extends AbstractTile
         return true;
     }
 
-    public function handleLogic(int $mapLevel): TileLogicInterface
+    public function handleLogic(int $scale, StatsInterface $stats): TileLogicInterface
     {
-        return new RareChestTileLogic($mapLevel);
+        return new RareChestTileLogic($scale, $stats);
     }
 
     public function draw(): string

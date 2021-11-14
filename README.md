@@ -8,10 +8,17 @@ Worst game on the planet.
 > 
 > Meanwhile, ADOM at home:
 
-![Screenshot](docs/images/screenshot.png?raw=true "Title")
+![Screenshot](docs/images/screenshot.png)
 
 ## Run & build
 
+#### Prerequisites:
+- Docker with Docker Compose
+- Terminal Emulator capable of dosplaying rich text and XTERM256 support
+
 ```shell
-/bin/build.sh
+cd ~
+git clone https://github.com/sebastianluczak/php-roguelike.git
+cd php-roguelike
+sh bin/build.sh
 ```
