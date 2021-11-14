@@ -20,5 +20,6 @@ Worst game on the planet.
 cd ~
 git clone https://github.com/sebastianluczak/php-roguelike.git
 cd php-roguelike
-sh bin/build.sh
+chmod +x bin/*
+bin/build.sh
 ```
