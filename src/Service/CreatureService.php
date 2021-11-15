@@ -9,6 +9,7 @@ use App\Message\AddAdventureLogMessage;
 use App\Message\CreatureGetsKilledMessage;
 use App\Model\Creature\CreatureInterface;
 use App\Model\Player\PlayerInterface;
+use DiceBag\DiceBag;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class CreatureService
@@ -28,38 +29,59 @@ class CreatureService
     public function handleFight(CreatureInterface $creature, PlayerInterface $player): void
     {
         $this->messageBus->dispatch(new AddAdventureLogMessage(
-            "☠️ Encountered " . $creature->getName() . " 💗" . $creature->getHealth() . "/🗡️" . $creature->getDamage() . "/🛡️" . $creature->getArmor(),
+            "☠️ Encountered " . $creature->getName() . " 💗" . $creature->getHealth() . "/🗡️" . $creature->getWeaponSlot()->getAverageRoll() . "/🛡️" . $creature->getArmorSlot()->getAverageRoll(),
             MessageClassEnum::IMPORTANT()
         ));
 
         $turn = 1;
         while ($creature->getHealth() >= 0) {
-            if ($player->getHealth()->getHealth() <= 0) {
-                throw new GameOverException($creature);
+            if ($turn > 21) {
+                // TODO critical issue
+                break;
             }
+
+            // check initiative
+            // todo initiative rolls
+            // todo add critical hits
+
             // calculate creature hit damage
-            // todo check those values
-            $playerDamageReduction = $player->getArmorScore() / 100;
-            $creatureHitDamage = round($creature->getDamage() - ($playerDamageReduction * $creature->getDamage()));
+            $playerDamageReduction = DiceBag::factory($player->getInventory()->getArmorSlot()->getDice())->getTotal();
+            $creatureDamageRoll =  DiceBag::factory($creature->getWeaponSlot()->getDice())->getTotal();
+            $creatureHitDamage = (ceil($creatureDamageRoll - $playerDamageReduction) > 0)?ceil($creatureDamageRoll - $playerDamageReduction):1;
 
             // calculate player damage
-            // todo check those values
-            $creatureDamageReduction = $creature->getArmor() / 100;
-            $playerHitDamage = round($player->getDamageScore() - ($creatureDamageReduction * $player->getDamageScore()));
-
-            // todo add items bypassing % armor
-            // take damage first
-            // todo initiative rolls
+            $creatureDamageReduction =  DiceBag::factory($creature->getArmorSlot()->getDice())->getTotal();
+            $playerHitDamageRoll = DiceBag::factory($player->getInventory()->getWeaponSlot()->getDice())->getTotal() + $player->getStats()->getStrength();
+            $playerHitDamage = (ceil($playerHitDamageRoll - $creatureDamageReduction) > 0)?ceil($playerHitDamageRoll - $creatureDamageReduction):1;
+            /*$this->messageBus->dispatch(
+                new AddAdventureLogMessage(
+                    "CreatureDamageReduction: " . $creatureDamageReduction . ", playerHitDamageRoll: " . $playerHitDamageRoll . ", playerHitDamage: " . $playerHitDamage . " // " .
+                    "PlayerDamageReduction: " . $playerDamageReduction . ", creatureDamageRoll: " . $creatureDamageRoll . ", creatureHitDamage: " . $creatureHitDamage,
+                    MessageClassEnum::STANDARD()
+                )
+            );*/
             $this->messageBus->dispatch(
                 new AddAdventureLogMessage(
                     "🗡️ Turn " . $turn . " - " . $creature->getName() . " (💗" . $creature->getHealth() . "/🗡".$creatureHitDamage.") vs. " . $player->getPlayerName() . " (💗" . $player->getHealth()->getHealth() . "/🗡".$playerHitDamage.")",
                     MessageClassEnum::STANDARD()
                 )
             );
-            $player->getHealth()->modifyHealth($creatureHitDamage, HealthActionEnum::DECREASE());
 
-            // todo creature health interface
-            $creature->decreaseHealth($playerHitDamage);
+            $playerInitiative = $player->getInitiative();
+            $creatureInitiative = $creature->getInitiative();
+            // this check doesn't really matter
+            if ($playerInitiative < $creatureInitiative) {
+                $player->getHealth()->modifyHealth($creatureHitDamage, HealthActionEnum::DECREASE());
+                $creature->decreaseHealth($playerHitDamage);
+            } else {
+                $creature->decreaseHealth($playerHitDamage);
+                $player->getHealth()->modifyHealth($creatureHitDamage, HealthActionEnum::DECREASE());
+            }
+
+            if ($player->getHealth()->getHealth() <= 0) {
+                throw new GameOverException($creature);
+            }
+
             $turn++;
         }
 

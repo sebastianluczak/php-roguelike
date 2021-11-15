@@ -85,6 +85,21 @@ class MapService
         }
     }
 
+    public function generateDevRoomMap()
+    {
+        $this->map = new Map();
+
+        $spawnTileCoordinates = [0, 0];
+        $this->map->addTile(new SpawnTile(), $spawnTileCoordinates[0], $spawnTileCoordinates[1]);
+        $this->playerService->getPlayer()->setCoordinates(new PlayerCoordinates($spawnTileCoordinates[0], $spawnTileCoordinates[1]));
+
+        for ($j=1;$j<=30;$j++) {
+            for ($i = 0; $i <= 50; $i++) {
+                $this->map->addTile(new RareChestTile(), $j, $i);
+            }
+        }
+    }
+
     public function getMap(): Map
     {
         return $this->map;

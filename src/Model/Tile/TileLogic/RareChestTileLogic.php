@@ -35,37 +35,33 @@ class RareChestTileLogic implements TileLogicInterface
             $this->loot = $itemObject;
             switch ($itemObject->getLootType()) {
                 case LootTypeEnum::WEAPON():
-                    $this->rawMessage = "You've picked up 🗡️ " . $this->loot->getName() . " (" . $this->loot->getLootClass()->getKey() . ")" . " +" . $this->loot->getDamage();
+                    $this->rawMessage = $this->loot->getLootPickupMessage();
                     break;
                 case LootTypeEnum::ARMOR():
-                    $this->rawMessage = "You've picked up 🛡️ " . $this->loot->getName() . " (" . $this->loot->getLootClass()->getKey() . ")" . " +" . $this->loot->getArmor();
+                    $this->rawMessage = $this->loot->getLootPickupMessage();;
                     break;
             }
         }
 
-/*        $roll = random_int(0, 1000);
-        if ($roll >= 500) {
-            $this->loot = new Sword();
-            $this->rawMessage =
-        } else {
-            $this->loot = new Shield();
-            $this->rawMessage = "You've picked up 🛡️ " . $this->loot->getName() . "+" . $this->loot->getArmor();
-        }*/
         $this->messageClass = MessageClassEnum::LOOT();
     }
 
-    // todo
     public function process(PlayerInterface $player)
    {
-       if ($this->loot->isWeapon()) {
-           $player->getInventory()->handleLoot($this->loot);
-            // soon becomes deprecated
-           $player->increaseDamage($this->loot->getDamage());
-       }
-       if ($this->loot->isArmor() && $player->getArmorScore() <= 80) {
-           $player->getInventory()->handleLoot($this->loot);
-           // soon becomes deprecated
-           $player->increaseArmor($this->loot->getArmor());
+       switch ($this->loot->getLootType()) {
+           case LootTypeEnum::WEAPON():
+               $player->getInventory()->handleLoot($this->loot);
+               if (!$player->getInventory()->hasChanged()) {
+                   // todo InventoryBag support
+                   $this->rawMessage = "You left " . $this->loot . " on ground, you're better equipped (" . $player->getInventory()->getArmorSlot() . ").";
+               }
+               break;
+           case LootTypeEnum::ARMOR():
+               $player->getInventory()->handleLoot($this->loot);
+               if (!$player->getInventory()->hasChanged()) {
+                   // todo InventoryBag support
+                   $this->rawMessage = "You left " . $this->loot . " on ground, you're better equipped (" . $player->getInventory()->getArmorSlot() . ").";
+               }
        }
    }
 

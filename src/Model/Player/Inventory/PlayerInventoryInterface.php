@@ -9,5 +9,6 @@ interface PlayerInventoryInterface
     public function getWeaponSlot(): LootInterface;
     public function getArmorSlot(): LootInterface;
     public function getKeystone(): LootInterface;
-    public function handleLoot(LootInterface $loot);
+    public function handleLoot(LootInterface $loot): PlayerInventoryInterface;
+    public function hasChanged(): bool;
 }

@@ -28,17 +28,15 @@ class CreatureGetsKilledHandler implements MessageHandlerInterface
         $creature = $message->getCreature();
 
         $this->loggerService->logMessage($message);
-        $this->messageBus->dispatch(new AddAdventureLogMessage("You've killed " . $creature->getName(), MessageClassEnum::SUCCESS()));
 
         $gold = $creature->handleLoot();
-        $player->addGoldAmount($gold->getAmount());
-        $this->messageBus->dispatch(new AddAdventureLogMessage("You've earned 💰 " . $gold->getAmount() . " gold", MessageClassEnum::SUCCESS()));
+        $this->messageBus->dispatch(new AddAdventureLogMessage("You've killed " . $creature->getName() . " earning 💰 " . $gold->getAmount() . " gold and 🧍 " . $creature->getExperience() . " experience points", MessageClassEnum::SUCCESS()));
 
+        $player->addGoldAmount($gold->getAmount());
         // increase level handler
         $initialPlayerLevel = $player->getLevel()->getLevel();
         $player->getLevel()->modifyExperience($creature->getExperience(), LevelActionEnum::INCREASE());
         $currentPlayerLevel = $player->getLevel()->getLevel();
-        $this->messageBus->dispatch(new AddAdventureLogMessage("You've earned 🧍 " . $creature->getExperience() . " experience points", MessageClassEnum::SUCCESS()));
         $player->increaseKillCount();
 
         // level up handler

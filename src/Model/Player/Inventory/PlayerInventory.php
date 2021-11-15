@@ -13,9 +13,11 @@ class PlayerInventory implements PlayerInventoryInterface
     protected LootInterface $weaponSlot;
     protected LootInterface $armorSlot;
     protected LootInterface $keyStone;
+    protected bool $hasChanged;
 
     public function __construct(Stats $stats)
     {
+        $this->hasChanged = false;
         $this->weaponSlot = new Sword($stats);
         // todo luckModifier from stats, do it other way, factory?
         $this->armorSlot = new Shield($stats);
@@ -36,20 +38,35 @@ class PlayerInventory implements PlayerInventoryInterface
         return $this->keyStone;
     }
 
-    // todo wip
-    // add checks if user wants to switch weapons?
-    public function handleLoot(LootInterface $loot)
+    // todo check if user wants to switch weapons? kinda hard
+    public function handleLoot(LootInterface $loot): PlayerInventoryInterface
     {
         switch ($loot->getLootType()) {
             case LootTypeEnum::WEAPON():
-                $this->weaponSlot = $loot;
+                if (!$this->weaponSlot->isBetterThan($loot)) {
+                    $this->weaponSlot = $loot;
+                    $this->hasChanged = true;
+                }
                 break;
             case LootTypeEnum::ARMOR():
-                $this->armorSlot = $loot;
+                if (!$this->armorSlot->isBetterThan($loot)) {
+                    $this->armorSlot = $loot;
+                    $this->hasChanged = true;
+                }
                 break;
             case LootTypeEnum::KEYSTONE():
                 $this->keyStone = $loot;
                 break;
         }
+
+        return $this;
+    }
+
+    public function hasChanged(): bool
+    {
+        $currentStatusHasChanged = $this->hasChanged;
+        $this->hasChanged = false;
+
+        return $currentStatusHasChanged;
     }
 }

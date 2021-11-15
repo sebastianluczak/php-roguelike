@@ -2,6 +2,7 @@
 
 namespace App\Model\Loot\Armor;
 
+use App\Enum\GameIconEnum;
 use App\Enum\Loot\LootClassEnum;
 use App\Model\Stats\Stats;
 use DiceBag\DiceBag;
@@ -10,6 +11,7 @@ class Shield extends AbstractArmor
 {
     protected int $armor;
     protected string $name = "Basic Shield";
+    protected string $dice;
 
     protected array $uniqueNames = [
         'Aegis',
@@ -29,15 +31,18 @@ class Shield extends AbstractArmor
     {
         parent::__construct();
         $this->armor = random_int(1, 3);
+        $this->dice = '1d' . random_int(1, 3 + $playerStats->getLuck()) . '+' . ( 5 - $this->getLootClass()->getValue() + random_int(0, sqrt($playerStats->getLuck())));
 
         $roll = DiceBag::factory('1d6+4');
-        if ($roll->getTotal() > 8 - $playerStats->getLuck()) { // unique loot handler
+        if ($roll->getTotal() > 11 - $playerStats->getLuck()) { // unique loot handler
             $this->lootClass = LootClassEnum::S();
             $this->name = $this->uniqueNames[array_rand($this->uniqueNames)];
             $diceRoll = DiceBag::factory('2d8+' . (5 - $this->lootClass->getValue()));
             $this->armor = $diceRoll->getTotal();
+            $this->dice = '2d' . random_int(1, 3 + $playerStats->getLuck()) . '+' . ( 5 - $this->getLootClass()->getValue() + random_int(0, sqrt($playerStats->getLuck())));
         }
 
+        $this->lootPickupMessage = "You've picked up " . $this->__toString();
     }
 
     /**
@@ -46,5 +51,17 @@ class Shield extends AbstractArmor
     public function getArmor(): int
     {
         return $this->armor;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            "%s %s (%s) %s (~%s)",
+            GameIconEnum::SHIELD(),
+            $this->getName(),
+            $this->getLootClass()->getKey(),
+            $this->getDice(),
+            $this->getAverageRoll()
+        );
     }
 }

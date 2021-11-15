@@ -2,6 +2,7 @@
 
 namespace App\Model\Tile\TileLogic;
 
+use App\Enum\MessageClassEnum;
 use App\Model\Creature\CreatureInterface;
 use App\Model\Creature\Dragon;
 use App\Model\Creature\Goblin;
@@ -13,11 +14,16 @@ use App\Model\RandomEvent\ThiefArrivedGameEvent;
 
 class CorridorTileLogic implements TileLogicInterface
 {
+    protected string $rawMessage;
+    protected string $messageClass;
     protected ?CreatureInterface $creature;
     protected RandomEventInterface $event;
 
     public function __construct(int $scale)
     {
+        $this->rawMessage = "";
+        $this->messageClass = MessageClassEnum::STANDARD();
+
         $scale = ceil(1 + ceil($scale * 0.5));
 
         // allows more creatures to be spawned on later levels
@@ -33,10 +39,11 @@ class CorridorTileLogic implements TileLogicInterface
             $this->creature = new Golem($scale);
         } else if ($roll <= 50) {
             $this->creature = new Goblin($scale);
-        } else if ($roll <= 100) {
+        } else if ($roll <= 200) {
             $this->creature = new Imp($scale);
         } else {
             $this->creature = null;
+            $this->rawMessage = "Nothing happens ...";
         }
     }
 
@@ -49,17 +56,17 @@ class CorridorTileLogic implements TileLogicInterface
 
     public function hasAdventureLogMessage(): bool
     {
-        return false;
+        return !empty($this->rawMessage);
     }
 
     public function getAdventureLogMessage(): string
     {
-        return "";
+        return $this->rawMessage;
     }
 
     public function getAdventureLogMessageClass(): string
     {
-        return "";
+        return $this->messageClass;
     }
 
     public function hasEncounter(): bool

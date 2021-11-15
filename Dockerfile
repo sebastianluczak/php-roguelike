@@ -8,5 +8,8 @@ RUN wget -O composer-setup.php https://getcomposer.org/installer
 RUN php composer-setup.php --filename=composer.phar
 RUN php composer.phar install
 RUN chmod +x /app/bin/console
+RUN mkdir -p /app/var/log
+RUN touch /app/var/log/dev.log
+RUN mkdir -p /app/var/cache
 RUN chmod +x /app/bin/entrypoint.sh
 CMD ['/app/bin/entrypoint.sh']

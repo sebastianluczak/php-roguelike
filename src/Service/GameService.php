@@ -8,6 +8,7 @@ use App\Exception\GameOverException;
 use App\Exception\NewLevelException;
 use App\Exception\NotValidMoveException;
 use App\Message\AddAdventureLogMessage;
+use App\Message\DevRoomSpawnMessage;
 use App\Message\GameOverMessage;
 use App\Message\RegenerateMapMessage;
 use App\Message\ShowPlayerInventoryMessage;
@@ -121,6 +122,15 @@ class GameService extends ConsoleOutputGameService
             if ($buttonPressed == "r") {
                 $this->messageBus->dispatch(new AddAdventureLogMessage("Map regenerated at " . Carbon::now(), MessageClassEnum::DEVELOPER()));
                 $this->messageBus->dispatch(new RegenerateMapMessage());
+
+                echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+
+                return true;
+            }
+
+            if ($buttonPressed == "m") {
+                $this->messageBus->dispatch(new AddAdventureLogMessage("[DEV] DevRoom spawned, have fun! At " . Carbon::now(), MessageClassEnum::DEVELOPER()));
+                $this->messageBus->dispatch(new DevRoomSpawnMessage());
 
                 echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
 
