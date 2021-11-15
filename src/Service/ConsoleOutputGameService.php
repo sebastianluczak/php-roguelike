@@ -82,6 +82,7 @@ class ConsoleOutputGameService
             " =- -= " . GameIconEnum::PLAYER() . " " . $player->getLevel()->getLevel() . " " . $player->getLevel()->drawExperienceBar() .
             " =- -= " . $player->getInventory()->getWeaponSlot() .
             " =- -= " . $player->getInventory()->getArmorSlot() .
+            " =- -= " . $player->getInventory()->getKeystone() .
             " =- -= " . GameIconEnum::MAP() . " " . $player->getMapLevel() .
             " =- -= " . GameIconEnum::BUFFS() . " " . $this->internalClockService->getActiveGameEventsCount() .
             " =- -= " . GameIconEnum::STATS() . " " . $player->getStats()->getFormattedStats() .  " ==--</>"

@@ -71,12 +71,7 @@ abstract class AbstractLoot implements LootInterface
 
     public function isBetterThan(LootInterface $otherLoot): bool
     {
-        if ($this->getLootClass()->getValue() == $otherLoot->getLootClass()->getValue()) {
-            if ($this->getAverageRoll() > $otherLoot->getAverageRoll()) {
-                return true; // current loot ($self) IS better than $otherLoot
-            }
-        }
-        if ($this->getLootClass()->getValue() < $otherLoot->getLootClass()->getValue()) {
+        if ($this->getAverageRoll() > $otherLoot->getAverageRoll()) {
             return true; // current loot ($self) IS better than $otherLoot
         }
 

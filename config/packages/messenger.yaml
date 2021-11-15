@@ -1,5 +1,4 @@
 framework:
     messenger:
         transports:
-            redis: "%env(MESSENGER_TRANSPORT_DSN)%"
             sync: 'sync://'

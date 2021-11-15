@@ -18,6 +18,7 @@ use MyCLabs\Enum\Enum;
  * @method static STATS()
  * @method static INVENTORY()
  * @method static SKULL()
+ * @method static GEM()
  */
 class GameIconEnum extends Enum
 {
@@ -35,4 +36,5 @@ class GameIconEnum extends Enum
     private const INVENTORY = '🧳';
 
     private const SKULL = '💀';
+    private const GEM = '💎';
 }

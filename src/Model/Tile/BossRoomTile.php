@@ -2,16 +2,15 @@
 
 namespace App\Model\Tile;
 
-use App\Model\Loot\Gold;
 use App\Model\Stats\StatsInterface;
-use App\Model\Tile\TileLogic\ChestTileLogic;
+use App\Model\Tile\TileLogic\BossRoomTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
 
-class ChestTile extends AbstractTile
+class BossRoomTile extends AbstractTile
 {
     public function isInteractable(): bool
     {
-        return true;
+        return false;
     }
 
     public function isPassable(): bool
@@ -31,11 +30,11 @@ class ChestTile extends AbstractTile
 
     public function handleLogic(int $scale, StatsInterface $stats): TileLogicInterface
     {
-        return new ChestTileLogic($scale);
+        return new BossRoomTileLogic($scale);
     }
 
     public function draw(): string
     {
-        return "<fg=bright-white>#</>";
+        return "<fg=bright-red>*</>";
     }
 }

@@ -4,6 +4,7 @@ namespace App\Model\Player\Inventory;
 
 use App\Enum\Loot\LootTypeEnum;
 use App\Model\Loot\Armor\Shield;
+use App\Model\Loot\Keystone\BrokenKeystone;
 use App\Model\Loot\LootInterface;
 use App\Model\Loot\Weapon\Sword;
 use App\Model\Stats\Stats;
@@ -21,6 +22,7 @@ class PlayerInventory implements PlayerInventoryInterface
         $this->weaponSlot = new Sword($stats);
         // todo luckModifier from stats, do it other way, factory?
         $this->armorSlot = new Shield($stats);
+        $this->keyStone = new BrokenKeystone($stats);
     }
 
     public function getWeaponSlot(): LootInterface
@@ -55,7 +57,10 @@ class PlayerInventory implements PlayerInventoryInterface
                 }
                 break;
             case LootTypeEnum::KEYSTONE():
-                $this->keyStone = $loot;
+                if (!$this->keyStone->isBetterThan($loot)) {
+                    $this->keyStone = $loot;
+                    $this->hasChanged = true;
+                }
                 break;
         }
 
