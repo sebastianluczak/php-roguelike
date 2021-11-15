@@ -6,6 +6,10 @@ use App\Enum\Loot\LootTypeEnum;
 use App\Enum\MessageClassEnum;
 use App\Model\Creature\CreatureInterface;
 use App\Model\Loot\AbstractLoot;
+use App\Model\Loot\Keystone\BrokenKeystone;
+use App\Model\Loot\Keystone\ChromaticKeystone;
+use App\Model\Loot\Keystone\ColorlessKeystone;
+use App\Model\Loot\Keystone\PrismaticKeystone;
 use App\Model\Loot\LootInterface;
 use App\Model\Loot\Armor\Shield;
 use App\Model\Loot\Weapon\Sword;
@@ -22,7 +26,11 @@ class RareChestTileLogic implements TileLogicInterface
     protected RandomEventInterface $event;
     protected array $itemChances = [
         Sword::class => 50,
-        Shield::class => 50
+        Shield::class => 50,
+        PrismaticKeystone::class => 1,
+        BrokenKeystone::class => 1,
+        ChromaticKeystone::class => 1,
+        ColorlessKeystone::class => 1
     ];
 
     public function __construct(int $scale, StatsInterface $stats)
@@ -34,11 +42,10 @@ class RareChestTileLogic implements TileLogicInterface
         if ($itemObject instanceof LootInterface) {
             $this->loot = $itemObject;
             switch ($itemObject->getLootType()) {
+                case LootTypeEnum::ARMOR():
+                case LootTypeEnum::KEYSTONE():
                 case LootTypeEnum::WEAPON():
                     $this->rawMessage = $this->loot->getLootPickupMessage();
-                    break;
-                case LootTypeEnum::ARMOR():
-                    $this->rawMessage = $this->loot->getLootPickupMessage();;
                     break;
             }
         }
@@ -53,7 +60,7 @@ class RareChestTileLogic implements TileLogicInterface
                $player->getInventory()->handleLoot($this->loot);
                if (!$player->getInventory()->hasChanged()) {
                    // todo InventoryBag support
-                   $this->rawMessage = "You left " . $this->loot . " on ground, you're better equipped (" . $player->getInventory()->getArmorSlot() . ").";
+                   $this->rawMessage = "You left " . $this->loot . " on ground, you're better equipped (" . $player->getInventory()->getWeaponSlot() . ").";
                }
                break;
            case LootTypeEnum::ARMOR():
@@ -62,6 +69,13 @@ class RareChestTileLogic implements TileLogicInterface
                    // todo InventoryBag support
                    $this->rawMessage = "You left " . $this->loot . " on ground, you're better equipped (" . $player->getInventory()->getArmorSlot() . ").";
                }
+               break;
+           case LootTypeEnum::KEYSTONE():
+                $player->getInventory()->handleLoot($this->loot);
+               if (!$player->getInventory()->hasChanged()) {
+                   $this->rawMessage = "You left " . $this->loot . " on ground, you're better equipped (" . $player->getInventory()->getKeystone() . ").";
+               }
+               break;
        }
    }
 
