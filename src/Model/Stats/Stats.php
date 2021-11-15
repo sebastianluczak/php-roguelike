@@ -13,6 +13,7 @@ class Stats implements StatsInterface
 
     /**
      *  Affects:
+     *  - Initiative
      *  - @TODO currently nothing
      */
     protected int $perception = 1;
@@ -20,6 +21,8 @@ class Stats implements StatsInterface
     /**
      *  Affects:
      *  - @TODO currently nothing
+     *  - Dice sides in CreatureGenericArmor, affecting damage reduction of player hits
+     *  - Rolls in damage reduction from creatures during fights
      */
     protected int $endurance = 1;
 

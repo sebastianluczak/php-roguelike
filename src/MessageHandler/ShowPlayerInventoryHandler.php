@@ -22,10 +22,6 @@ class ShowPlayerInventoryHandler implements MessageHandlerInterface
         $player = $message->getPlayer();
         $inventory = $player->getInventory();
 
-        $this->messageBus->dispatch(new AddAdventureLogMessage(
-            GameIconEnum::INVENTORY() . " Player inventory -> " .
-            GameIconEnum::WEAPON() . " " . $inventory->getWeaponSlot()->getName() . "+" . $inventory->getWeaponSlot()->getDamage() .
-            GameIconEnum::SHIELD() . " " . $inventory->getArmorSlot()->getName() . "+" . $inventory->getArmorSlot()->getArmor()
-        ));
+        // TODO add this - print inventory of player
     }
 }

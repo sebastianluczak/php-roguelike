@@ -76,15 +76,15 @@ class ConsoleOutputGameService
         }
 
         $output->writeln(
-            $devModeSymbol . " <fg=bright-blue>--== " . GameIconEnum::HEALTH() . " " . $player->getHealth()->getHealth() .
-            " ==-- --== " . GameIconEnum::GOLD() . " " . $player->getGold() .
-            "g ==-- --== " . GameIconEnum::KILLS() . " " . $player->getKillCount() .
-            " ==-- --== " . GameIconEnum::PLAYER() . " " . $player->getLevel()->getLevel() . " " . $player->getLevel()->drawExperienceBar() .
-            " ==-- --== " . GameIconEnum::WEAPON() . " " . $player->getDamageScore() .
-            " ==-- --== " . GameIconEnum::SHIELD() . " " . $player->getArmorScore() .
-            "% ==-- --== " . GameIconEnum::MAP() . " " . $player->getMapLevel() .
-            " ==-- --== " . GameIconEnum::BUFFS() . " " . $this->internalClockService->getActiveGameEventsCount() ." ==--" .
-            " --== " . GameIconEnum::STATS() . " " . $player->getStats()->getFormattedStats() .  " ==--</>"
+            $devModeSymbol . " <fg=bright-blue>-= " . GameIconEnum::HEALTH() . " " . $player->getHealth()->getHealth() .
+            " =- -= " . GameIconEnum::GOLD() . " " . $player->getGold() .
+            " =- -= " . GameIconEnum::KILLS() . " " . $player->getKillCount() .
+            " =- -= " . GameIconEnum::PLAYER() . " " . $player->getLevel()->getLevel() . " " . $player->getLevel()->drawExperienceBar() .
+            " =- -= " . $player->getInventory()->getWeaponSlot() .
+            " =- -= " . $player->getInventory()->getArmorSlot() .
+            " =- -= " . GameIconEnum::MAP() . " " . $player->getMapLevel() .
+            " =- -= " . GameIconEnum::BUFFS() . " " . $this->internalClockService->getActiveGameEventsCount() .
+            " =- -= " . GameIconEnum::STATS() . " " . $player->getStats()->getFormattedStats() .  " ==--</>"
         );
     }
 

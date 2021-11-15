@@ -2,30 +2,42 @@
 
 namespace App\Model\Creature;
 
-use App\Model\Stats\Stats;
+use App\Enum\Creature\CreatureClassEnum;
+use App\Model\Loot\LootInterface;
 use App\Model\Stats\StatsInterface;
 use Faker\Factory as FakerFactory;
 use Faker\Generator;
+use Irfa\Gatcha\Roll;
 use RPGFaker\RPGFaker;
 
 abstract class AbstractCreature implements CreatureInterface
 {
     protected int $health;
-    protected int $damage;
-    protected int $armor;
     protected string $name;
     protected int $experience;
     protected int $scale;
     protected Generator $faker;
     protected string $rawName;
     protected StatsInterface $stats;
+    protected LootInterface $weaponSlot;
+    protected LootInterface $armorSlot;
+    protected CreatureClassEnum $creatureClass;
+    protected float $initiative;
 
     public function __construct()
     {
+        $classEnumChances = [
+            CreatureClassEnum::NORMAL()->getKey() => 30,
+            CreatureClassEnum::ELITE()->getKey() => 2,
+            CreatureClassEnum::LEGENDARY()->getKey() => 1
+        ];
+
+        $classEnumChancesSpin = Roll::put($classEnumChances)->spin();
+        $this->creatureClass = CreatureClassEnum::$classEnumChancesSpin();
+
         $nameFaker = new RPGFaker(['count' => 1]);
         $this->faker = FakerFactory::create('ja_JP');
         $this->rawName = $nameFaker->name;
-        $this->stats = new Stats();
     }
 
     public function getExperience(): int
@@ -36,20 +48,6 @@ abstract class AbstractCreature implements CreatureInterface
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getDamage(): int
-    {
-        return $this->damage;
-    }
-
-    public function getArmor(): int
-    {
-        if ($this->armor >= 80) {
-            return 80;
-        }
-
-        return $this->armor;
     }
 
     public function getHealth(): int
@@ -80,5 +78,28 @@ abstract class AbstractCreature implements CreatureInterface
     public function getStats(): StatsInterface
     {
         return $this->stats;
+    }
+
+    public function getWeaponSlot(): LootInterface
+    {
+        return $this->weaponSlot;
+    }
+
+    public function getArmorSlot(): LootInterface
+    {
+        return $this->armorSlot;
+    }
+
+    /**
+     * @return CreatureClassEnum
+     */
+    public function getCreatureClass(): CreatureClassEnum
+    {
+        return $this->creatureClass;
+    }
+
+    public function getInitiative(): float
+    {
+        return $this->getStats()->getPerception() * $this->getStats()->getPerception() - $this->getStats()->getPerception() - $this->getScale();
     }
 }

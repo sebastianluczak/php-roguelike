@@ -14,8 +14,6 @@ use App\Model\Stats\StatsInterface;
 class Player implements PlayerInterface
 {
     protected string $name;
-    protected int $damageScore;
-    protected int $armorScore;
     protected int $gold = 0;
     protected int $killCount = 0;
     protected int $mapLevel = 1;
@@ -26,45 +24,14 @@ class Player implements PlayerInterface
     protected PlayerInventoryInterface $inventory;
     protected PlayerLevelInterface $level;
 
-    public function __construct(string $name, PlayerCoordinatesInterface $coordinates, int $damageScore = 2, int $armorScore = 7, int $health = 100)
+    public function __construct(string $name, PlayerCoordinatesInterface $coordinates, int $health = 100)
     {
         $this->name = $name;
-        // todo remove
-        $this->damageScore = $damageScore;
-        $this->armorScore = $armorScore;
         $this->health = new PlayerHealth($health);
         $this->level = new PlayerLevel();
         $this->coordinates = $coordinates;
         $this->stats = new Stats();
         $this->inventory = new PlayerInventory($this->stats);
-    }
-
-    public function getArmorScore(): int
-    {
-        if ($this->armorScore >= 80) {
-            return 80;
-        }
-
-        return $this->armorScore;
-    }
-
-    public function setArmorScore(int $armorScore): PlayerInterface
-    {
-        $this->armorScore = $armorScore;
-
-        return $this;
-    }
-
-    public function getDamageScore(): int
-    {
-        return $this->damageScore;
-    }
-
-    public function setDamageScore(int $damageScore): PlayerInterface
-    {
-        $this->damageScore = $damageScore;
-
-        return $this;
     }
 
     public function getPlayerName(): string
@@ -102,20 +69,6 @@ class Player implements PlayerInterface
     public function decreaseGoldAmount(int $amount): PlayerInterface
     {
         $this->gold = $this->gold - $amount;
-
-        return $this;
-    }
-
-    public function increaseDamage(int $amount): PlayerInterface
-    {
-        $this->damageScore = $this->damageScore + $amount;
-
-        return $this;
-    }
-
-    public function increaseArmor(int $amount): PlayerInterface
-    {
-        $this->armorScore = $this->armorScore + $amount;
 
         return $this;
     }
@@ -174,6 +127,11 @@ class Player implements PlayerInterface
     public function getInventory(): PlayerInventoryInterface
     {
         return $this->inventory;
+    }
+
+    public function getInitiative(): float
+    {
+        return $this->getStats()->getPerception() * $this->getStats()->getPerception() - $this->getStats()->getPerception();
     }
 
     public function draw(): string

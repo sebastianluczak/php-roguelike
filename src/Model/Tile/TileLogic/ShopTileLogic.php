@@ -4,10 +4,7 @@ namespace App\Model\Tile\TileLogic;
 
 use App\Enum\MessageClassEnum;
 use App\Enum\Player\Health\HealthActionEnum;
-use App\Enum\Player\Level\LevelActionEnum;
-use App\Message\AddAdventureLogMessage;
 use App\Model\Creature\CreatureInterface;
-use App\Model\Loot\Gold;
 use App\Model\Loot\SkillBoost;
 use App\Model\Player\PlayerInterface;
 use App\Model\RandomEvent\PleasedTheGodsGameEvent;
@@ -36,11 +33,15 @@ class ShopTileLogic implements TileLogicInterface
            $this->rawMessage = "🧍 You feel rush of energy after paying " . $amountRequired . " gold to strange man";
            $this->messageClass = MessageClassEnum::SUCCESS();
 
-           // todo delete damage and armor
-           $player->increaseDamage($this->skillBoost->getDamageAmount());
-           $player->increaseArmor($this->skillBoost->getArmorAmount());
            $player->getHealth()->modifyHealth($this->skillBoost->getHealthAmount(), HealthActionEnum::INCREASE());
-           $player->getLevel()->modifyExperience($this->skillBoost->getExperience(), LevelActionEnum::INCREASE());
+           $player->getStats()->modifyStrength(random_int(0, 1));
+           $player->getStats()->modifyPerception(random_int(0, 1));
+           $player->getStats()->modifyEndurance(random_int(0, 1));
+           $player->getStats()->modifyCharisma(random_int(0, 1));
+           $player->getStats()->modifyIntelligence(random_int(0, 1));
+           $player->getStats()->modifyAgility(random_int(0, 1));
+           $player->getStats()->modifyAgility(random_int(0, 1));
+
            $player->decreaseGoldAmount($amountRequired);
        } else {
            $this->event = new PleasedTheGodsGameEvent($player);
