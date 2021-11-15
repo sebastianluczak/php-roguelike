@@ -15,6 +15,7 @@ use App\Model\Player\PlayerCoordinates;
 use App\Model\Player\PlayerInterface;
 use App\Model\Tile\AbstractTile;
 use App\Model\Tile\AltarTile;
+use App\Model\Tile\BossRoomTile;
 use App\Model\Tile\ChestTile;
 use App\Model\Tile\CorridorTile;
 use App\Model\Tile\EmptyTile;
@@ -38,11 +39,12 @@ class MapService
     protected MessageBusInterface $messageBus;
     protected array $mapErrors;
     private array $tilesAvailableToSpawnWithChances = [
-        ShopTile::class => 2,
-        AltarTile::class => 3,
-        RareChestTile::class => 5,
-        ChestTile::class => 5,
-        CorridorTile::class => 1500
+        BossRoomTile::class => 1,
+        ShopTile::class => 8,
+        AltarTile::class => 12,
+        RareChestTile::class => 20,
+        ChestTile::class => 20,
+        CorridorTile::class => 6000
     ];
 
     public function __construct(PlayerService $playerService, LoggerService $loggerService, MessageBusInterface $messageBus)

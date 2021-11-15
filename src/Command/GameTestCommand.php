@@ -26,7 +26,8 @@ class GameTestCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        var_dump($this->gameService->getLeaderboardService()->getBestScores());
+        $output->writeln('<fg=#00ff00;bg=#00f>... contents ...</>');
+
         return Command::SUCCESS;
     }
 
