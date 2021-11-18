@@ -7,6 +7,7 @@ use App\Enum\Player\Level\LevelActionEnum;
 use App\Message\AddAdventureLogMessage;
 use App\Message\CreatureGetsKilledMessage;
 use App\Message\PlayerLevelUpMessage;
+use App\Model\Loot\Gold;
 use App\Service\LoggerService;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -27,12 +28,16 @@ class CreatureGetsKilledHandler implements MessageHandlerInterface
         $player = $message->getPlayer();
         $creature = $message->getCreature();
 
-        $this->loggerService->logMessage($message);
+        $goldAmount = 0;
+        $inventoryBag = $creature->getLootInventoryBag($player);
+        foreach ($inventoryBag->getItems() as $item) {
+            if ($item instanceof Gold) {
+                $goldAmount += $item->getAmount();
+            }
+            $player->getInventory()->handleLoot($item);
+        }
+        $this->messageBus->dispatch(new AddAdventureLogMessage("You've killed " . $creature->getName() . " earning 💰 " . $goldAmount . " gold and 🧍 " . $creature->getExperience() . " experience points", MessageClassEnum::SUCCESS()));
 
-        $gold = $creature->handleLoot();
-        $this->messageBus->dispatch(new AddAdventureLogMessage("You've killed " . $creature->getName() . " earning 💰 " . $gold->getAmount() . " gold and 🧍 " . $creature->getExperience() . " experience points", MessageClassEnum::SUCCESS()));
-
-        $player->addGoldAmount($gold->getAmount());
         // increase level handler
         $initialPlayerLevel = $player->getLevel()->getLevel();
         $player->getLevel()->modifyExperience($creature->getExperience(), LevelActionEnum::INCREASE());

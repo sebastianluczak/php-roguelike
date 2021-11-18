@@ -42,7 +42,7 @@ class ShopTileLogic implements TileLogicInterface
            $player->getStats()->modifyAgility(random_int(0, 1));
            $player->getStats()->modifyAgility(random_int(0, 1));
 
-           $player->decreaseGoldAmount($amountRequired);
+           $player->getInventory()->subtractGoldAmount($amountRequired);
        } else {
            $this->event = new PleasedTheGodsGameEvent($player);
        }

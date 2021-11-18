@@ -26,9 +26,10 @@ class GameCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->clearScreen();
+
         $this->gameService->setDevMode($_ENV['GAME_DEBUG']);
         $input->setInteractive(false);
-        $this->clearScreen();
         $this->gameService->run($output);
 
         return Command::SUCCESS;

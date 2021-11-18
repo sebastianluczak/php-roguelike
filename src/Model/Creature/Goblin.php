@@ -7,6 +7,8 @@ use App\Enum\GameIconEnum;
 use App\Model\Loot\Armor\CreatureGenericArmor;
 use App\Model\Loot\Gold;
 use App\Model\Loot\Weapon\CreatureMeleeWeapon;
+use App\Model\Player\Inventory\InventoryBagInterface;
+use App\Model\Player\PlayerInterface;
 use App\Model\Stats\Stats;
 
 class Goblin extends AbstractCreature
@@ -37,8 +39,10 @@ class Goblin extends AbstractCreature
         $this->experience = $this->createRandomNumberInRangeWithScale(20, 50, $scale);
     }
 
-    public function handleLoot()
+    public function getLootInventoryBag(PlayerInterface $player): InventoryBagInterface
     {
-        return new Gold($this->scale);
+        $this->loot->addItem(new Gold($this->scale));
+
+        return $this->loot;
     }
 }

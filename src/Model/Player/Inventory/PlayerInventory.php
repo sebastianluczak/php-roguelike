@@ -6,23 +6,30 @@ use App\Enum\Loot\LootTypeEnum;
 use App\Model\Loot\Armor\Shield;
 use App\Model\Loot\Keystone\BrokenKeystone;
 use App\Model\Loot\LootInterface;
+use App\Model\Loot\Potion\HealthPotion;
 use App\Model\Loot\Weapon\Sword;
 use App\Model\Stats\Stats;
 
 class PlayerInventory implements PlayerInventoryInterface
 {
+    protected InventoryBagInterface $inventoryBag;
     protected LootInterface $weaponSlot;
     protected LootInterface $armorSlot;
     protected LootInterface $keyStone;
     protected bool $hasChanged;
+    protected int $goldAmount;
 
     public function __construct(Stats $stats)
     {
         $this->hasChanged = false;
+        $this->goldAmount = $stats->getIntelligence() * 10;
         $this->weaponSlot = new Sword($stats);
-        // todo luckModifier from stats, do it other way, factory?
         $this->armorSlot = new Shield($stats);
         $this->keyStone = new BrokenKeystone($stats);
+        $this->inventoryBag = new InventoryBag();
+        // todo move to gamestart event !!!!
+        $this->inventoryBag->addItem(new HealthPotion($stats));
+        $this->inventoryBag->addItem(new HealthPotion($stats));
     }
 
     public function getWeaponSlot(): LootInterface
@@ -48,19 +55,31 @@ class PlayerInventory implements PlayerInventoryInterface
                 if (!$this->weaponSlot->isBetterThan($loot)) {
                     $this->weaponSlot = $loot;
                     $this->hasChanged = true;
+                } else {
+                    $this->inventoryBag->addItem($loot);
                 }
                 break;
             case LootTypeEnum::ARMOR():
                 if (!$this->armorSlot->isBetterThan($loot)) {
                     $this->armorSlot = $loot;
                     $this->hasChanged = true;
+                } else {
+                    $this->inventoryBag->addItem($loot);
                 }
                 break;
             case LootTypeEnum::KEYSTONE():
                 if (!$this->keyStone->isBetterThan($loot)) {
                     $this->keyStone = $loot;
                     $this->hasChanged = true;
+                } else {
+                    $this->inventoryBag->addItem($loot);
                 }
+                break;
+            case LootTypeEnum::POTION():
+                $this->inventoryBag->addItem($loot);
+                break;
+            case LootTypeEnum::GOLD():
+                $this->addGoldAmount($loot->getAmount());
                 break;
         }
 
@@ -73,5 +92,35 @@ class PlayerInventory implements PlayerInventoryInterface
         $this->hasChanged = false;
 
         return $currentStatusHasChanged;
+    }
+
+    /**
+     * @return InventoryBag|InventoryBagInterface
+     */
+    public function getInventoryBag(): InventoryBagInterface
+    {
+        return $this->inventoryBag;
+    }
+
+    public function addGoldAmount(int $amount): PlayerInventoryInterface
+    {
+        $this->goldAmount = $this->getGoldAmount() + $amount;
+
+        return $this;
+    }
+
+    public function subtractGoldAmount(int $amount): PlayerInventoryInterface
+    {
+        $this->goldAmount = $this->getGoldAmount() - $amount;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGoldAmount(): int
+    {
+        return $this->goldAmount;
     }
 }

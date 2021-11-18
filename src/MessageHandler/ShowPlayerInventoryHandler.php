@@ -3,6 +3,7 @@
 namespace App\MessageHandler;
 
 use App\Enum\GameIconEnum;
+use App\Enum\Loot\LootTypeEnum;
 use App\Message\AddAdventureLogMessage;
 use App\Message\ShowPlayerInventoryMessage;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -22,6 +23,8 @@ class ShowPlayerInventoryHandler implements MessageHandlerInterface
         $player = $message->getPlayer();
         $inventory = $player->getInventory();
 
-        // TODO add this - print inventory of player
+        $this->messageBus->dispatch(new AddAdventureLogMessage(
+            'All items in bag: ' . $inventory->getInventoryBag()->count() . " - Health potions count: " . count($inventory->getInventoryBag()->getItemsOfType(LootTypeEnum::POTION()))
+        ));
     }
 }

@@ -5,9 +5,15 @@ namespace App\Model\Creature;
 use App\Enum\Creature\CreatureClassEnum;
 use App\Enum\GameIconEnum;
 use App\Model\Loot\Armor\CreatureGenericArmor;
+use App\Model\Loot\Armor\Shield;
 use App\Model\Loot\Gold;
+use App\Model\Loot\Potion\HealthPotion;
 use App\Model\Loot\Weapon\CreatureMeleeWeapon;
+use App\Model\Loot\Weapon\Sword;
+use App\Model\Player\Inventory\InventoryBagInterface;
+use App\Model\Player\PlayerInterface;
 use App\Model\Stats\Stats;
+use Irfa\Gatcha\Roll;
 
 class Imp extends AbstractCreature
 {
@@ -15,6 +21,11 @@ class Imp extends AbstractCreature
     private const BASE_ENDURANCE = 1.8;
     private const BASE_LUCK = 1;
     private const COMMON_NAME = 'Imp';
+    private array $lootTable = [
+        Sword::class => 1,
+        Shield::class => 1,
+        HealthPotion::class => 50
+    ];
 
     public function __construct(int $scale)
     {
@@ -37,8 +48,15 @@ class Imp extends AbstractCreature
         $this->experience = $this->createRandomNumberInRangeWithScale(5, 7, $scale);
     }
 
-    public function handleLoot()
+    public function getLootInventoryBag(PlayerInterface $player): InventoryBagInterface
     {
-        return new Gold($this->scale);
+        if (random_int(0, 10) > 6) {
+            $lootItemRoll = Roll::put($this->lootTable)->spin();
+            $lootItem = new $lootItemRoll($player->getStats());
+            $this->loot->addItem(new Gold($this->scale));
+            $this->loot->addItem($lootItem);
+        }
+
+        return $this->loot;
     }
 }

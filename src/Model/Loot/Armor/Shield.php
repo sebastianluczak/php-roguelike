@@ -45,14 +45,6 @@ class Shield extends AbstractArmor
         $this->lootPickupMessage = "You've picked up " . $this->__toString();
     }
 
-    /**
-     * @return int
-     */
-    public function getArmor(): int
-    {
-        return $this->armor;
-    }
-
     public function __toString(): string
     {
         return sprintf(

@@ -50,7 +50,7 @@ class CreatureService
             $creatureHitDamage = (ceil($creatureDamageRoll - $playerDamageReduction) > 0)?ceil($creatureDamageRoll - $playerDamageReduction):1;
 
             // calculate player damage
-            $creatureDamageReduction =  DiceBag::factory($creature->getArmorSlot()->getDice())->getTotal();
+            $creatureDamageReduction = ceil(DiceBag::factory($creature->getArmorSlot()->getDice())->getTotal() / 2);
             $playerHitDamageRoll = DiceBag::factory($player->getInventory()->getWeaponSlot()->getDice())->getTotal() + $player->getStats()->getStrength();
             $playerHitDamage = (ceil($playerHitDamageRoll - $creatureDamageReduction) > 0)?ceil($playerHitDamageRoll - $creatureDamageReduction):1;
             /*$this->messageBus->dispatch(

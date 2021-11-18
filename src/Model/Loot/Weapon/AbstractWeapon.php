@@ -13,14 +13,4 @@ abstract class AbstractWeapon extends AbstractLoot
 
         $this->lootType = LootTypeEnum::WEAPON();
     }
-
-    public function isWeapon(): bool
-    {
-        return true;
-    }
-
-    public function isArmor(): bool
-    {
-        return false;
-    }
 }

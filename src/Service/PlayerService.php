@@ -6,20 +6,15 @@ use App\Model\Player\Player;
 use App\Model\Player\PlayerCoordinates;
 use App\Model\Player\PlayerInterface;
 use RPGFaker\RPGFaker;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 class PlayerService
 {
-    protected array $inventory;
-    protected MessageBusInterface $messageBus;
     protected PlayerInterface $player;
     protected LoggerService $loggerService;
 
-    public function __construct(MessageBusInterface $messageBus, LoggerService $loggerService)
+    public function __construct()
     {
         $rpgFaker = new RPGFaker(['count' => 1, 'race' => 'human']);
-        $this->messageBus = $messageBus;
-        $this->loggerService = $loggerService;
         $this->player = new Player($rpgFaker->name, New PlayerCoordinates(0, 0));
     }
 

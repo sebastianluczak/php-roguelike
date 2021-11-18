@@ -12,6 +12,7 @@ use App\Message\DevRoomSpawnMessage;
 use App\Message\GameOverMessage;
 use App\Message\RegenerateMapMessage;
 use App\Message\ShowPlayerInventoryMessage;
+use App\Message\UseHealingPotionMessage;
 use App\Model\Player\PlayerInterface;
 use Carbon\Carbon;
 use Symfony\Component\Console\Command\Command;
@@ -92,6 +93,12 @@ class GameService extends ConsoleOutputGameService
 
         if ($buttonPressed == "i") {
             $this->messageBus->dispatch(new ShowPlayerInventoryMessage($this->playerService->getPlayer()));
+
+            return true;
+        }
+
+        if ($buttonPressed == "h") {
+            $this->messageBus->dispatch(new UseHealingPotionMessage($this->playerService->getPlayer()));
 
             return true;
         }
