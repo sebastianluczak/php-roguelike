@@ -4,6 +4,8 @@ namespace App\Model\Creature;
 
 use App\Enum\Creature\CreatureClassEnum;
 use App\Model\Loot\LootInterface;
+use App\Model\Player\Inventory\InventoryBag;
+use App\Model\Player\Inventory\InventoryBagInterface;
 use App\Model\Stats\StatsInterface;
 use Faker\Factory as FakerFactory;
 use Faker\Generator;
@@ -21,6 +23,7 @@ abstract class AbstractCreature implements CreatureInterface
     protected StatsInterface $stats;
     protected LootInterface $weaponSlot;
     protected LootInterface $armorSlot;
+    protected InventoryBagInterface $loot;
     protected CreatureClassEnum $creatureClass;
     protected float $initiative;
 
@@ -37,6 +40,7 @@ abstract class AbstractCreature implements CreatureInterface
 
         $nameFaker = new RPGFaker(['count' => 1]);
         $this->faker = FakerFactory::create('ja_JP');
+        $this->loot = new InventoryBag();
         $this->rawName = $nameFaker->name;
     }
 

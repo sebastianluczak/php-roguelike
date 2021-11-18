@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Leaderboard;
 use App\Enum\GameIconEnum;
+use App\Enum\Loot\LootTypeEnum;
 use App\Enum\MessageClassEnum;
 use App\Message\AddAdventureLogMessage;
 use App\Model\AdventureLog\AdventureLog;
@@ -13,7 +14,6 @@ use App\Model\Map;
 use App\Model\Player\PlayerInterface;
 use App\Model\Tile\AbstractTile;
 use Carbon\Carbon;
-use DateTime;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -22,7 +22,6 @@ class ConsoleOutputGameService
 {
     protected MapService $mapService;
     protected PlayerService $playerService;
-    protected DiceService $diceService;
     protected AdventureLogService $adventureLogService;
     protected MessageBusInterface $messageBus;
     protected LeaderboardService $leaderboardService;
@@ -32,7 +31,6 @@ class ConsoleOutputGameService
     public function __construct(
         MapService $mapService,
         PlayerService $playerService,
-        DiceService $diceService,
         AdventureLogService $adventureLogService,
         MessageBusInterface $messageBus,
         LeaderboardService $leaderboardService,
@@ -40,7 +38,6 @@ class ConsoleOutputGameService
     ) {
         $this->mapService = $mapService;
         $this->playerService = $playerService;
-        $this->diceService = $diceService;
         $this->adventureLogService = $adventureLogService;
         $this->messageBus = $messageBus;
         $this->leaderboardService = $leaderboardService;
@@ -75,18 +72,19 @@ class ConsoleOutputGameService
             $devModeSymbol = GameIconEnum::DEV_MODE();
         }
 
-        $output->writeln(
-            $devModeSymbol . " <fg=bright-blue>-= " . GameIconEnum::HEALTH() . " " . $player->getHealth()->getHealth() .
-            " =- -= " . GameIconEnum::GOLD() . " " . $player->getGold() .
-            " =- -= " . GameIconEnum::KILLS() . " " . $player->getKillCount() .
-            " =- -= " . GameIconEnum::PLAYER() . " " . $player->getLevel()->getLevel() . " " . $player->getLevel()->drawExperienceBar() .
-            " =- -= " . $player->getInventory()->getWeaponSlot() .
-            " =- -= " . $player->getInventory()->getArmorSlot() .
-            " =- -= " . $player->getInventory()->getKeystone() .
-            " =- -= " . GameIconEnum::MAP() . " " . $player->getMapLevel() .
-            " =- -= " . GameIconEnum::BUFFS() . " " . $this->internalClockService->getActiveGameEventsCount() .
-            " =- -= " . GameIconEnum::STATS() . " " . $player->getStats()->getFormattedStats() .  " ==--</>"
-        );
+        $statusLine = $devModeSymbol . " <fg=bright-blue> " . GameIconEnum::HEALTH() . " " . $player->getHealth()->getHealth() . "/" . $player->getHealth()->getMaxHealth() .
+            " | " . GameIconEnum::POTION() . " " . count($player->getInventory()->getInventoryBag()->getItemsOfType(LootTypeEnum::POTION())) .
+            " | " . GameIconEnum::GOLD() . " " . $player->getGold() .
+            " | " . GameIconEnum::KILLS() . " " . $player->getKillCount() .
+            " | " . GameIconEnum::PLAYER() . " " . $player->getLevel()->getLevel() . " " . $player->getLevel()->drawExperienceBar() .
+            " | " . $player->getInventory()->getWeaponSlot() .
+            " | " . $player->getInventory()->getArmorSlot() .
+            " | " . $player->getInventory()->getKeystone() .
+            " | " . GameIconEnum::MAP() . " " . $player->getMapLevel() .
+            " | " . GameIconEnum::BUFFS() . " " . $this->internalClockService->getActiveGameEventsCount() .
+            " | " . GameIconEnum::STATS() . " " . $player->getStats()->getFormattedStats() .  "</>";
+
+        $output->writeln($statusLine);
     }
 
     protected function printAdventureLog(AdventureLogInterface $adventureLog, OutputInterface $output)
@@ -193,14 +191,6 @@ class ConsoleOutputGameService
     public function getPlayerService(): PlayerService
     {
         return $this->playerService;
-    }
-
-    /**
-     * @return DiceService
-     */
-    public function getDiceService(): DiceService
-    {
-        return $this->diceService;
     }
 
     /**

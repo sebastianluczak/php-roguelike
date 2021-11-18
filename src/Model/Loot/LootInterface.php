@@ -6,8 +6,6 @@ use App\Enum\Loot\LootClassEnum;
 
 interface LootInterface
 {
-    public function isArmor(): bool;
-    public function isWeapon(): bool;
     public function getName(): string;
     public function getLootType(): string;
     public function setLootType(string $lootType): AbstractLoot;

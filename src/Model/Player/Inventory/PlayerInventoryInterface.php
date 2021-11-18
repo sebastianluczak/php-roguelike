@@ -11,4 +11,8 @@ interface PlayerInventoryInterface
     public function getKeystone(): LootInterface;
     public function handleLoot(LootInterface $loot): PlayerInventoryInterface;
     public function hasChanged(): bool;
+    public function getInventoryBag(): InventoryBagInterface;
+    public function addGoldAmount(int $amount): PlayerInventoryInterface;
+    public function subtractGoldAmount(int $amount): PlayerInventoryInterface;
+    public function getGoldAmount(): int;
 }

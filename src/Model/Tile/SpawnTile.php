@@ -35,6 +35,6 @@ class SpawnTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<options=bold;fg=red>@</>";
+        return "<options=bold,blink;fg=bright-red>@</>";
     }
 }

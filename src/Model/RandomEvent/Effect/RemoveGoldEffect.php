@@ -15,6 +15,6 @@ class RemoveGoldEffect implements GameEffectInterface
 
     public function apply(): void
     {
-        $this->player->decreaseGoldAmount(random_int(ceil($this->player->getGold() / 10), $this->player->getGold()));
+        $this->player->getInventory()->subtractGoldAmount(random_int(ceil($this->player->getGold() / 10), $this->player->getGold()));
     }
 }

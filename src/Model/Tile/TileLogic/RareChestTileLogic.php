@@ -12,6 +12,7 @@ use App\Model\Loot\Keystone\ColorlessKeystone;
 use App\Model\Loot\Keystone\PrismaticKeystone;
 use App\Model\Loot\LootInterface;
 use App\Model\Loot\Armor\Shield;
+use App\Model\Loot\Potion\HealthPotion;
 use App\Model\Loot\Weapon\Sword;
 use App\Model\Player\PlayerInterface;
 use App\Model\RandomEvent\RandomEventInterface;
@@ -27,6 +28,7 @@ class RareChestTileLogic implements TileLogicInterface
     protected array $itemChances = [
         Sword::class => 50,
         Shield::class => 50,
+        HealthPotion::class => 5,
         PrismaticKeystone::class => 1,
         BrokenKeystone::class => 1,
         ChromaticKeystone::class => 1,
@@ -45,6 +47,7 @@ class RareChestTileLogic implements TileLogicInterface
                 case LootTypeEnum::ARMOR():
                 case LootTypeEnum::KEYSTONE():
                 case LootTypeEnum::WEAPON():
+                case LootTypeEnum::POTION():
                     $this->rawMessage = $this->loot->getLootPickupMessage();
                     break;
             }
@@ -73,8 +76,12 @@ class RareChestTileLogic implements TileLogicInterface
            case LootTypeEnum::KEYSTONE():
                 $player->getInventory()->handleLoot($this->loot);
                if (!$player->getInventory()->hasChanged()) {
+                   // todo inventory bag support
                    $this->rawMessage = "You left " . $this->loot . " on ground, you're better equipped (" . $player->getInventory()->getKeystone() . ").";
                }
+               break;
+           case LootTypeEnum::POTION():
+               $player->getInventory()->handleLoot($this->loot);
                break;
        }
    }

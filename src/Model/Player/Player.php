@@ -14,7 +14,6 @@ use App\Model\Stats\StatsInterface;
 class Player implements PlayerInterface
 {
     protected string $name;
-    protected int $gold = 0;
     protected int $killCount = 0;
     protected int $mapLevel = 1;
 
@@ -44,33 +43,7 @@ class Player implements PlayerInterface
      */
     public function getGold(): int
     {
-        return $this->gold;
-    }
-
-    /**
-     * @param int $gold
-     * @return PlayerInterface
-     */
-    public function setGold(int $gold): PlayerInterface
-    {
-        $this->gold = $gold;
-
-        return $this;
-    }
-
-    public function addGoldAmount(int $amount): PlayerInterface
-    {
-        $this->gold = $this->gold + $amount;
-
-        return $this;
-    }
-
-    // todo add check for negative values
-    public function decreaseGoldAmount(int $amount): PlayerInterface
-    {
-        $this->gold = $this->gold - $amount;
-
-        return $this;
+        return $this->inventory->getGoldAmount();
     }
 
     public function getHealth(): PlayerHealthInterface

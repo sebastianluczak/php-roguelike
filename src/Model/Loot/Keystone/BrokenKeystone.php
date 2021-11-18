@@ -14,6 +14,7 @@ class BrokenKeystone extends AbstractKeystone
         parent::__construct();
 
         $this->lootPickupMessage = "You've picked up " . GameIconEnum::GEM() . " " . $this->getName();
+
         $this->dice = '1d1';
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\MessageClassEnum;
+use App\Model\Creature\Boss\Annurabi;
 use App\Model\Creature\CreatureInterface;
-use App\Model\Creature\Dragon;
 use App\Model\Player\PlayerInterface;
 use App\Model\RandomEvent\RandomEventInterface;
 use App\Model\RandomEvent\ThiefArrivedGameEvent;
@@ -27,7 +27,7 @@ class BossRoomTileLogic implements TileLogicInterface
     public function process(PlayerInterface $player)
     {
         if ($player->getInventory()->getKeystone()->getAverageRoll() > 3) {
-            $this->creature = new Dragon($this->scale * 1.8);
+            $this->creature = new Annurabi($this->scale * 1.2);
         } else {
             $this->event = new ThiefArrivedGameEvent($player);
         }

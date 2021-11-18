@@ -24,7 +24,7 @@ class ChestTileLogic implements TileLogicInterface
 
     public function process(PlayerInterface $player)
    {
-       $player->addGoldAmount($this->gold->getAmount());
+       $player->getInventory()->addGoldAmount($this->gold->getAmount());
    }
 
    public function hasAdventureLogMessage(): bool

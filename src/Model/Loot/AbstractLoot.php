@@ -92,7 +92,7 @@ abstract class AbstractLoot implements LootInterface
     }
 
     public function getMinRollValue(): int
-    {
+    { 
         $minRoll = 0;
         $diceBag = DiceBag::factory($this->getDice());
         foreach ($diceBag->getDicePools() as $dicePool) {
