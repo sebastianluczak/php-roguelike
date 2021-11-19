@@ -7,14 +7,21 @@ use App\Model\Tile\EmptyTile;
 
 class Map
 {
+    protected string $name;
     protected int $width;
     protected int $height;
     protected array $mapInstance;
 
-    public function __construct(int $width = 140, int $height = 44)
+    /**
+     * @param int $width
+     * @param int $height
+     * @param string|null $name
+     */
+    public function __construct(int $width = 140, int $height = 44, string $name = null)
     {
         $this->width = $width;
         $this->height = $height;
+        $this->name = $name??"Dungeon";
         $this->createMapInstance();
     }
 
@@ -64,5 +71,13 @@ class Map
     public function getMapInstance(): array
     {
         return $this->mapInstance;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 }
