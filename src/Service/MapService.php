@@ -7,9 +7,11 @@ use App\Enum\MoveDirectionEnum;
 use App\Exception\MapFiniteException;
 use App\Exception\NewLevelException;
 use App\Exception\NotValidMoveException;
+use App\Generator\Level\DefaultBoxRoomGenerator;
 use App\Message\AddAdventureLogMessage;
 use App\Message\CreatureEncounteredMessage;
 use App\Message\TileLogicMessage;
+use App\Model\CityMap;
 use App\Model\Map;
 use App\Model\Player\PlayerCoordinates;
 use App\Model\Player\PlayerInterface;
@@ -32,11 +34,15 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class MapService
 {
     protected ?Map $map = null;
+    protected CityMap $cityMap;
+    protected Map $tempDungeonMap;
+
     protected ValidatorInterface $validator;
     protected PlayerService $playerService;
     protected LoggerService $loggerService;
     protected int $mapLevel = 1;
     protected MessageBusInterface $messageBus;
+    protected YamlLevelParserService $levelParserService;
     protected array $mapErrors;
     private array $tilesAvailableToSpawnWithChances = [
         BossRoomTile::class => 1,
@@ -47,16 +53,19 @@ class MapService
         CorridorTile::class => 6000
     ];
 
-    public function __construct(PlayerService $playerService, LoggerService $loggerService, MessageBusInterface $messageBus)
+    public function __construct(PlayerService $playerService, LoggerService $loggerService, MessageBusInterface $messageBus, YamlLevelParserService $levelParserService)
     {
         $this->playerService = $playerService;
         $this->loggerService = $loggerService;
         $this->messageBus = $messageBus;
+        $this->levelParserService = $levelParserService;
         $this->mapErrors = [];
 
         if ($this->map == null) {
             $this->createNewLevel();
         }
+
+        $this->generateCityMapInstance();
     }
 
     public function createNewLevel(): void
@@ -266,6 +275,35 @@ class MapService
         return [0, 0];
     }
 
+    /**
+     * @return CityMap
+     */
+    public function getCityMap(): CityMap
+    {
+        return $this->cityMap;
+    }
+
+    protected function generateCityMapInstance()
+    {
+        $yamlFilePath = "resources/levels/Rivermouth_city.yaml";
+        $this->levelParserService->setYamlFilePath($yamlFilePath);
+        $cityMapScaffold = new CityMap(
+            $this->levelParserService->getMapWidth(),
+            $this->levelParserService->getMapHeight(),
+            $this->levelParserService->getMapName()
+        );
+
+        $rooms = $this->levelParserService->getRoomsDefinitions();
+        foreach ($rooms as $roomDefinition) {
+            /** @var DefaultBoxRoomGenerator $generator */
+            $generator = new $roomDefinition['generation_class']($cityMapScaffold, $roomDefinition);
+            $cityMapScaffold = $generator->getMap();
+        }
+        $cityMapScaffold->addTile(new SpawnTile(), 0, 0);
+
+        $this->cityMap = $cityMapScaffold;
+    }
+
     private function isTileTraversable(int $width, int $height): bool
     {
         $this->loggerService->log("IsTileTraversable @" . $width . "#" . $height);
@@ -372,5 +410,31 @@ class MapService
     public function resetErrors()
     {
         $this->mapErrors = [];
+    }
+
+    /**
+     * @return Map
+     */
+    public function getTempDungeonMap(): Map
+    {
+        return $this->tempDungeonMap;
+    }
+
+    /**
+     * @param Map $tempDungeonMap
+     */
+    public function setTempDungeonMap(Map $tempDungeonMap): void
+    {
+        $this->tempDungeonMap = $tempDungeonMap;
+    }
+
+    /**
+     * @param Map|null $map
+     * @return MapService
+     */
+    public function setMap(?Map $map): MapService
+    {
+        $this->map = $map;
+        return $this;
     }
 }

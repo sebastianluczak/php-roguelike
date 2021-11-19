@@ -4,7 +4,7 @@ namespace App\Model\Tile\City;
 
 use App\Model\Stats\StatsInterface;
 use App\Model\Tile\AbstractTile;
-use App\Model\Tile\TileLogic\City\PavementTileLogic;
+use App\Model\Tile\TileLogic\NoLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
 
 class PavementTile extends AbstractTile
@@ -26,12 +26,12 @@ class PavementTile extends AbstractTile
 
     public function hasLogic(): bool
     {
-        return true;
+        return false;
     }
 
     public function handleLogic(int $scale, StatsInterface $stats): TileLogicInterface
     {
-        return new PavementTileLogic($scale);
+        return new NoLogic();
     }
 
     public function draw(): string

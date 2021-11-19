@@ -7,7 +7,7 @@ use Symfony\Component\Yaml\Yaml;
 class YamlLevelParserService
 {
     protected string $yamlFilePath;
-    private $yamlProcessed;
+    private array $yamlProcessed;
 
     protected function processCurrentYamlFile()
     {
@@ -16,14 +16,6 @@ class YamlLevelParserService
         }
 
         $this->yamlProcessed = Yaml::parseFile($this->yamlFilePath);
-    }
-
-    /**
-     * @return string
-     */
-    public function getYamlFilePath()
-    {
-        return $this->yamlFilePath;
     }
 
     /**

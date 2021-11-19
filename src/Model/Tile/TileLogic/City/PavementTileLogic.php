@@ -18,6 +18,7 @@ class PavementTileLogic implements TileLogicInterface
     public function __construct(int $scale)
     {
         $this->rawMessage = "";
+        $this->creature = null;
         $this->messageClass = MessageClassEnum::STANDARD();
     }
 

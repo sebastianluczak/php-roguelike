@@ -8,6 +8,7 @@ use App\Exception\GameOverException;
 use App\Exception\NewLevelException;
 use App\Exception\NotValidMoveException;
 use App\Message\AddAdventureLogMessage;
+use App\Message\CityPortalMessage;
 use App\Message\DevRoomSpawnMessage;
 use App\Message\GameOverMessage;
 use App\Message\RegenerateMapMessage;
@@ -119,6 +120,14 @@ class GameService extends ConsoleOutputGameService
 
         if ($buttonPressed == "l") {
             $this->printLeaderBoards();
+
+            echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+
+            return true;
+        }
+
+        if ($buttonPressed == "t") {
+            $this->messageBus->dispatch(new CityPortalMessage($this->playerService->getPlayer()));
 
             echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
 
