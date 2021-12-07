@@ -23,34 +23,34 @@ class ChestTileLogic implements TileLogicInterface
     }
 
     public function process(PlayerInterface $player)
-   {
-       $player->getInventory()->addGoldAmount($this->gold->getAmount());
-   }
+    {
+        $player->getInventory()->addGoldAmount($this->gold->getAmount());
+    }
 
-   public function hasAdventureLogMessage(): bool
-   {
-       return !empty($this->rawMessage);
-   }
+    public function hasAdventureLogMessage(): bool
+    {
+        return !empty($this->rawMessage);
+    }
 
-   public function getAdventureLogMessage(): string
-   {
-       return $this->rawMessage;
-   }
+    public function getAdventureLogMessage(): string
+    {
+        return $this->rawMessage;
+    }
 
-   public function getAdventureLogMessageClass(): string
-   {
+    public function getAdventureLogMessageClass(): string
+    {
         return $this->messageClass;
-   }
+    }
 
-   public function hasEncounter(): bool
-   {
-       return false;
-   }
+    public function hasEncounter(): bool
+    {
+        return false;
+    }
 
-   public function getEncounteredCreature(): ?CreatureInterface
-   {
-       return null;
-   }
+    public function getEncounteredCreature(): ?CreatureInterface
+    {
+        return null;
+    }
 
     public function getEvent(): RandomEventInterface
     {

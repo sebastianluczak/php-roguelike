@@ -10,6 +10,7 @@ use App\Exception\NotValidMoveException;
 use App\Generator\Level\DefaultBoxRoomGenerator;
 use App\Message\AddAdventureLogMessage;
 use App\Message\CreatureEncounteredMessage;
+use App\Message\TileInteractionMessage;
 use App\Message\TileLogicMessage;
 use App\Model\CityMap;
 use App\Model\Map;
@@ -19,6 +20,7 @@ use App\Model\Tile\AbstractTile;
 use App\Model\Tile\AltarTile;
 use App\Model\Tile\BossRoomTile;
 use App\Model\Tile\ChestTile;
+use App\Model\Tile\City\PavementTile;
 use App\Model\Tile\CorridorTile;
 use App\Model\Tile\EmptyTile;
 use App\Model\Tile\ExitTile;
@@ -102,7 +104,7 @@ class MapService
 
         $spawnTileCoordinates = [0, 0];
         $this->map->addTile(new SpawnTile(), $spawnTileCoordinates[0], $spawnTileCoordinates[1]);
-        $this->playerService->getPlayer()->setCoordinates(new PlayerCoordinates($spawnTileCoordinates[0], $spawnTileCoordinates[1]));
+        //$this->playerService->getPlayer()->setCoordinates(new PlayerCoordinates($spawnTileCoordinates[0], $spawnTileCoordinates[1]));
 
         for ($j=1;$j<=30;$j++) {
             for ($i = 0; $i <= 50; $i++) {
@@ -208,7 +210,7 @@ class MapService
      */
     public function movePlayer(PlayerInterface $player, string $direction, int $mapLevel)
     {
-        $this->loggerService->log("Moving player: " . $player->getPlayerName() . " in direction: " . $direction);
+        $this->loggerService->log("Moving player: " . $player->getName() . " in direction: " . $direction);
         $xcoordinate = null;
         $ycoordinate = null;
 
@@ -256,12 +258,22 @@ class MapService
         if ($tile->hasLogic()) {
             $this->handleTileLogic($tile, $player, $mapLevel);
         }
+
+        if ($tile->isInteractable()) {
+            $this->handleTileInteraction($tile, $player);
+        }
+
         // remove player from previous tile
-        $this->getMap()->replaceTile(new CorridorTile(), $spawnTile[0], $spawnTile[1]);
+        if ($this->getMap() instanceof CityMap) {
+            $this->getMap()->replaceTile(new PavementTile(), $spawnTile[0], $spawnTile[1]);
+        } else {
+            $this->getMap()->replaceTile(new CorridorTile(), $spawnTile[0], $spawnTile[1]);
+        }
+
         // add player to new tile
         $this->getMap()->addTile(new SpawnTile(), $xcoordinate, $ycoordinate);
     }
-    
+
     protected function getSpawnTile()
     {
         foreach ($this->getMap()->getMapInstance() as $xposition => $row) {
@@ -299,7 +311,7 @@ class MapService
             $generator = new $roomDefinition['generation_class']($cityMapScaffold, $roomDefinition);
             $cityMapScaffold = $generator->getMap();
         }
-        $cityMapScaffold->addTile(new SpawnTile(), 0, 0);
+        $cityMapScaffold->addTile(new SpawnTile(), 1, 1);
 
         $this->cityMap = $cityMapScaffold;
     }
@@ -325,7 +337,7 @@ class MapService
     {
         $tileRolled = Roll::put($this->tilesAvailableToSpawnWithChances)->spin();
 
-        return new $tileRolled;
+        return new $tileRolled();
     }
 
     public function increaseMapLevel()
@@ -353,7 +365,7 @@ class MapService
         $allTiles = 0;
         foreach ($this->getMap()->getMapInstance() as $arrayOfTiles) {
             foreach ($arrayOfTiles as $mapTile) {
-                $mapTileStatistics[get_class($mapTile)] = (isset($mapTileStatistics[get_class($mapTile)]))?$mapTileStatistics[get_class($mapTile)] + 1:1;
+                $mapTileStatistics[get_class($mapTile)] = (isset($mapTileStatistics[get_class($mapTile)])) ? $mapTileStatistics[get_class($mapTile)] + 1 : 1;
                 $allTiles++;
             }
         }
@@ -404,6 +416,18 @@ class MapService
 
                 throw new NewLevelException();
             }
+        }
+    }
+
+    /**
+     * @throws NewLevelException
+     */
+    public function handleTileInteraction(AbstractTile $tile, PlayerInterface $player)
+    {
+        $tileInteraction = $tile->handleInteraction($player);
+
+        if ($tile->isInteractable()) {
+            $this->messageBus->dispatch(new TileInteractionMessage($player, $tileInteraction));
         }
     }
 

@@ -47,12 +47,12 @@ class CreatureService
             // calculate creature hit damage
             $playerDamageReduction = DiceBag::factory($player->getInventory()->getArmorSlot()->getDice())->getTotal();
             $creatureDamageRoll =  DiceBag::factory($creature->getWeaponSlot()->getDice())->getTotal();
-            $creatureHitDamage = (ceil($creatureDamageRoll - $playerDamageReduction) > 0)?ceil($creatureDamageRoll - $playerDamageReduction):1;
+            $creatureHitDamage = (ceil($creatureDamageRoll - $playerDamageReduction) > 0) ? ceil($creatureDamageRoll - $playerDamageReduction) : 1;
 
             // calculate player damage
             $creatureDamageReduction = ceil(DiceBag::factory($creature->getArmorSlot()->getDice())->getTotal() / 2);
             $playerHitDamageRoll = DiceBag::factory($player->getInventory()->getWeaponSlot()->getDice())->getTotal() + $player->getStats()->getStrength();
-            $playerHitDamage = (ceil($playerHitDamageRoll - $creatureDamageReduction) > 0)?ceil($playerHitDamageRoll - $creatureDamageReduction):1;
+            $playerHitDamage = (ceil($playerHitDamageRoll - $creatureDamageReduction) > 0) ? ceil($playerHitDamageRoll - $creatureDamageReduction) : 1;
             /*$this->messageBus->dispatch(
                 new AddAdventureLogMessage(
                     "CreatureDamageReduction: " . $creatureDamageReduction . ", playerHitDamageRoll: " . $playerHitDamageRoll . ", playerHitDamage: " . $playerHitDamage . " // " .
@@ -62,7 +62,7 @@ class CreatureService
             );*/
             $this->messageBus->dispatch(
                 new AddAdventureLogMessage(
-                    "🗡️ Turn " . $turn . " - " . $creature->getName() . " (💗" . $creature->getHealth() . "/🗡".$creatureHitDamage.") vs. " . $player->getPlayerName() . " (💗" . $player->getHealth()->getHealth() . "/🗡".$playerHitDamage.")",
+                    "🗡️ Turn " . $turn . " - " . $creature->getName() . " (💗" . $creature->getHealth() . "/🗡".$creatureHitDamage.") vs. " . $player->getName() . " (💗" . $player->getHealth()->getHealth() . "/🗡".$playerHitDamage.")",
                     MessageClassEnum::STANDARD()
                 )
             );

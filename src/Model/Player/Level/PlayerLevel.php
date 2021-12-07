@@ -55,7 +55,7 @@ class PlayerLevel implements PlayerLevelInterface
         $linesToFill = (int)$numberOfFilledLinesString[0];
         $totalLines = 10;
         $feed = "[";
-        for ($i=0;$i<=$linesToFill;$i++){
+        for ($i=0;$i<=$linesToFill;$i++) {
             $feed .= "=";
         }
         for ($j=$linesToFill;$j<$totalLines;$j++) {

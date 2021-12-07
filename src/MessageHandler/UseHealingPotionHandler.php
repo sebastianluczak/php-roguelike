@@ -31,17 +31,19 @@ class UseHealingPotionHandler implements MessageHandlerInterface
                 $player->getHealth()->modifyHealth($player->getHealth()->getMaxHealth(), HealthActionEnum::INCREASE());
                 $player->getInventory()->getInventoryBag()->removeItem($healingPotion);
 
-                $this->messageBus->dispatch(new AddAdventureLogMessage(
-                        'Healed using ' . GameIconEnum::POTION() . " " . $healingPotions[0]->getName(),
-                        MessageClassEnum::LOOT()
-                    )
+                $this->messageBus->dispatch(
+                    new AddAdventureLogMessage(
+                    'Healed using ' . GameIconEnum::POTION() . " " . $healingPotions[0]->getName(),
+                    MessageClassEnum::LOOT()
+                )
                 );
             }
         } else {
-            $this->messageBus->dispatch(new AddAdventureLogMessage(
-                    'No more healing potions left',
-                    MessageClassEnum::IMPORTANT()
-                )
+            $this->messageBus->dispatch(
+                new AddAdventureLogMessage(
+                'No more healing potions left',
+                MessageClassEnum::IMPORTANT()
+            )
             );
         }
     }

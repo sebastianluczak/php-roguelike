@@ -24,6 +24,7 @@ abstract class AbstractLoot implements LootInterface
             LootClassEnum::D()->getKey() => 60
         ];
 
+        $this->dice = "";
         $lootClassRoll = Roll::put($lootClassChances)->spin();
         $this->lootClass = LootClassEnum::$lootClassRoll();
     }
@@ -92,7 +93,7 @@ abstract class AbstractLoot implements LootInterface
     }
 
     public function getMinRollValue(): int
-    { 
+    {
         $minRoll = 0;
         $diceBag = DiceBag::factory($this->getDice());
         foreach ($diceBag->getDicePools() as $dicePool) {

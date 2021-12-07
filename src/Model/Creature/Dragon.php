@@ -46,5 +46,4 @@ class Dragon extends AbstractCreature
 
         return $this->loot;
     }
-
 }

@@ -13,14 +13,16 @@ use App\Model\Stats\Stats;
 class PlayerInventory implements PlayerInventoryInterface
 {
     protected InventoryBagInterface $inventoryBag;
+    /** @var LootInterface|Sword */
     protected LootInterface $weaponSlot;
     protected LootInterface $armorSlot;
     protected LootInterface $keyStone;
     protected bool $hasChanged;
     protected int $goldAmount;
 
-    public function __construct(Stats $stats)
+    public function __construct()
     {
+        $stats = new Stats();
         $this->hasChanged = false;
         $this->goldAmount = $stats->getIntelligence() * 10;
         $this->weaponSlot = new Sword($stats);

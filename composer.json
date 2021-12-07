@@ -13,10 +13,12 @@
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.10",
+        "friendsofphp/php-cs-fixer": "^3.3",
         "fzaninotto/faker": "^1.9",
         "irfa/php-gatcha": "^2.1",
         "myclabs/php-enum": "^1.8",
         "nesbot/carbon": "^2.54",
+        "phpdocumentor/reflection-docblock": "^5.3",
         "porthou/dicebag": "^0.1.0",
         "symfony/console": "5.3.*",
         "symfony/dotenv": "5.3.*",
@@ -24,9 +26,12 @@
         "symfony/framework-bundle": "5.3.*",
         "symfony/messenger": "5.3.*",
         "symfony/monolog-bundle": "^3.7",
+        "symfony/property-access": "5.3.*",
+        "symfony/property-info": "5.3.*",
         "symfony/proxy-manager-bridge": "5.3.*",
         "symfony/redis-messenger": "5.3.*",
         "symfony/runtime": "5.3.*",
+        "symfony/serializer": "5.3.*",
         "symfony/validator": "5.3.*",
         "symfony/yaml": "5.3.*"
     },
@@ -66,7 +71,8 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "php-cs-fixer": "php-cs-fixer --config=./.php_cs",
     },
     "conflict": {
         "symfony/symfony": "*"

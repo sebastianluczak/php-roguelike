@@ -9,7 +9,7 @@ class PlayerHealth implements PlayerHealthInterface
     protected int $health;
     protected int $maxHealth;
 
-    public function __construct(int $playerHealth)
+    public function __construct(int $playerHealth = 100)
     {
         $this->health = $playerHealth;
         $this->maxHealth = $playerHealth;

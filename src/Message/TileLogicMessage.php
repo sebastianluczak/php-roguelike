@@ -31,5 +31,4 @@ class TileLogicMessage
     {
         return $this->tileLogic;
     }
-
 }

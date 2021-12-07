@@ -42,7 +42,7 @@ class LeaderboardService
         $leaderboard->setGoldAmount($player->getGold());
         $leaderboard->setKills($player->getKillCount());
         $leaderboard->setPlayerLevel($player->getLevel()->getLevel());
-        $leaderboard->setPlayerName($player->getPlayerName());
+        $leaderboard->setPlayerName($player->getName());
 
         $this->em->persist($leaderboard);
         $this->em->flush();

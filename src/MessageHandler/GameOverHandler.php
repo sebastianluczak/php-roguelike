@@ -32,8 +32,11 @@ class GameOverHandler implements MessageHandlerInterface
         } catch (\Exception $e) {
             // adventure log offline
         }
-        $this->messageBus->dispatch(new AddAdventureLogMessage(
-            $player->getPlayerName() . " -> 🗺️ " . $player->getMapLevel() . " 🧍 " . $player->getLevel()->getLevel() . " ☠️ " . $player->getKillCount() . " 💰 " . $player->getGold() . " ⏲ " . Carbon::now()->format(DATE_RFC822), MessageClassEnum::IMPORTANT())
+        $this->messageBus->dispatch(
+            new AddAdventureLogMessage(
+            $player->getName() . " -> 🗺️ " . $player->getMapLevel() . " 🧍 " . $player->getLevel()->getLevel() . " ☠️ " . $player->getKillCount() . " 💰 " . $player->getGold() . " ⏲ " . Carbon::now()->format(DATE_RFC822),
+            MessageClassEnum::IMPORTANT()
+        )
         );
         $this->messageBus->dispatch(new AddAdventureLogMessage($message->getReason(), MessageClassEnum::IMPORTANT()));
         $this->messageBus->dispatch(new AddAdventureLogMessage(" -- GAME OVER -- ", MessageClassEnum::IMPORTANT()));

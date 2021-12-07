@@ -24,7 +24,6 @@ class PavementTileLogic implements TileLogicInterface
 
     public function process(PlayerInterface $player)
     {
-
     }
 
     public function hasAdventureLogMessage(): bool

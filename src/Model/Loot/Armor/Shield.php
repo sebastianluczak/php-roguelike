@@ -31,7 +31,7 @@ class Shield extends AbstractArmor
     {
         parent::__construct();
         $this->armor = random_int(1, 3);
-        $this->dice = '1d' . random_int(1, 3 + $playerStats->getLuck()) . '+' . ( 5 - $this->getLootClass()->getValue() + random_int(0, sqrt($playerStats->getLuck())));
+        $this->dice = '1d' . random_int(1, 3 + $playerStats->getLuck()) . '+' . (5 - $this->getLootClass()->getValue() + random_int(0, sqrt($playerStats->getLuck())));
 
         $roll = DiceBag::factory('1d6+4');
         if ($roll->getTotal() > 11 - $playerStats->getLuck()) { // unique loot handler
@@ -39,7 +39,7 @@ class Shield extends AbstractArmor
             $this->name = $this->uniqueNames[array_rand($this->uniqueNames)];
             $diceRoll = DiceBag::factory('2d8+' . (5 - $this->lootClass->getValue()));
             $this->armor = $diceRoll->getTotal();
-            $this->dice = '2d' . random_int(1, 3 + $playerStats->getLuck()) . '+' . ( 5 - $this->getLootClass()->getValue() + random_int(0, sqrt($playerStats->getLuck())));
+            $this->dice = '2d' . random_int(1, 3 + $playerStats->getLuck()) . '+' . (5 - $this->getLootClass()->getValue() + random_int(0, sqrt($playerStats->getLuck())));
         }
 
         $this->lootPickupMessage = "You've picked up " . $this->__toString();

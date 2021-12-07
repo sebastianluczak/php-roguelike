@@ -15,7 +15,7 @@ class PlayerService
     public function __construct()
     {
         $rpgFaker = new RPGFaker(['count' => 1, 'race' => 'human']);
-        $this->player = new Player($rpgFaker->name, New PlayerCoordinates(0, 0));
+        $this->player = new Player($rpgFaker->name, new PlayerCoordinates(0, 0));
     }
 
     /**

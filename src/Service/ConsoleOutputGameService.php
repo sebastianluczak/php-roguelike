@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class ConsoleOutputGameService
 {
@@ -26,6 +27,7 @@ class ConsoleOutputGameService
     protected MessageBusInterface $messageBus;
     protected LeaderboardService $leaderboardService;
     protected InternalClockService $internalClockService;
+    protected SerializerInterface $serializer;
     protected bool $devMode;
 
     public function __construct(
@@ -34,7 +36,8 @@ class ConsoleOutputGameService
         AdventureLogService $adventureLogService,
         MessageBusInterface $messageBus,
         LeaderboardService $leaderboardService,
-        InternalClockService $internalClockService
+        InternalClockService $internalClockService,
+        SerializerInterface $serializer
     ) {
         $this->mapService = $mapService;
         $this->playerService = $playerService;
@@ -42,6 +45,7 @@ class ConsoleOutputGameService
         $this->messageBus = $messageBus;
         $this->leaderboardService = $leaderboardService;
         $this->internalClockService = $internalClockService;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -143,8 +147,11 @@ class ConsoleOutputGameService
          */
         $entriesCount = count($entries);
         foreach ($entries as $key => $entry) {
-            $this->messageBus->dispatch(new AddAdventureLogMessage(
-                $entriesCount - $key . ". " . $entry->getPlayerName() . " -> " . GameIconEnum::MAP() . " " . $entry->getDungeonLevel() . " 🧍 " . $entry->getPlayerLevel() . " ☠️ " . $entry->getKills() . " 💰 " . $entry->getGoldAmount() . " ⏲ " . Carbon::createFromImmutable($entry->getCreatedAt())->format(DATE_RFC822), MessageClassEnum::IMPORTANT())
+            $this->messageBus->dispatch(
+                new AddAdventureLogMessage(
+                $entriesCount - $key . ". " . $entry->getPlayerName() . " -> " . GameIconEnum::MAP() . " " . $entry->getDungeonLevel() . " 🧍 " . $entry->getPlayerLevel() . " ☠️ " . $entry->getKills() . " 💰 " . $entry->getGoldAmount() . " ⏲ " . Carbon::createFromImmutable($entry->getCreatedAt())->format(DATE_RFC822),
+                MessageClassEnum::IMPORTANT()
+            )
             );
         }
         $this->messageBus->dispatch(new AddAdventureLogMessage(" --- Leaderboards --- ", MessageClassEnum::IMPORTANT()));
@@ -153,7 +160,7 @@ class ConsoleOutputGameService
     protected function stty($options)
     {
         exec($cmd = "stty $options", $output, $el);
-        $el AND die("exec($cmd) failed");
+        $el and die("exec($cmd) failed");
 
         return implode(" ", $output);
     }

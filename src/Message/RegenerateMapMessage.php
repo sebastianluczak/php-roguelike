@@ -8,5 +8,4 @@ namespace App\Message;
  */
 class RegenerateMapMessage
 {
-
 }

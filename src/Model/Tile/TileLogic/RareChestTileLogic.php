@@ -57,8 +57,8 @@ class RareChestTileLogic implements TileLogicInterface
     }
 
     public function process(PlayerInterface $player)
-   {
-       switch ($this->loot->getLootType()) {
+    {
+        switch ($this->loot->getLootType()) {
            case LootTypeEnum::WEAPON():
                $player->getInventory()->handleLoot($this->loot);
                if (!$player->getInventory()->hasChanged()) {
@@ -84,32 +84,32 @@ class RareChestTileLogic implements TileLogicInterface
                $player->getInventory()->handleLoot($this->loot);
                break;
        }
-   }
+    }
 
-   public function hasAdventureLogMessage(): bool
-   {
-       return !empty($this->rawMessage);
-   }
+    public function hasAdventureLogMessage(): bool
+    {
+        return !empty($this->rawMessage);
+    }
 
-   public function getAdventureLogMessage(): string
-   {
-       return $this->rawMessage;
-   }
+    public function getAdventureLogMessage(): string
+    {
+        return $this->rawMessage;
+    }
 
     public function hasEncounter(): bool
     {
         return false;
     }
 
-   public function getAdventureLogMessageClass(): string
-   {
+    public function getAdventureLogMessageClass(): string
+    {
         return $this->messageClass;
-   }
+    }
 
-   public function getEncounteredCreature(): ?CreatureInterface
-   {
+    public function getEncounteredCreature(): ?CreatureInterface
+    {
         return null;
-   }
+    }
 
     public function getEvent(): RandomEventInterface
     {

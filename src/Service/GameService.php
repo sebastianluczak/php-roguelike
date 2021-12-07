@@ -31,6 +31,22 @@ class GameService extends ConsoleOutputGameService
             if ($player->getHealth()->getHealth() <= 0) {
                 break;
             }
+            if ($player->getInDialogue()) {
+                // player has dialogue event
+                $this->messageBus->dispatch(new AddAdventureLogMessage("IN DIALOGUE, GAME BREAKS HERE!!!!", MessageClassEnum::DEVELOPER()));
+                $mapObject = $this->mapService->getMap();
+                $this->printPlayerInfo($player, $output);
+                $this->printMap($mapObject, $output);
+                $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
+
+                $buttonPressed = $this->getPlayerCommand();
+                // some kind of logic loop here!
+                if ($buttonPressed == '1') {
+                    $this->messageBus->dispatch(new AddAdventureLogMessage("CHOSEN 1", MessageClassEnum::DEVELOPER()));
+                }
+
+                break;
+            }
             $this->internalClockService->tick();
 
             $mapObject = $this->mapService->getMap();

@@ -35,11 +35,11 @@ class CorridorTileLogic implements TileLogicInterface
         $roll = random_int(0, $maxChance);
         if ($roll <= 1) {
             $this->creature = new Dragon($scale);
-        } else if ($roll <= 5) {
+        } elseif ($roll <= 5) {
             $this->creature = new Golem($scale);
-        } else if ($roll <= 50) {
+        } elseif ($roll <= 50) {
             $this->creature = new Goblin($scale);
-        } else if ($roll <= 200) {
+        } elseif ($roll <= 200) {
             $this->creature = new Imp($scale);
         } else {
             $this->creature = null;

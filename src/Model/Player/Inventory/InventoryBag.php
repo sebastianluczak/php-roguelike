@@ -36,7 +36,7 @@ class InventoryBag implements InventoryBagInterface
     public function getItemsOfType(LootTypeEnum $lootTypeEnum): array
     {
         $searchedItems = $this->items->filter(function (LootInterface $loot) use ($lootTypeEnum) {
-           return $loot->getLootType() == $lootTypeEnum->getValue();
+            return $loot->getLootType() == $lootTypeEnum->getValue();
         });
 
         return $searchedItems->toArray();
