@@ -6,6 +6,5 @@ parameters:
 	checkMissingIterableValueType: false
 	universalObjectCratesClasses:
 	    - RPGFaker\RPGFaker
-	    
 	paths:
 		- src
