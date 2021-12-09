@@ -3,13 +3,16 @@ declare(strict_types=1);
 
 namespace App\Model\Dialogue\City;
 
+use App\Message\MessageInterface;
+use App\Message\SellExcessItemsMessage;
+use App\Message\WrongDialogueOptionMessage;
 use App\Model\Dialogue\DialogueInterface;
 
 class ShopkeeperDialogue implements DialogueInterface
 {
     public const DIALOGUE_ENTITY = "Shopkeeper";
-    public const DIALOGUE_TEXT = "You want to buy or sell something?";
-    public const DIALOGUE_OPTIONS = [ 'Sell' , 'Buy' ];
+    public const DIALOGUE_TEXT = "Do you want to sell excess items?";
+    public const DIALOGUE_OPTIONS = [ 'YES' , 'no' ];
 
     public function getEntity(): string
     {
@@ -28,6 +31,16 @@ class ShopkeeperDialogue implements DialogueInterface
 
     public function print(): string
     {
-        return sprintf("[%s] %s", self::DIALOGUE_ENTITY, self::DIALOGUE_TEXT);
+        return sprintf("[%s] %s [%s | %s]", self::DIALOGUE_ENTITY, self::DIALOGUE_TEXT, self::DIALOGUE_OPTIONS[0], self::DIALOGUE_OPTIONS[1]);
+    }
+
+    public function handleButtonPress(string $buttonPressed): ?MessageInterface
+    {
+        switch ($buttonPressed) {
+            case "1":
+                return new SellExcessItemsMessage();
+            default:
+                return new WrongDialogueOptionMessage();
+        }
     }
 }

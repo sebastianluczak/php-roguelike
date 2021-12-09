@@ -11,6 +11,7 @@ use App\Message\AddAdventureLogMessage;
 use App\Message\CityPortalMessage;
 use App\Message\DevRoomSpawnMessage;
 use App\Message\GameOverMessage;
+use App\Message\MessageInterface;
 use App\Message\RegenerateMapMessage;
 use App\Message\ShowPlayerInventoryMessage;
 use App\Message\UseHealingPotionMessage;
@@ -33,19 +34,21 @@ class GameService extends ConsoleOutputGameService
             }
             if ($player->getInDialogue()) {
                 // player has dialogue event
-                $this->messageBus->dispatch(new AddAdventureLogMessage("IN DIALOGUE, GAME BREAKS HERE!!!!", MessageClassEnum::DEVELOPER()));
                 // how to get current dialogue?
                 $dialogue = $player->getCurrentDialogue();
-                $this->messageBus->dispatch(new AddAdventureLogMessage($dialogue->print(), MessageClassEnum::DEVELOPER()));
+                $this->messageBus->dispatch(new AddAdventureLogMessage($dialogue->print(), MessageClassEnum::DIALOGUE()));
                 $mapObject = $this->mapService->getMap();
                 $this->printPlayerInfo($player, $output);
                 $this->printMap($mapObject, $output);
                 $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
 
                 $buttonPressed = $this->getPlayerCommand();
-                // some kind of logic loop here!
-                if ($buttonPressed == '1') {
-                    $this->messageBus->dispatch(new AddAdventureLogMessage("CHOSEN 1", MessageClassEnum::DEVELOPER()));
+                $message = $dialogue->handleButtonPress($buttonPressed);
+                if ($message instanceof MessageInterface) {
+                    $message->setPlayer($player);
+                    $this->messageBus->dispatch($message);
+                    $player->setInDialogue(false);
+                    $player->setCurrentDialogue(null);
                 }
 
                 echo chr(27) . chr(91) . 'H' . chr(27) . chr(91) . 'J';   //^[H^[J

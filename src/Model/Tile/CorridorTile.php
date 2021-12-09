@@ -14,7 +14,7 @@ class CorridorTile extends AbstractTile
 {
     public function isInteractable(): bool
     {
-        return false;
+        return true;
     }
 
     public function isPassable(): bool

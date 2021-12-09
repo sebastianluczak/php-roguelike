@@ -2,8 +2,6 @@
 
 namespace App\MessageHandler;
 
-use App\Enum\MessageClassEnum;
-use App\Message\AddAdventureLogMessage;
 use App\Message\TileInteractionMessage;
 use App\Service\GameService;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -27,7 +25,5 @@ class TileInteractionHandler implements MessageHandlerInterface
 
         $player->setInDialogue(true);
         $player->setCurrentDialogue($tileInteraction->getDialogue());
-
-        $this->messageBus->dispatch(new AddAdventureLogMessage("[DEBUG] ", MessageClassEnum::LOOT()));
     }
 }

@@ -13,6 +13,7 @@ abstract class AbstractLoot implements LootInterface
     protected string $lootType;
     protected string $dice;
     protected string $lootPickupMessage;
+    protected int $priceValue = 20;
 
     public function __construct()
     {
@@ -108,5 +109,10 @@ abstract class AbstractLoot implements LootInterface
     public function getAverageRoll(): float
     {
         return ($this->getMinRollValue() + $this->getMaxRollValue()) / 2;
+    }
+
+    public function getPriceValue(): int
+    {
+        return $this->priceValue;
     }
 }

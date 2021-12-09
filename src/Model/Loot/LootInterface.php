@@ -14,7 +14,8 @@ interface LootInterface
     public function getLootPickupMessage(): string;
     public function getDice(): string;
     public function isBetterThan(LootInterface $otherLoot): bool;
-    public function getMinRollValue(): int; // @todo used for critical misses
-    public function getMaxRollValue(): int; // @todo used for critical hits
+    public function getMinRollValue(): int;
+    public function getMaxRollValue(): int;
     public function getAverageRoll(): float;
+    public function getPriceValue(): int;
 }
