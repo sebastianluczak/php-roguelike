@@ -62,10 +62,12 @@ class ConsoleOutputGameService
             /**
              * @var AbstractTile $item
              * @var  $value */
+            $line = "";
             foreach ($column as $value) {
-                $output->write($value->draw());
+                $line .= $value->draw();
             }
-            $output->writeln('');
+            $lines[] = $line;
+            $output->writeln($line);
         }
     }
 
@@ -76,7 +78,7 @@ class ConsoleOutputGameService
             $devModeSymbol = GameIconEnum::DEV_MODE();
         }
 
-        $statusLine = $devModeSymbol . " <fg=bright-blue> " . GameIconEnum::HEALTH() . " " . $player->getHealth()->getHealth() . "/" . $player->getHealth()->getMaxHealth() .
+        $statusLine = $devModeSymbol . " <fg=bright-blue>" . GameIconEnum::HEALTH() . " " . $player->getHealth()->getHealth() . "/" . $player->getHealth()->getMaxHealth() .
             " | " . GameIconEnum::POTION() . " " . count($player->getInventory()->getInventoryBag()->getItemsOfType(LootTypeEnum::POTION())) .
             " | " . GameIconEnum::GOLD() . " " . $player->getGold() .
             " | " . GameIconEnum::KILLS() . " " . $player->getKillCount() .

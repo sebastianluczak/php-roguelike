@@ -14,7 +14,7 @@ class CorridorTile extends AbstractTile
 {
     public function isInteractable(): bool
     {
-        return true;
+        return false;
     }
 
     public function isPassable(): bool
@@ -35,13 +35,6 @@ class CorridorTile extends AbstractTile
     public function handleLogic(int $scale, StatsInterface $stats): TileLogicInterface
     {
         return new CorridorTileLogic($scale);
-    }
-
-    public function handleInteraction(PlayerInterface $player): TileInteractionInterface
-    {
-        $npc = new Shopkeeper();
-
-        return new NpcTileInteraction($player, $npc);
     }
 
     public function draw(): string
