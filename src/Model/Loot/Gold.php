@@ -5,12 +5,16 @@ namespace App\Model\Loot;
 use App\Enum\GameIconEnum;
 use App\Enum\Loot\LootTypeEnum;
 use DiceBag\DiceBag;
+use Exception;
 
 class Gold extends AbstractLoot
 {
     protected string $name = 'gold';
     protected int $amount;
 
+    /**
+     * @throws Exception
+     */
     public function __construct(int $scale = 1)
     {
         parent::__construct();

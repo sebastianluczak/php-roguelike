@@ -1,0 +1,10 @@
+includes:
+	- vendor/timeweb/phpstan-enum/extension.neon
+
+parameters:
+	level: 2
+	checkMissingIterableValueType: false
+	universalObjectCratesClasses:
+	    - RPGFaker\RPGFaker
+	paths:
+		- src

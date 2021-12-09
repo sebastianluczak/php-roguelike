@@ -139,6 +139,9 @@
     "phpdocumentor/type-resolver": {
         "version": "1.5.1"
     },
+    "phpstan/phpstan": {
+        "version": "1.2.0"
+    },
     "porthou/dicebag": {
         "version": "V0.1.0"
     },
@@ -400,6 +403,9 @@
     },
     "symfony/yaml": {
         "version": "v5.3.6"
+    },
+    "timeweb/phpstan-enum": {
+        "version": "v3.0.0"
     },
     "webmozart/assert": {
         "version": "1.10.0"

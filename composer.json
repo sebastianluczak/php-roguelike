@@ -38,7 +38,9 @@
     },
     "require-dev": {
         "php": "*",
-        "symfony/maker-bundle": "^1.34"
+        "phpstan/phpstan": "^1.2",
+        "symfony/maker-bundle": "^1.34",
+        "timeweb/phpstan-enum": "^3.0"
     },
     "config": {
         "optimize-autoloader": true,
