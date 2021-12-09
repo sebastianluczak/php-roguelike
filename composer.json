@@ -20,6 +20,7 @@
         "nesbot/carbon": "^2.54",
         "phpdocumentor/reflection-docblock": "^5.3",
         "porthou/dicebag": "^0.1.0",
+        "squizlabs/php_codesniffer": "*",
         "symfony/console": "5.3.*",
         "symfony/dotenv": "5.3.*",
         "symfony/flex": "^1.3.1",
@@ -72,7 +73,7 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "php-cs-fixer": "php-cs-fixer --config=./.php_cs",
+        "php-cs-fixer": "php-cs-fixer --config=./.php_cs"
     },
     "conflict": {
         "symfony/symfony": "*"

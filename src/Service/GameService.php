@@ -34,6 +34,9 @@ class GameService extends ConsoleOutputGameService
             if ($player->getInDialogue()) {
                 // player has dialogue event
                 $this->messageBus->dispatch(new AddAdventureLogMessage("IN DIALOGUE, GAME BREAKS HERE!!!!", MessageClassEnum::DEVELOPER()));
+                // how to get current dialogue?
+                $dialogue = $player->getCurrentDialogue();
+                $this->messageBus->dispatch(new AddAdventureLogMessage($dialogue->print(), MessageClassEnum::DEVELOPER()));
                 $mapObject = $this->mapService->getMap();
                 $this->printPlayerInfo($player, $output);
                 $this->printMap($mapObject, $output);
@@ -45,28 +48,29 @@ class GameService extends ConsoleOutputGameService
                     $this->messageBus->dispatch(new AddAdventureLogMessage("CHOSEN 1", MessageClassEnum::DEVELOPER()));
                 }
 
-                break;
-            }
-            $this->internalClockService->tick();
+                echo chr(27) . chr(91) . 'H' . chr(27) . chr(91) . 'J';   //^[H^[J
+            } else {
+                $this->internalClockService->tick();
 
-            $mapObject = $this->mapService->getMap();
-            $this->printPlayerInfo($player, $output);
-            $this->printMap($mapObject, $output);
-            $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
+                $mapObject = $this->mapService->getMap();
+                $this->printPlayerInfo($player, $output);
+                $this->printMap($mapObject, $output);
+                $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
 
-            $buttonPressed = $this->getPlayerCommand();
-            if (!$this->handleUncommonButtonPresses($buttonPressed)) {
-                try {
-                    $this->mapService->movePlayer($player, $buttonPressed, $this->mapService->getMapLevel());
-                } catch (NotValidMoveException $e) {
-                    $this->messageBus->dispatch(new AddAdventureLogMessage("You can't move in this direction"));
-                } catch (NewLevelException $e) {
-                    // todo move to dispatch queue
-                    $this->getMapService()->increaseMapLevel();
-                    $this->getMapService()->createNewLevel();
+                $buttonPressed = $this->getPlayerCommand();
+                if (!$this->handleUncommonButtonPresses($buttonPressed)) {
+                    try {
+                        $this->mapService->movePlayer($player, $buttonPressed, $this->mapService->getMapLevel());
+                    } catch (NotValidMoveException $e) {
+                        $this->messageBus->dispatch(new AddAdventureLogMessage("You can't move in this direction"));
+                    } catch (NewLevelException $e) {
+                        // todo move to dispatch queue
+                        $this->getMapService()->increaseMapLevel();
+                        $this->getMapService()->createNewLevel();
+                    }
                 }
+                echo chr(27) . chr(91) . 'H' . chr(27) . chr(91) . 'J';   //^[H^[J
             }
-            echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
         }
 
         $this->printPlayerInfo($player, $output);

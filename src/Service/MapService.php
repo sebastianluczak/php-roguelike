@@ -318,14 +318,11 @@ class MapService
 
     private function isTileTraversable(int $width, int $height): bool
     {
-        $this->loggerService->log("IsTileTraversable @" . $width . "#" . $height);
         /** @var AbstractTile $tile */
         if (!isset($this->getMap()->getMapInstance()[$width][$height])) {
             return false;
         }
         $tile = $this->getMap()->getMapInstance()[$width][$height];
-        $this->loggerService->log("Tile: " . get_class($tile));
-        $this->loggerService->log("TileIsPassable : " . $tile->isPassable());
         if ($tile->isPassable()) {
             return true;
         }

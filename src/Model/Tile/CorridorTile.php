@@ -2,9 +2,6 @@
 
 namespace App\Model\Tile;
 
-use App\Model\Creature\Dragon;
-use App\Model\Creature\Golem;
-use App\Model\Creature\Imp;
 use App\Model\Npc\City\Shopkeeper;
 use App\Model\Player\PlayerInterface;
 use App\Model\Stats\StatsInterface;
@@ -17,7 +14,7 @@ class CorridorTile extends AbstractTile
 {
     public function isInteractable(): bool
     {
-        return true;
+        return false;
     }
 
     public function isPassable(): bool

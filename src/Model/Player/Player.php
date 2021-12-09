@@ -131,6 +131,11 @@ class Player implements PlayerInterface
         $this->currentDialogue = $dialogue;
     }
 
+    public function getCurrentDialogue(): ?DialogueInterface
+    {
+        return $this->currentDialogue;
+    }
+
     public function draw(): string
     {
         return "<color=bright-red>@</color>";

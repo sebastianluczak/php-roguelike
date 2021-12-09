@@ -4,13 +4,23 @@ namespace App\Model\Dialogue;
 
 class EmptyDialogue implements DialogueInterface
 {
+    public function getEntity(): string
+    {
+        return "";
+    }
+
     public function getOptions(): array
     {
-        // TODO: Implement getOptions() method.
+        return [];
     }
 
     public function getText(): string
     {
-        // TODO: Implement getText() method.
+        return "";
+    }
+
+    public function print(): string
+    {
+        return "";
     }
 }

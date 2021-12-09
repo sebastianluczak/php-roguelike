@@ -1,29 +1,29 @@
 name: "Rivermouth"
 size:
-  height: 44
+  height: 34
   width: 140
 
 places:
   church:
     generation_class: App\Generator\Level\DefaultBoxRoomGenerator
     logic_tile: App\Model\Tile\City\AltarTile
-    size: [ 8, 9 ]
+    size: [ 8, 8 ]
     starting_point: [ 9, 13 ]
 
   stables:
     generation_class: App\Generator\Level\DefaultBoxRoomGenerator
     logic_tile: App\Model\Tile\City\AltarTile
-    size: [ 11, 19 ]
+    size: [ 8, 8 ]
     starting_point: [ 2, 49 ]
 
   tavern:
     generation_class: App\Generator\Level\DefaultBoxRoomGenerator
     logic_tile: App\Model\Tile\City\AltarTile
-    size: [ 21, 30 ]
+    size: [ 8, 8 ]
     starting_point: [ 21, 12 ]
 
   cathedral:
     generation_class: App\Generator\Level\DefaultBoxRoomGenerator
     logic_tile: App\Model\Tile\City\AltarTile
-    size: [ 27, 40 ]
+    size: [ 8, 8 ]
     starting_point: [ 11, 82 ]

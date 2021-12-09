@@ -12,7 +12,7 @@ class ShopTile extends AbstractTile
 {
     public function isInteractable(): bool
     {
-        return true;
+        return false;
     }
 
     public function isPassable(): bool

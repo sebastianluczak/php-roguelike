@@ -9,7 +9,7 @@ use App\Model\Tile\TileInteraction\TileInteractionInterface;
 abstract class AbstractTile implements TileInterface
 {
     protected bool $isPassable;
-    protected bool $isInteractable;
+    protected bool $isInteractable = false;
     protected bool $isSpawn;
     protected bool $hasLogic;
 

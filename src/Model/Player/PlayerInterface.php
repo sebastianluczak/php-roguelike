@@ -47,4 +47,6 @@ interface PlayerInterface
     public function setInDialogue(bool $true): PlayerInterface;
 
     public function setCurrentDialogue(?DialogueInterface $dialogue = null);
+
+    public function getCurrentDialogue(): ?DialogueInterface;
 }
