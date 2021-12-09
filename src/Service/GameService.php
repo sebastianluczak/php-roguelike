@@ -24,8 +24,8 @@ class GameService extends ConsoleOutputGameService
 {
     public function run(OutputInterface $output)
     {
-        $this->messageBus->dispatch(new AddAdventureLogMessage("Game started at " . $this->getInternalClockService()->getGameStartTime()->toFormattedDateString()));
-        $this->messageBus->dispatch(new AddAdventureLogMessage("DEVELOPER MODE IS ACTIVE", MessageClassEnum::DEVELOPER()));
+        $this->messageBus->dispatch(new AddAdventureLogMessage('Game started at '.$this->getInternalClockService()->getGameStartTime()->toFormattedDateString()));
+        $this->messageBus->dispatch(new AddAdventureLogMessage('DEVELOPER MODE IS ACTIVE', MessageClassEnum::DEVELOPER()));
 
         while (true) {
             $player = $this->getPlayerService()->getPlayer();
@@ -51,7 +51,7 @@ class GameService extends ConsoleOutputGameService
                     $player->setCurrentDialogue(null);
                 }
 
-                echo chr(27) . chr(91) . 'H' . chr(27) . chr(91) . 'J';   //^[H^[J
+                echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
             } else {
                 $this->internalClockService->tick();
 
@@ -72,7 +72,7 @@ class GameService extends ConsoleOutputGameService
                         $this->getMapService()->createNewLevel();
                     }
                 }
-                echo chr(27) . chr(91) . 'H' . chr(27) . chr(91) . 'J';   //^[H^[J
+                echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
             }
         }
 
@@ -89,18 +89,18 @@ class GameService extends ConsoleOutputGameService
         $this->messageBus->dispatch(new GameOverMessage($player, $e->getReason()));
     }
 
-    public function setDevMode(string $devMode = "false")
+    public function setDevMode(string $devMode = 'false')
     {
         $this->devMode = true;
-        if ($devMode == "false") {
+        if ('false' == $devMode) {
             $this->devMode = false;
         }
     }
 
     private function handleUncommonButtonPresses(string $buttonPressed): bool
     {
-        if ($buttonPressed == "q") {
-            $this->messageBus->dispatch(new AddAdventureLogMessage("Game exit at " . Carbon::now()->toFormattedDateString()));
+        if ('q' == $buttonPressed) {
+            $this->messageBus->dispatch(new AddAdventureLogMessage('Game exit at '.Carbon::now()->toFormattedDateString()));
             $this->playerService->getPlayer()->getHealth()->modifyHealth(
                 $this->playerService->getPlayer()->getHealth()->getHealth(),
                 HealthActionEnum::DECREASE()
@@ -108,40 +108,40 @@ class GameService extends ConsoleOutputGameService
             $this->messageBus->dispatch(
                 new GameOverMessage(
                     $this->playerService->getPlayer(),
-                    "Suicide by " . $this->playerService->getPlayer()->getInventory()->getWeaponSlot()->getName()
+                    'Suicide by '.$this->playerService->getPlayer()->getInventory()->getWeaponSlot()->getName()
                 )
             );
 
             return true;
         }
 
-        if ($buttonPressed == "i") {
+        if ('i' == $buttonPressed) {
             $this->messageBus->dispatch(new ShowPlayerInventoryMessage($this->playerService->getPlayer()));
 
             return true;
         }
 
-        if ($buttonPressed == "h") {
+        if ('h' == $buttonPressed) {
             $this->messageBus->dispatch(new UseHealingPotionMessage($this->playerService->getPlayer()));
 
             return true;
         }
 
-        if ($buttonPressed == "p") {
-            $this->messageBus->dispatch(new AddAdventureLogMessage("DEV MODE STATUS: " . $this->isDevMode()));
+        if ('p' == $buttonPressed) {
+            $this->messageBus->dispatch(new AddAdventureLogMessage('DEV MODE STATUS: '.$this->isDevMode()));
             if ($this->isDevMode()) {
-                $devMode = "false";
+                $devMode = 'false';
             } else {
-                $devMode = "true";
+                $devMode = 'true';
             }
             $this->setDevMode($devMode);
-            $this->messageBus->dispatch(new AddAdventureLogMessage("Dev mode changed at " . Carbon::now()));
-            $this->messageBus->dispatch(new AddAdventureLogMessage("DEV MODE STATUS: " . $this->isDevMode()));
+            $this->messageBus->dispatch(new AddAdventureLogMessage('Dev mode changed at '.Carbon::now()));
+            $this->messageBus->dispatch(new AddAdventureLogMessage('DEV MODE STATUS: '.$this->isDevMode()));
 
             return true;
         }
 
-        if ($buttonPressed == "l") {
+        if ('l' == $buttonPressed) {
             $this->printLeaderBoards();
 
             echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
@@ -149,7 +149,7 @@ class GameService extends ConsoleOutputGameService
             return true;
         }
 
-        if ($buttonPressed == "t") {
+        if ('t' == $buttonPressed) {
             $this->messageBus->dispatch(new CityPortalMessage($this->playerService->getPlayer()));
 
             echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
@@ -158,8 +158,8 @@ class GameService extends ConsoleOutputGameService
         }
 
         if ($this->isDevMode()) {
-            if ($buttonPressed == "r") {
-                $this->messageBus->dispatch(new AddAdventureLogMessage("Map regenerated at " . Carbon::now(), MessageClassEnum::DEVELOPER()));
+            if ('r' == $buttonPressed) {
+                $this->messageBus->dispatch(new AddAdventureLogMessage('Map regenerated at '.Carbon::now(), MessageClassEnum::DEVELOPER()));
                 $this->messageBus->dispatch(new RegenerateMapMessage());
 
                 echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
@@ -167,8 +167,8 @@ class GameService extends ConsoleOutputGameService
                 return true;
             }
 
-            if ($buttonPressed == "m") {
-                $this->messageBus->dispatch(new AddAdventureLogMessage("[DEV] DevRoom spawned, have fun! At " . Carbon::now(), MessageClassEnum::DEVELOPER()));
+            if ('m' == $buttonPressed) {
+                $this->messageBus->dispatch(new AddAdventureLogMessage('[DEV] DevRoom spawned, have fun! At '.Carbon::now(), MessageClassEnum::DEVELOPER()));
                 $this->messageBus->dispatch(new DevRoomSpawnMessage());
 
                 echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J

@@ -51,18 +51,18 @@ class PlayerLevel implements PlayerLevelInterface
 
     public function drawExperienceBar(): string
     {
-        $numberOfFilledLinesString = (string)($this->getPercentageOfLevelExpProgress() / 10);
-        $linesToFill = (int)$numberOfFilledLinesString[0];
+        $numberOfFilledLinesString = (string) ($this->getPercentageOfLevelExpProgress() / 10);
+        $linesToFill = (int) $numberOfFilledLinesString[0];
         $totalLines = 10;
-        $feed = "[";
-        for ($i=0;$i<=$linesToFill;$i++) {
-            $feed .= "=";
+        $feed = '[';
+        for ($i = 0; $i <= $linesToFill; ++$i) {
+            $feed .= '=';
         }
-        for ($j=$linesToFill;$j<$totalLines;$j++) {
-            $feed .= " ";
+        for ($j = $linesToFill; $j < $totalLines; ++$j) {
+            $feed .= ' ';
         }
-        $feed .= "] ";
+        $feed .= '] ';
 
-        return $feed . $this->getPercentageOfLevelExpProgress() . "%";
+        return $feed.$this->getPercentageOfLevelExpProgress().'%';
     }
 }

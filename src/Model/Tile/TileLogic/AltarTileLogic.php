@@ -22,7 +22,7 @@ class AltarTileLogic implements TileLogicInterface
         if ($player->getGold() > 10) {
             $thrownGold = random_int(1, $player->getGold());
             $player->getInventory()->subtractGoldAmount($thrownGold);
-            $this->rawMessage = "🧍 You've thrown " . GameIconEnum::GOLD() . " " . $thrownGold . " gold into the altar.";
+            $this->rawMessage = "🧍 You've thrown ".GameIconEnum::GOLD().' '.$thrownGold.' gold into the altar.';
             $this->messageClass = MessageClassEnum::LOOT();
 
             $roll = random_int(1, 10) + sqrt($player->getStats()->getIntelligence());

@@ -31,7 +31,7 @@ class ShopTileLogic implements TileLogicInterface
         );
 
         if ($player->getGold() >= $amountRequired) {
-            $this->rawMessage = "🧍 You feel rush of energy after paying " . $amountRequired . " gold to strange man";
+            $this->rawMessage = '🧍 You feel rush of energy after paying '.$amountRequired.' gold to strange man';
             $this->messageClass = MessageClassEnum::SUCCESS();
 
             $player->getHealth()->modifyHealth($this->skillBoost->getHealthAmount(), HealthActionEnum::INCREASE());

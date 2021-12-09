@@ -24,11 +24,11 @@ class PlayerLevelUpHandler implements MessageHandlerInterface
     {
         $player = $message->getPlayer();
         $statChosen = $this->specialStats[array_rand($this->specialStats)];
-        $randomSkillBoostMethod = 'modify' . $statChosen;
+        $randomSkillBoostMethod = 'modify'.$statChosen;
         $player->getStats()->{$randomSkillBoostMethod}(sqrt($player->getStats()->getIntelligence()));
 
         $player->getHealth()->increaseMaxHealth(10);
         $player->getHealth()->modifyHealth($player->getHealth()->getMaxHealth(), HealthActionEnum::INCREASE());
-        $this->messageBus->dispatch(new AddAdventureLogMessage("Player skill leveled up: " . $statChosen, MessageClassEnum::LOOT()));
+        $this->messageBus->dispatch(new AddAdventureLogMessage('Player skill leveled up: '.$statChosen, MessageClassEnum::LOOT()));
     }
 }

@@ -10,7 +10,6 @@ use App\Model\Loot\Weapon\CreatureMeleeWeapon;
 use App\Model\Player\Inventory\InventoryBagInterface;
 use App\Model\Player\PlayerInterface;
 use App\Model\Stats\Stats;
-use Irfa\Gatcha\Roll;
 
 class Dragon extends AbstractCreature
 {
@@ -32,11 +31,11 @@ class Dragon extends AbstractCreature
         $this->armorSlot = new CreatureGenericArmor($this->stats);
 
         if ($this->creatureClass == CreatureClassEnum::ELITE() || $this->creatureClass == CreatureClassEnum::LEGENDARY()) {
-            $this->name = "<fg=yellow>" . GameIconEnum::SKULL() . " " . $this->creatureClass->getKey() . " " . self::COMMON_NAME . " " . $this->getRawName() . "</>";
+            $this->name = '<fg=yellow>'.GameIconEnum::SKULL().' '.$this->creatureClass->getKey().' '.self::COMMON_NAME.' '.$this->getRawName().'</>';
         } else {
-            $this->name = self::COMMON_NAME . " - " . $this->getRawName();
+            $this->name = self::COMMON_NAME.' - '.$this->getRawName();
         }
-        $this->health = ceil($this->stats->getEndurance() * ceil($scale/2) * ($this->creatureClass->getValue() / 100));
+        $this->health = ceil($this->stats->getEndurance() * ceil($scale / 2) * ($this->creatureClass->getValue() / 100));
         $this->experience = $this->createRandomNumberInRangeWithScale(20, 50, $scale);
     }
 

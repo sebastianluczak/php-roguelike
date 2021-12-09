@@ -33,7 +33,7 @@ class UseHealingPotionHandler implements MessageHandlerInterface
 
                 $this->messageBus->dispatch(
                     new AddAdventureLogMessage(
-                    'Healed using ' . GameIconEnum::POTION() . " " . $healingPotions[0]->getName(),
+                    'Healed using '.GameIconEnum::POTION().' '.$healingPotions[0]->getName(),
                     MessageClassEnum::LOOT()
                 )
                 );

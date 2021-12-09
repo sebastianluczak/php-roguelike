@@ -32,7 +32,7 @@ abstract class AbstractCreature implements CreatureInterface
         $classEnumChances = [
             CreatureClassEnum::NORMAL()->getKey() => 30,
             CreatureClassEnum::ELITE()->getKey() => 2,
-            CreatureClassEnum::LEGENDARY()->getKey() => 1
+            CreatureClassEnum::LEGENDARY()->getKey() => 1,
         ];
 
         $classEnumChancesSpin = Roll::put($classEnumChances)->spin();
@@ -94,9 +94,6 @@ abstract class AbstractCreature implements CreatureInterface
         return $this->armorSlot;
     }
 
-    /**
-     * @return CreatureClassEnum
-     */
     public function getCreatureClass(): CreatureClassEnum
     {
         return $this->creatureClass;

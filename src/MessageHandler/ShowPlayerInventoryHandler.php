@@ -2,7 +2,6 @@
 
 namespace App\MessageHandler;
 
-use App\Enum\GameIconEnum;
 use App\Enum\Loot\LootTypeEnum;
 use App\Message\AddAdventureLogMessage;
 use App\Message\ShowPlayerInventoryMessage;
@@ -24,7 +23,7 @@ class ShowPlayerInventoryHandler implements MessageHandlerInterface
         $inventory = $player->getInventory();
 
         $this->messageBus->dispatch(new AddAdventureLogMessage(
-            'All items in bag: ' . $inventory->getInventoryBag()->count() . " - Health potions count: " . count($inventory->getInventoryBag()->getItemsOfType(LootTypeEnum::POTION()))
+            'All items in bag: '.$inventory->getInventoryBag()->count().' - Health potions count: '.count($inventory->getInventoryBag()->getItemsOfType(LootTypeEnum::POTION()))
         ));
     }
 }

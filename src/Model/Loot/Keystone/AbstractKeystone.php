@@ -18,7 +18,7 @@ abstract class AbstractKeystone extends AbstractLoot
     public function __toString(): string
     {
         return sprintf(
-            "%s %s",
+            '%s %s',
             GameIconEnum::GEM(),
             $this->getName()
         );

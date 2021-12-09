@@ -48,12 +48,9 @@ class ConsoleOutputGameService
         $this->serializer = $serializer;
     }
 
-    /**
-     * @return bool
-     */
     public function isDevMode(): bool
     {
-        return $this->devMode??(bool)$_ENV['GAME_DEBUG'];
+        return $this->devMode ?? (bool) $_ENV['GAME_DEBUG'];
     }
 
     protected function printMap(Map $map, OutputInterface $output)
@@ -62,7 +59,7 @@ class ConsoleOutputGameService
             /**
              * @var AbstractTile $item
              * @var  $value */
-            $line = "";
+            $line = '';
             foreach ($column as $value) {
                 $line .= $value->draw();
             }
@@ -73,22 +70,22 @@ class ConsoleOutputGameService
 
     protected function printPlayerInfo(PlayerInterface $player, OutputInterface $output)
     {
-        $devModeSymbol = "";
+        $devModeSymbol = '';
         if ($this->isDevMode()) {
             $devModeSymbol = GameIconEnum::DEV_MODE();
         }
 
-        $statusLine = $devModeSymbol . " <fg=bright-blue>" . GameIconEnum::HEALTH() . " " . $player->getHealth()->getHealth() . "/" . $player->getHealth()->getMaxHealth() .
-            " | " . GameIconEnum::POTION() . " " . count($player->getInventory()->getInventoryBag()->getItemsOfType(LootTypeEnum::POTION())) .
-            " | " . GameIconEnum::GOLD() . " " . $player->getGold() .
-            " | " . GameIconEnum::KILLS() . " " . $player->getKillCount() .
-            " | " . GameIconEnum::PLAYER() . " " . $player->getLevel()->getLevel() . " " . $player->getLevel()->drawExperienceBar() .
-            " | " . $player->getInventory()->getWeaponSlot() .
-            " | " . $player->getInventory()->getArmorSlot() .
-            " | " . $player->getInventory()->getKeystone() .
-            " | " . GameIconEnum::MAP() . " " . $player->getMapLevel() .
-            " | " . GameIconEnum::BUFFS() . " " . $this->internalClockService->getActiveGameEventsCount() .
-            " | " . GameIconEnum::STATS() . " " . $player->getStats()->getFormattedStats() .  "</>";
+        $statusLine = $devModeSymbol.' <fg=bright-blue>'.GameIconEnum::HEALTH().' '.$player->getHealth()->getHealth().'/'.$player->getHealth()->getMaxHealth().
+            ' | '.GameIconEnum::POTION().' '.count($player->getInventory()->getInventoryBag()->getItemsOfType(LootTypeEnum::POTION())).
+            ' | '.GameIconEnum::GOLD().' '.$player->getGold().
+            ' | '.GameIconEnum::KILLS().' '.$player->getKillCount().
+            ' | '.GameIconEnum::PLAYER().' '.$player->getLevel()->getLevel().' '.$player->getLevel()->drawExperienceBar().
+            ' | '.$player->getInventory()->getWeaponSlot().
+            ' | '.$player->getInventory()->getArmorSlot().
+            ' | '.$player->getInventory()->getKeystone().
+            ' | '.GameIconEnum::MAP().' '.$player->getMapLevel().
+            ' | '.GameIconEnum::BUFFS().' '.$this->internalClockService->getActiveGameEventsCount().
+            ' | '.GameIconEnum::STATS().' '.$player->getStats()->getFormattedStats().'</>';
 
         $output->writeln($statusLine);
     }
@@ -97,44 +94,44 @@ class ConsoleOutputGameService
     {
         $terminalWidth = (new Terminal())->getWidth() - 48;
 
-        $ornament = "+=+";
-        $title = "-=  Adventure Log  =-";
+        $ornament = '+=+';
+        $title = '-=  Adventure Log  =-';
 
         $numberOfIntermittentLines = ceil(($terminalWidth - (strlen($ornament) * 2 + strlen($title))) / 2);
 
         $lines = $adventureLog->getLines();
         $output->writeln('<fg=green>');
         $output->write($ornament);
-        for ($i = 0; $i < $numberOfIntermittentLines; $i++) {
-            $output->write(" ");
+        for ($i = 0; $i < $numberOfIntermittentLines; ++$i) {
+            $output->write(' ');
         }
         $output->write($title);
-        for ($i = 0; $i < $numberOfIntermittentLines; $i++) {
-            $output->write(" ");
+        for ($i = 0; $i < $numberOfIntermittentLines; ++$i) {
+            $output->write(' ');
         }
         $output->write($ornament);
-        $output->writeln("");
+        $output->writeln('');
         $output->write($ornament);
-        for ($i = 0; $i < $terminalWidth - (strlen($ornament) * 2); $i++) {
-            $output->write("=");
+        for ($i = 0; $i < $terminalWidth - (strlen($ornament) * 2); ++$i) {
+            $output->write('=');
         }
         $output->writeln($ornament);
 
-        if ($lines == 0) {
-            for ($i = 0; $i <= AdventureLog::MAX_NUMBER_OF_MESSAGES; $i++) {
-                $output->writeln("");
+        if (0 == $lines) {
+            for ($i = 0; $i <= AdventureLog::MAX_NUMBER_OF_MESSAGES; ++$i) {
+                $output->writeln('');
             }
         } else {
             /** @var AdventureLogMessageInterface $newMessage */
             $linesPrinted = 0;
             foreach ($adventureLog->getNewMessages() as $newMessage) {
                 $output->writeln($newMessage->getMessage());
-                $linesPrinted++;
+                ++$linesPrinted;
             }
 
             if ($linesPrinted <= AdventureLog::MAX_NUMBER_OF_MESSAGES) {
-                for ($j = $linesPrinted; $j <= AdventureLog::MAX_NUMBER_OF_MESSAGES; $j++) {
-                    $output->writeln("");
+                for ($j = $linesPrinted; $j <= AdventureLog::MAX_NUMBER_OF_MESSAGES; ++$j) {
+                    $output->writeln('');
                 }
             }
         }
@@ -144,33 +141,33 @@ class ConsoleOutputGameService
     {
         $entries = array_reverse($this->leaderboardService->getBestScores());
         /**
-         * @var int $key
+         * @var int         $key
          * @var Leaderboard $entry
          */
         $entriesCount = count($entries);
         foreach ($entries as $key => $entry) {
             $this->messageBus->dispatch(
                 new AddAdventureLogMessage(
-                $entriesCount - $key . ". " . $entry->getPlayerName() . " -> " . GameIconEnum::MAP() . " " . $entry->getDungeonLevel() . " 🧍 " . $entry->getPlayerLevel() . " ☠️ " . $entry->getKills() . " 💰 " . $entry->getGoldAmount() . " ⏲ " . Carbon::createFromImmutable($entry->getCreatedAt())->format(DATE_RFC822),
+                $entriesCount - $key.'. '.$entry->getPlayerName().' -> '.GameIconEnum::MAP().' '.$entry->getDungeonLevel().' 🧍 '.$entry->getPlayerLevel().' ☠️ '.$entry->getKills().' 💰 '.$entry->getGoldAmount().' ⏲ '.Carbon::createFromImmutable($entry->getCreatedAt())->format(DATE_RFC822),
                 MessageClassEnum::IMPORTANT()
             )
             );
         }
-        $this->messageBus->dispatch(new AddAdventureLogMessage(" --- Leaderboards --- ", MessageClassEnum::IMPORTANT()));
+        $this->messageBus->dispatch(new AddAdventureLogMessage(' --- Leaderboards --- ', MessageClassEnum::IMPORTANT()));
     }
 
     protected function stty($options)
     {
         exec($cmd = "stty $options", $output, $el);
-        $el and die("exec($cmd) failed");
+        $el and exit("exec($cmd) failed");
 
-        return implode(" ", $output);
+        return implode(' ', $output);
     }
 
     protected function getPlayerCommand($echo = false): string
     {
-        $echo = $echo ? "" : "-echo";
-        $stty_settings = preg_replace("#.*; ?#s", "", $this->stty("--all"));
+        $echo = $echo ? '' : '-echo';
+        $stty_settings = preg_replace('#.*; ?#s', '', $this->stty('--all'));
         $this->stty("cbreak $echo");
         $c = fgetc(STDIN);
         $this->stty($stty_settings);
@@ -178,49 +175,31 @@ class ConsoleOutputGameService
         return $c;
     }
 
-    /**
-     * @return AdventureLogService
-     */
     protected function getAdventureLogService(): AdventureLogService
     {
         return $this->adventureLogService;
     }
 
-    /**
-     * @return MapService
-     */
     public function getMapService(): MapService
     {
         return $this->mapService;
     }
 
-    /**
-     * @return PlayerService
-     */
     public function getPlayerService(): PlayerService
     {
         return $this->playerService;
     }
 
-    /**
-     * @return MessageBusInterface
-     */
     public function getMessageBus(): MessageBusInterface
     {
         return $this->messageBus;
     }
 
-    /**
-     * @return LeaderboardService
-     */
     public function getLeaderboardService(): LeaderboardService
     {
         return $this->leaderboardService;
     }
 
-    /**
-     * @return InternalClockService
-     */
     public function getInternalClockService(): InternalClockService
     {
         return $this->internalClockService;

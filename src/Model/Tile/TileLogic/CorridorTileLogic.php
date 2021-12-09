@@ -21,7 +21,7 @@ class CorridorTileLogic implements TileLogicInterface
 
     public function __construct(int $scale)
     {
-        $this->rawMessage = "";
+        $this->rawMessage = '';
         $this->messageClass = MessageClassEnum::STANDARD();
 
         $scale = ceil(1 + ceil($scale * 0.5));
@@ -43,13 +43,13 @@ class CorridorTileLogic implements TileLogicInterface
             $this->creature = new Imp($scale);
         } else {
             $this->creature = null;
-            $this->rawMessage = "Nothing happens ...";
+            $this->rawMessage = 'Nothing happens ...';
         }
     }
 
     public function process(PlayerInterface $player)
     {
-        if (random_int(0, 1000) == 0) {
+        if (0 == random_int(0, 1000)) {
             $this->event = new ThiefArrivedGameEvent($player);
         }
     }

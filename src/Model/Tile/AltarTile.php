@@ -2,11 +2,8 @@
 
 namespace App\Model\Tile;
 
-use App\Model\Creature\Imp;
-use App\Model\Loot\SkillBoost;
 use App\Model\Stats\StatsInterface;
 use App\Model\Tile\TileLogic\AltarTileLogic;
-use App\Model\Tile\TileLogic\ShopTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
 
 class AltarTile extends AbstractTile
@@ -38,6 +35,6 @@ class AltarTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<fg=gray>o</>";
+        return '<fg=gray>o</>';
     }
 }

@@ -24,7 +24,7 @@ class Imp extends AbstractCreature
     private array $lootTable = [
         Sword::class => 1,
         Shield::class => 1,
-        HealthPotion::class => 50
+        HealthPotion::class => 50,
     ];
 
     public function __construct(int $scale)
@@ -40,11 +40,11 @@ class Imp extends AbstractCreature
         $this->armorSlot = new CreatureGenericArmor($this->stats);
 
         if ($this->creatureClass == CreatureClassEnum::ELITE() || $this->creatureClass == CreatureClassEnum::LEGENDARY()) {
-            $this->name = "<fg=yellow>" . GameIconEnum::SKULL() . " " . $this->creatureClass->getKey() . " " . self::COMMON_NAME . " " . $this->getRawName() . "</>";
+            $this->name = '<fg=yellow>'.GameIconEnum::SKULL().' '.$this->creatureClass->getKey().' '.self::COMMON_NAME.' '.$this->getRawName().'</>';
         } else {
-            $this->name = self::COMMON_NAME . " - " . $this->getRawName();
+            $this->name = self::COMMON_NAME.' - '.$this->getRawName();
         }
-        $this->health = ceil($this->stats->getEndurance() * ceil($scale/2) * ($this->creatureClass->getValue() / 100));
+        $this->health = ceil($this->stats->getEndurance() * ceil($scale / 2) * ($this->creatureClass->getValue() / 100));
         $this->experience = $this->createRandomNumberInRangeWithScale(5, 7, $scale);
     }
 

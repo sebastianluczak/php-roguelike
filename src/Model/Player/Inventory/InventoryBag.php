@@ -30,7 +30,6 @@ class InventoryBag implements InventoryBagInterface
     }
 
     /**
-     * @param LootTypeEnum $lootTypeEnum
      * @return array|LootInterface[]
      */
     public function getItemsOfType(LootTypeEnum $lootTypeEnum): array
@@ -47,9 +46,6 @@ class InventoryBag implements InventoryBagInterface
         return $this->items->count();
     }
 
-    /**
-     * @return ArrayCollection
-     */
     public function getItems(): ArrayCollection
     {
         return $this->items;

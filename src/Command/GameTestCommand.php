@@ -6,10 +6,8 @@ use App\Generator\Level\DefaultBoxRoomGenerator;
 use App\Model\CityMap;
 use App\Model\Map;
 use App\Model\Tile\AbstractTile;
-use App\Service\GameService;
 use App\Service\YamlLevelParserService;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -31,7 +29,7 @@ class GameTestCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $yamlFilePath = "resources/levels/Rivermouth_city.yaml";
+        $yamlFilePath = 'resources/levels/Rivermouth_city.yaml';
         $this->levelParserService->setYamlFilePath($yamlFilePath);
         $mapGeneric = new CityMap(
             $this->levelParserService->getMapWidth(),

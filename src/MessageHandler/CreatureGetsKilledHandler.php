@@ -36,7 +36,7 @@ class CreatureGetsKilledHandler implements MessageHandlerInterface
             }
             $player->getInventory()->handleLoot($item);
         }
-        $this->messageBus->dispatch(new AddAdventureLogMessage("You've killed " . $creature->getName() . " earning 💰 " . $goldAmount . " gold and 🧍 " . $creature->getExperience() . " experience points", MessageClassEnum::SUCCESS()));
+        $this->messageBus->dispatch(new AddAdventureLogMessage("You've killed ".$creature->getName().' earning 💰 '.$goldAmount.' gold and 🧍 '.$creature->getExperience().' experience points', MessageClassEnum::SUCCESS()));
 
         // increase level handler
         $initialPlayerLevel = $player->getLevel()->getLevel();
@@ -50,7 +50,7 @@ class CreatureGetsKilledHandler implements MessageHandlerInterface
         }
 
         if ($player->getHealth()->getHealth() <= $player->getHealth()->getWarningThreshold()) {
-            $this->messageBus->dispatch(new AddAdventureLogMessage("Your health is low, find a way to heal.", MessageClassEnum::IMPORTANT()));
+            $this->messageBus->dispatch(new AddAdventureLogMessage('Your health is low, find a way to heal.', MessageClassEnum::IMPORTANT()));
         }
     }
 }

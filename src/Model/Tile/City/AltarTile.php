@@ -45,6 +45,6 @@ class AltarTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<fg=bright-white>O</>";
+        return '<fg=bright-white>O</>';
     }
 }

@@ -18,7 +18,7 @@ class ChestTileLogic implements TileLogicInterface
     public function __construct(int $scale)
     {
         $this->gold = new Gold($scale);
-        $this->rawMessage = "You've picked up 💰 " . $this->gold->getAmount() . " gold.";
+        $this->rawMessage = "You've picked up 💰 ".$this->gold->getAmount().' gold.';
         $this->messageClass = MessageClassEnum::LOOT();
     }
 

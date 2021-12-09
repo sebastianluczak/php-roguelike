@@ -6,7 +6,7 @@ use App\Model\Player\PlayerInterface;
 
 /**
  * Used at:
- * CityPortalHandler::__invoke()
+ * CityPortalHandler::__invoke().
  */
 class CityPortalMessage
 {
@@ -17,9 +17,6 @@ class CityPortalMessage
         $this->player = $player;
     }
 
-    /**
-     * @return PlayerInterface
-     */
     public function getPlayer(): PlayerInterface
     {
         return $this->player;

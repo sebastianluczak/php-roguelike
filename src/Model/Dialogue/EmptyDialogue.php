@@ -8,7 +8,7 @@ class EmptyDialogue implements DialogueInterface
 {
     public function getEntity(): string
     {
-        return "";
+        return '';
     }
 
     public function getOptions(): array
@@ -18,12 +18,12 @@ class EmptyDialogue implements DialogueInterface
 
     public function getText(): string
     {
-        return "";
+        return '';
     }
 
     public function print(): string
     {
-        return "";
+        return '';
     }
 
     public function handleButtonPress(string $buttonPressed): ?MessageInterface

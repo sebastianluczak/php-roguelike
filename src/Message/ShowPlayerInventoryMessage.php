@@ -6,7 +6,7 @@ use App\Model\Player\PlayerInterface;
 
 /**
  * Used at:
- * ShowPlayerInventoryHandler::__invoke()
+ * ShowPlayerInventoryHandler::__invoke().
  */
 class ShowPlayerInventoryMessage
 {
@@ -17,9 +17,6 @@ class ShowPlayerInventoryMessage
         $this->player = $player;
     }
 
-    /**
-     * @return PlayerInterface
-     */
     public function getPlayer(): PlayerInterface
     {
         return $this->player;

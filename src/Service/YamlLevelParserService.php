@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Exception;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlLevelParserService
@@ -9,18 +10,18 @@ class YamlLevelParserService
     protected string $yamlFilePath;
     private array $yamlProcessed;
 
+    /**
+     * @throws Exception
+     */
     protected function processCurrentYamlFile()
     {
         if (!$this->yamlFilePath) {
-            throw new \Exception("Not file specified");
+            throw new Exception('Not file specified');
         }
 
         $this->yamlProcessed = Yaml::parseFile($this->yamlFilePath);
     }
 
-    /**
-     * @param string $yamlFilePath
-     */
     public function setYamlFilePath(string $yamlFilePath): void
     {
         $this->yamlFilePath = $yamlFilePath;
@@ -29,7 +30,7 @@ class YamlLevelParserService
     // Push to higher service
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getMapName()
     {
@@ -38,6 +39,9 @@ class YamlLevelParserService
         return $this->yamlProcessed['name'];
     }
 
+    /**
+     * @throws Exception
+     */
     public function getMapHeight()
     {
         $this->processCurrentYamlFile();
@@ -45,6 +49,9 @@ class YamlLevelParserService
         return $this->yamlProcessed['size']['height'];
     }
 
+    /**
+     * @throws Exception
+     */
     public function getMapWidth()
     {
         $this->processCurrentYamlFile();

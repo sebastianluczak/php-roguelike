@@ -11,14 +11,24 @@ use App\Model\Stats\StatsInterface;
 interface CreatureInterface
 {
     public function getName(): string;
+
     public function getHealth(): int;
+
     public function getLootInventoryBag(PlayerInterface $player): InventoryBagInterface;
+
     public function decreaseHealth(int $playerHitDamage);
+
     public function getExperience(): int;
+
     public function getScale(): int;
+
     public function getStats(): StatsInterface;
+
     public function getWeaponSlot(): LootInterface;
+
     public function getArmorSlot(): LootInterface;
+
     public function getCreatureClass(): CreatureClassEnum;
+
     public function getInitiative(): float;
 }

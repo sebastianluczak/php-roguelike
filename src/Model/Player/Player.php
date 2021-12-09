@@ -23,7 +23,7 @@ class Player implements PlayerInterface
     protected PlayerCoordinatesInterface $coordinates;
     /** @var PlayerHealth */
     protected PlayerHealthInterface $health;
-    /** @var StatsInterface|Stats  */
+    /** @var StatsInterface|Stats */
     protected StatsInterface $stats;
     /** @var PlayerInventory */
     protected PlayerInventoryInterface $inventory;
@@ -46,9 +46,6 @@ class Player implements PlayerInterface
         return $this->name;
     }
 
-    /**
-     * @return int
-     */
     public function getGold(): int
     {
         return $this->inventory->getGoldAmount();
@@ -119,9 +116,10 @@ class Player implements PlayerInterface
     {
         return $this->inDialogue;
     }
+
     public function setInDialogue(bool $true): PlayerInterface
     {
-        $this->inDialogue  = $true;
+        $this->inDialogue = $true;
 
         return $this;
     }
@@ -138,6 +136,6 @@ class Player implements PlayerInterface
 
     public function draw(): string
     {
-        return "<color=bright-red>@</color>";
+        return '<color=bright-red>@</color>';
     }
 }

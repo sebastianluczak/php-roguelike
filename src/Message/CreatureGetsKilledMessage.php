@@ -7,7 +7,7 @@ use App\Model\Player\PlayerInterface;
 
 /**
  * Used at:
- * CreatureGetsKilledHandler::__invoke()
+ * CreatureGetsKilledHandler::__invoke().
  */
 class CreatureGetsKilledMessage
 {
@@ -20,17 +20,11 @@ class CreatureGetsKilledMessage
         $this->player = $player;
     }
 
-    /**
-     * @return CreatureInterface
-     */
     public function getCreature(): CreatureInterface
     {
         return $this->creature;
     }
 
-    /**
-     * @return PlayerInterface
-     */
     public function getPlayer(): PlayerInterface
     {
         return $this->player;

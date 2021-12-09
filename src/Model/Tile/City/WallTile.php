@@ -4,7 +4,6 @@ namespace App\Model\Tile\City;
 
 use App\Model\Stats\StatsInterface;
 use App\Model\Tile\AbstractTile;
-use App\Model\Tile\TileLogic\CorridorTileLogic;
 use App\Model\Tile\TileLogic\NoLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
 
@@ -37,6 +36,6 @@ class WallTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<fg=bright-white>#</>";
+        return '<fg=bright-white>#</>';
     }
 }

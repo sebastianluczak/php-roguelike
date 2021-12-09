@@ -18,9 +18,6 @@ class PlayerService
         $this->player = new Player($rpgFaker->name, new PlayerCoordinates(0, 0));
     }
 
-    /**
-     * @return PlayerInterface
-     */
     public function getPlayer(): PlayerInterface
     {
         return $this->player;

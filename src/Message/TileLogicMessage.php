@@ -16,17 +16,11 @@ class TileLogicMessage
         $this->tileLogic = $tileLogic;
     }
 
-    /**
-     * @return PlayerInterface
-     */
     public function getPlayer(): PlayerInterface
     {
         return $this->player;
     }
 
-    /**
-     * @return TileLogicInterface
-     */
     public function getTileLogic(): TileLogicInterface
     {
         return $this->tileLogic;

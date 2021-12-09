@@ -7,14 +7,14 @@ class Stats implements StatsInterface
     /**
      *  Affects:
      *  - @TODO base dmg (melee + weapons based of melee)
-     *  - @TODO carrying weight
+     *  - @TODO carrying weight.
      */
     protected int $strength = 1;
 
     /**
      *  Affects:
      *  - Initiative
-     *  - @TODO currently nothing
+     *  - @TODO currently nothing.
      */
     protected int $perception = 1;
 
@@ -22,13 +22,13 @@ class Stats implements StatsInterface
      *  Affects:
      *  - @TODO currently nothing
      *  - Dice sides in CreatureGenericArmor, affecting damage reduction of player hits
-     *  - Rolls in damage reduction from creatures during fights
+     *  - Rolls in damage reduction from creatures during fights.
      */
     protected int $endurance = 1;
 
     /**
      *  Affects:
-     *  - price of shop/strange-man
+     *  - price of shop/strange-man.
      */
     protected int $charisma = 1;
 
@@ -36,74 +36,53 @@ class Stats implements StatsInterface
      *  Affects:
      *  - @TODO scrolls requirements
      *  - strength of Game Effects
-     *  - SkillBoost
+     *  - SkillBoost.
      */
     protected int $intelligence = 1;
 
     /**
      *  Affects:
-     *  - @TODO currently nothing
+     *  - @TODO currently nothing.
      */
     protected int $agility = 1;
 
     /**
      *  Affects:
      *  - chance of getting better loot
-     *  - @TODO chance of getting additional loot
+     *  - @TODO chance of getting additional loot.
      */
     protected int $luck = 1;
 
-    /**
-     * @return int
-     */
     public function getStrength(): int
     {
         return $this->strength;
     }
 
-    /**
-     * @return int
-     */
     public function getPerception(): int
     {
         return $this->perception;
     }
 
-    /**
-     * @return int
-     */
     public function getEndurance(): int
     {
         return $this->endurance;
     }
 
-    /**
-     * @return int
-     */
     public function getCharisma(): int
     {
         return $this->charisma;
     }
 
-    /**
-     * @return int
-     */
     public function getIntelligence(): int
     {
         return $this->intelligence;
     }
 
-    /**
-     * @return int
-     */
     public function getAgility(): int
     {
         return $this->agility;
     }
 
-    /**
-     * @return int
-     */
     public function getLuck(): int
     {
         return $this->luck;
@@ -161,7 +140,7 @@ class Stats implements StatsInterface
     public function getFormattedStats(): string
     {
         return sprintf(
-            "S.P.E.C.I.A.L: %s/%s/%s/%s/%s/%s/%s",
+            'S.P.E.C.I.A.L: %s/%s/%s/%s/%s/%s/%s',
             $this->getStrength(),
             $this->getPerception(),
             $this->getEndurance(),

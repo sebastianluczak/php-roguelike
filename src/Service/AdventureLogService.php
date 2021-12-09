@@ -13,9 +13,6 @@ class AdventureLogService
         $this->adventureLog = $adventureLog;
     }
 
-    /**
-     * @return AdventureLogInterface
-     */
     public function getAdventureLog(): AdventureLogInterface
     {
         return $this->adventureLog;

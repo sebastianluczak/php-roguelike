@@ -52,7 +52,7 @@ class MapService
         AltarTile::class => 12,
         RareChestTile::class => 20,
         ChestTile::class => 20,
-        CorridorTile::class => 6000
+        CorridorTile::class => 6000,
     ];
 
     public function __construct(PlayerService $playerService, LoggerService $loggerService, MessageBusInterface $messageBus, YamlLevelParserService $levelParserService)
@@ -63,7 +63,7 @@ class MapService
         $this->levelParserService = $levelParserService;
         $this->mapErrors = [];
 
-        if ($this->map == null) {
+        if (null == $this->map) {
             $this->createNewLevel();
         }
 
@@ -77,7 +77,7 @@ class MapService
 
         $mapValid = $this->isMapValid();
         if (!$mapValid) {
-            $this->messageBus->dispatch(new AddAdventureLogMessage("Map regenerated due to errors: " . implode(", ", $this->mapErrors), MessageClassEnum::DEVELOPER()));
+            $this->messageBus->dispatch(new AddAdventureLogMessage('Map regenerated due to errors: '.implode(', ', $this->mapErrors), MessageClassEnum::DEVELOPER()));
             $this->createNewLevel();
         } else {
             $this->mapErrors = [];
@@ -106,8 +106,8 @@ class MapService
         $this->map->addTile(new SpawnTile(), $spawnTileCoordinates[0], $spawnTileCoordinates[1]);
         //$this->playerService->getPlayer()->setCoordinates(new PlayerCoordinates($spawnTileCoordinates[0], $spawnTileCoordinates[1]));
 
-        for ($j=1;$j<=30;$j++) {
-            for ($i = 0; $i <= 50; $i++) {
+        for ($j = 1; $j <= 30; ++$j) {
+            for ($i = 0; $i <= 50; ++$i) {
                 $this->map->addTile(new RareChestTile(), $j, $i);
             }
         }
@@ -139,7 +139,7 @@ class MapService
      */
     protected function getNextPossibleTile(array $currentCoordinates, int $tries = 0): array
     {
-        $tries++;
+        ++$tries;
         if ($tries > 8) {
             throw new MapFiniteException();
         }
@@ -210,7 +210,7 @@ class MapService
      */
     public function movePlayer(PlayerInterface $player, string $direction, int $mapLevel)
     {
-        $this->loggerService->log("Moving player: " . $player->getName() . " in direction: " . $direction);
+        $this->loggerService->log('Moving player: '.$player->getName().' in direction: '.$direction);
         $xcoordinate = null;
         $ycoordinate = null;
 
@@ -244,11 +244,11 @@ class MapService
                 break;
         }
 
-        $this->loggerService->log("Move coordinates: " . $xcoordinate . " / " . $ycoordinate);
-        if ($xcoordinate === null || $ycoordinate === null) {
-            $this->loggerService->log("Not valid move");
+        $this->loggerService->log('Move coordinates: '.$xcoordinate.' / '.$ycoordinate);
+        if (null === $xcoordinate || null === $ycoordinate) {
+            $this->loggerService->log('Not valid move');
 
-            throw new NotValidMoveException("Not valid move");
+            throw new NotValidMoveException('Not valid move');
         } else {
             $player->setCoordinates(new PlayerCoordinates($xcoordinate, $ycoordinate));
         }
@@ -287,9 +287,6 @@ class MapService
         return [0, 0];
     }
 
-    /**
-     * @return CityMap
-     */
     public function getCityMap(): CityMap
     {
         return $this->cityMap;
@@ -297,7 +294,7 @@ class MapService
 
     protected function generateCityMapInstance()
     {
-        $yamlFilePath = "resources/levels/Rivermouth_city.yaml";
+        $yamlFilePath = 'resources/levels/Rivermouth_city.yaml';
         $this->levelParserService->setYamlFilePath($yamlFilePath);
         $cityMapScaffold = new CityMap(
             $this->levelParserService->getMapWidth(),
@@ -318,7 +315,7 @@ class MapService
 
     private function isTileTraversable(int $width, int $height): bool
     {
-        /** @var AbstractTile $tile */
+        /* @var AbstractTile $tile */
         if (!isset($this->getMap()->getMapInstance()[$width][$height])) {
             return false;
         }
@@ -347,9 +344,6 @@ class MapService
         $this->getMap()->replaceTile(new ExitTile(), $coordinates[0], $coordinates[1]);
     }
 
-    /**
-     * @return int
-     */
     public function getMapLevel(): int
     {
         return $this->mapLevel;
@@ -363,29 +357,29 @@ class MapService
         foreach ($this->getMap()->getMapInstance() as $arrayOfTiles) {
             foreach ($arrayOfTiles as $mapTile) {
                 $mapTileStatistics[get_class($mapTile)] = (isset($mapTileStatistics[get_class($mapTile)])) ? $mapTileStatistics[get_class($mapTile)] + 1 : 1;
-                $allTiles++;
+                ++$allTiles;
             }
         }
-        $mapTileStatistics["count"] = $allTiles;
+        $mapTileStatistics['count'] = $allTiles;
 
         try {
             $percentageOfEmptyTiles = round($mapTileStatistics[EmptyTile::class] / $allTiles * 100, 2);
             $numberOfSpawnTiles = $mapTileStatistics[SpawnTile::class];
         } catch (Exception $e) {
-            $this->mapErrors[] = "Mandatory tiles not found";
+            $this->mapErrors[] = 'Mandatory tiles not found';
 
             return false;
         }
 
         if ($percentageOfEmptyTiles > 88) {
-            $this->mapErrors[] = "Playable area too small: " . $percentageOfEmptyTiles . "%";
+            $this->mapErrors[] = 'Playable area too small: '.$percentageOfEmptyTiles.'%';
         }
 
-        if ($numberOfSpawnTiles != 1) {
-            $this->mapErrors[] = "Wrong SpawnTile count: " . $numberOfSpawnTiles . ", expecting 1";
+        if (1 != $numberOfSpawnTiles) {
+            $this->mapErrors[] = 'Wrong SpawnTile count: '.$numberOfSpawnTiles.', expecting 1';
         }
 
-        if (count($this->mapErrors) == 0) {
+        if (0 == count($this->mapErrors)) {
             return true;
         }
 
@@ -433,29 +427,20 @@ class MapService
         $this->mapErrors = [];
     }
 
-    /**
-     * @return Map
-     */
     public function getTempDungeonMap(): Map
     {
         return $this->tempDungeonMap;
     }
 
-    /**
-     * @param Map $tempDungeonMap
-     */
     public function setTempDungeonMap(Map $tempDungeonMap): void
     {
         $this->tempDungeonMap = $tempDungeonMap;
     }
 
-    /**
-     * @param Map|null $map
-     * @return MapService
-     */
     public function setMap(?Map $map): MapService
     {
         $this->map = $map;
+
         return $this;
     }
 }

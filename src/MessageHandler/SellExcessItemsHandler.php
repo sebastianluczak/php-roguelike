@@ -33,7 +33,7 @@ class SellExcessItemsHandler implements MessageHandlerInterface
         }
 
         $armorsToRemove = $player->getInventory()->getInventoryBag()->getItemsOfType(LootTypeEnum::ARMOR());
-        /** @var LootInterface $weaponInInventory */
+        /* @var LootInterface $weaponInInventory */
         foreach ($armorsToRemove as $armorInInventory) {
             $totalPrice += $armorInInventory->getPriceValue();
             $player->getInventory()->getInventoryBag()->removeItem($armorInInventory);
@@ -42,7 +42,7 @@ class SellExcessItemsHandler implements MessageHandlerInterface
 
         $this->messageBus->dispatch(
             new AddAdventureLogMessage(
-                'Sold excess items and gained ' . GameIconEnum::GOLD() . ' ' . $totalPrice . ' gold',
+                'Sold excess items and gained '.GameIconEnum::GOLD().' '.$totalPrice.' gold',
                 MessageClassEnum::LOOT()
             )
         );

@@ -2,8 +2,6 @@
 
 namespace App\Model\Tile;
 
-use App\Model\Creature\Imp;
-use App\Model\Loot\SkillBoost;
 use App\Model\Stats\StatsInterface;
 use App\Model\Tile\TileLogic\ShopTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
@@ -37,6 +35,6 @@ class ShopTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<fg=yellow>$</>";
+        return '<fg=yellow>$</>';
     }
 }

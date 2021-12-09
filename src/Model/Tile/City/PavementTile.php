@@ -36,6 +36,6 @@ class PavementTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<fg=gray>.</>";
+        return '<fg=gray>.</>';
     }
 }

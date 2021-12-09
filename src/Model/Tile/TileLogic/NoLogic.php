@@ -21,12 +21,12 @@ class NoLogic implements TileLogicInterface
 
     public function getAdventureLogMessage(): string
     {
-        return "";
+        return '';
     }
 
     public function getAdventureLogMessageClass(): string
     {
-        return "";
+        return '';
     }
 
     public function hasEncounter(): bool

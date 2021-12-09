@@ -2,11 +2,7 @@
 
 namespace App\Model\Tile;
 
-use App\Model\Npc\City\Shopkeeper;
-use App\Model\Player\PlayerInterface;
 use App\Model\Stats\StatsInterface;
-use App\Model\Tile\TileInteraction\NpcTileInteraction;
-use App\Model\Tile\TileInteraction\TileInteractionInterface;
 use App\Model\Tile\TileLogic\CorridorTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
 
@@ -39,6 +35,6 @@ class CorridorTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<fg=gray>.</>";
+        return '<fg=gray>.</>';
     }
 }

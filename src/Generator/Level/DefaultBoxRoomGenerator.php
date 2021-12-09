@@ -20,8 +20,8 @@ class DefaultBoxRoomGenerator
 
     public function createRooms()
     {
-        for ($x = $this->roomDefinition['starting_point'][0]; $x < $this->roomDefinition['starting_point'][0] + $this->roomDefinition['size'][0]; $x++) {
-            for ($y = $this->roomDefinition['starting_point'][1]; $y < $this->roomDefinition['starting_point'][1] + $this->roomDefinition['size'][1]; $y++) {
+        for ($x = $this->roomDefinition['starting_point'][0]; $x < $this->roomDefinition['starting_point'][0] + $this->roomDefinition['size'][0]; ++$x) {
+            for ($y = $this->roomDefinition['starting_point'][1]; $y < $this->roomDefinition['starting_point'][1] + $this->roomDefinition['size'][1]; ++$y) {
                 if ($this->isSpawnableArea($x, $y) && !empty($this->roomDefinition['logic_tile'])) {
                     $roomLogicTile = $this->roomDefinition['logic_tile'];
                     $this->map->replaceTile(new $roomLogicTile(), $x, $y);
@@ -50,9 +50,6 @@ class DefaultBoxRoomGenerator
         return false;
     }
 
-    /**
-     * @return CityMap
-     */
     public function getMap(): CityMap
     {
         return $this->map;

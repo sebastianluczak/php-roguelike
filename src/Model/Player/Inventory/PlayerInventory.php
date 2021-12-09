@@ -118,9 +118,6 @@ class PlayerInventory implements PlayerInventoryInterface
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getGoldAmount(): int
     {
         return $this->goldAmount;

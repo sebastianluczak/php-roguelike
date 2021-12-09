@@ -13,7 +13,6 @@ interface PlayerInterface
     public function getName(): string;
 
     /**
-     * @return int
      * @deprecated Please use InventoryBag::getGoldAmount()
      */
     public function getGold(): int;

@@ -11,7 +11,7 @@ class GameOverException extends Exception
     protected string $reason;
     protected CreatureInterface $creature;
 
-    public function __construct(CreatureInterface $creature, $message = "", $code = 0, Throwable $previous = null)
+    public function __construct(CreatureInterface $creature, $message = '', $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->creature = $creature;
@@ -20,12 +20,9 @@ class GameOverException extends Exception
 
     protected function setReason()
     {
-        $this->reason = "Killed by: " . $this->creature->getName();
+        $this->reason = 'Killed by: '.$this->creature->getName();
     }
 
-    /**
-     * @return string
-     */
     public function getReason(): string
     {
         return $this->reason;

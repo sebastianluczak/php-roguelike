@@ -13,9 +13,6 @@ class UseHealingPotionMessage
         $this->player = $player;
     }
 
-    /**
-     * @return PlayerInterface
-     */
     public function getPlayer(): PlayerInterface
     {
         return $this->player;

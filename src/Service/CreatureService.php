@@ -29,7 +29,7 @@ class CreatureService
     public function handleFight(CreatureInterface $creature, PlayerInterface $player): void
     {
         $this->messageBus->dispatch(new AddAdventureLogMessage(
-            "☠️ Encountered " . $creature->getName() . " 💗" . $creature->getHealth() . "/🗡️" . $creature->getWeaponSlot()->getAverageRoll() . "/🛡️" . $creature->getArmorSlot()->getAverageRoll(),
+            '☠️ Encountered '.$creature->getName().' 💗'.$creature->getHealth().'/🗡️'.$creature->getWeaponSlot()->getAverageRoll().'/🛡️'.$creature->getArmorSlot()->getAverageRoll(),
             MessageClassEnum::IMPORTANT()
         ));
 
@@ -46,7 +46,7 @@ class CreatureService
 
             // calculate creature hit damage
             $playerDamageReduction = DiceBag::factory($player->getInventory()->getArmorSlot()->getDice())->getTotal();
-            $creatureDamageRoll =  DiceBag::factory($creature->getWeaponSlot()->getDice())->getTotal();
+            $creatureDamageRoll = DiceBag::factory($creature->getWeaponSlot()->getDice())->getTotal();
             $creatureHitDamage = (ceil($creatureDamageRoll - $playerDamageReduction) > 0) ? ceil($creatureDamageRoll - $playerDamageReduction) : 1;
 
             // calculate player damage
@@ -62,7 +62,7 @@ class CreatureService
             );*/
             $this->messageBus->dispatch(
                 new AddAdventureLogMessage(
-                    "🗡️ Turn " . $turn . " - " . $creature->getName() . " (💗" . $creature->getHealth() . "/🗡".$creatureHitDamage.") vs. " . $player->getName() . " (💗" . $player->getHealth()->getHealth() . "/🗡".$playerHitDamage.")",
+                    '🗡️ Turn '.$turn.' - '.$creature->getName().' (💗'.$creature->getHealth().'/🗡'.$creatureHitDamage.') vs. '.$player->getName().' (💗'.$player->getHealth()->getHealth().'/🗡'.$playerHitDamage.')',
                     MessageClassEnum::STANDARD()
                 )
             );
@@ -82,7 +82,7 @@ class CreatureService
                 throw new GameOverException($creature);
             }
 
-            $turn++;
+            ++$turn;
         }
 
         if ($creature->getHealth() <= 0) {

@@ -12,23 +12,18 @@ class Map
     protected int $height;
     protected array $mapInstance;
 
-    /**
-     * @param int $width
-     * @param int $height
-     * @param string|null $name
-     */
     public function __construct(int $width = 140, int $height = 44, string $name = null)
     {
         $this->width = $width;
         $this->height = $height;
-        $this->name = $name??"Dungeon";
+        $this->name = $name ?? 'Dungeon';
         $this->createMapInstance();
     }
 
     protected function createMapInstance(): void
     {
-        for ($i = 0; $i < $this->height; $i++) {
-            for ($j = 0; $j < $this->width; $j++) {
+        for ($i = 0; $i < $this->height; ++$i) {
+            for ($j = 0; $j < $this->width; ++$j) {
                 $this->mapInstance[$i][$j] = new EmptyTile();
             }
         }
@@ -49,33 +44,21 @@ class Map
         $this->addTile($tile, $width, $height);
     }
 
-    /**
-     * @return int
-     */
     public function getWidth(): int
     {
         return $this->width;
     }
 
-    /**
-     * @return int
-     */
     public function getHeight(): int
     {
         return $this->height;
     }
 
-    /**
-     * @return array
-     */
     public function getMapInstance(): array
     {
         return $this->mapInstance;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

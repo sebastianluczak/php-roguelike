@@ -22,10 +22,10 @@ abstract class AbstractLoot implements LootInterface
             LootClassEnum::A()->getKey() => 1,
             LootClassEnum::B()->getKey() => 2,
             LootClassEnum::C()->getKey() => 10,
-            LootClassEnum::D()->getKey() => 60
+            LootClassEnum::D()->getKey() => 60,
         ];
 
-        $this->dice = "";
+        $this->dice = '';
         $lootClassRoll = Roll::put($lootClassChances)->spin();
         $this->lootClass = LootClassEnum::$lootClassRoll();
     }

@@ -29,7 +29,7 @@ class AltarPrayerGameEvent extends AbstractRandomEvent
 
     public function getDescription(): string
     {
-        return "You have pleased the Gods...";
+        return 'You have pleased the Gods...';
     }
 
     public function applyEffect(): void
