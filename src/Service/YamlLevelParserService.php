@@ -21,7 +21,7 @@ class YamlLevelParserService
             throw new Exception('Not file specified');
         }
 
-        $this->yamlProcessed = Yaml::parseFile($this->yamlFilePath);
+        $this->yamlProcessed = (array) Yaml::parseFile($this->yamlFilePath);
     }
 
     public function setYamlFilePath(string $yamlFilePath): void

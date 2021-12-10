@@ -1,5 +1,5 @@
 parameters:
-	level: 8
+	level: 9
 	checkMissingIterableValueType: false
 	checkGenericClassInNonGenericObjectType: false
 	doctrine:
@@ -8,3 +8,5 @@ parameters:
 	    - RPGFaker\RPGFaker
 	paths:
 		- src
+	ignoreErrors:
+	    - '#. but returns mixed.#'

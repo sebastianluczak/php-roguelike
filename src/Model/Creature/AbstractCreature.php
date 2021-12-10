@@ -43,7 +43,9 @@ abstract class AbstractCreature implements CreatureInterface
         $nameFaker = new RPGFaker(['count' => 1]);
         $this->faker = FakerFactory::create('ja_JP');
         $this->loot = new InventoryBag();
-        $this->rawName = $nameFaker->name;
+        if (is_string($generatedName = $nameFaker->name)) {
+            $this->rawName = $generatedName;
+        }
     }
 
     public function getExperience(): int

@@ -20,9 +20,6 @@ class LeaderboardService
         $this->em = $em;
     }
 
-    /**
-     * @return Leaderboard[]|array
-     */
     public function getBestScores(): array
     {
         try {
