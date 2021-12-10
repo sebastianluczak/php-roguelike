@@ -62,8 +62,6 @@ class RareChestTileLogic implements TileLogicInterface
 
     public function process(PlayerInterface $player): void
     {
-        // TODO, GOOD PRACTICE!!!! Universal via interface
-        //$itemInSlot = $player->getInventory()->getSlotOfType($this->loot->getLootType());
         switch ($this->loot->getLootType()) {
             case LootTypeEnum::KEYSTONE():
             case LootTypeEnum::ARMOR():

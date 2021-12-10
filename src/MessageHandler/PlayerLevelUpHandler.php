@@ -23,12 +23,18 @@ class PlayerLevelUpHandler implements MessageHandlerInterface
     public function __invoke(PlayerLevelUpMessage $message): void
     {
         $player = $message->getPlayer();
-        $statChosen = $this->specialStats[array_rand($this->specialStats)];
-        $randomSkillBoostMethod = 'modify'.$statChosen;
-        $player->getStats()->{$randomSkillBoostMethod}(sqrt($player->getStats()->getIntelligence()));
+        $initialPlayerLevel = $message->getInitialPlayerLevel();
+        if ($player->getLevel()->getLevel() > $initialPlayerLevel) {
+            $levelsToGain = $player->getLevel()->getLevel() - $initialPlayerLevel;
+            for ($x = 0; $x < $levelsToGain; ++$x) {
+                $statChosen = $this->specialStats[array_rand($this->specialStats)];
+                $randomSkillBoostMethod = 'modify'.$statChosen;
+                $player->getStats()->{$randomSkillBoostMethod}(sqrt($player->getStats()->getIntelligence()));
 
-        $player->getHealth()->increaseMaxHealth(10);
-        $player->getHealth()->modifyHealth($player->getHealth()->getMaxHealth(), HealthActionEnum::INCREASE());
-        $this->messageBus->dispatch(new AddAdventureLogMessage('Player skill leveled up: '.$statChosen, MessageClassEnum::LOOT()));
+                $player->getHealth()->increaseMaxHealth(10);
+                $player->getHealth()->modifyHealth($player->getHealth()->getMaxHealth(), HealthActionEnum::INCREASE());
+                $this->messageBus->dispatch(new AddAdventureLogMessage('Player skill leveled up: '.$statChosen, MessageClassEnum::LOOT()));
+            }
+        }
     }
 }

@@ -17,7 +17,6 @@ class AltarPrayerGameEvent extends AbstractRandomEvent
     {
         parent::__construct();
         $this->player = $player;
-        // todo add changeable events
         $this->effect = new RegenHealthEffect($player, (int) ceil(sqrt($player->getStats()->getIntelligence())));
         $this->lastsForSeconds = (int) ceil(($this->lastsForSeconds + ceil(sqrt($player->getStats()->getIntelligence()))));
 

@@ -12,6 +12,7 @@ class HealthPotion extends AbstractPotion
     {
         parent::__construct();
 
+        $this->weight = 1;
         $this->lootPickupMessage = "You've picked up ".GameIconEnum::POTION().' '.$this->getName();
     }
 }

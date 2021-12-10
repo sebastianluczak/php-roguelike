@@ -10,7 +10,6 @@ use Exception;
 class Gold extends AbstractLoot
 {
     protected string $name = 'gold';
-    protected int $amount;
 
     /**
      * @throws Exception
@@ -23,6 +22,7 @@ class Gold extends AbstractLoot
         $goldDiceRoll = DiceBag::factory($this->dice);
         $this->amount = $goldDiceRoll->getTotal();
         $this->lootType = LootTypeEnum::GOLD();
+        $this->weight = 0;
     }
 
     public function getFormattedName(): string

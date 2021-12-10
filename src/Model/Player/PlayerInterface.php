@@ -36,6 +36,8 @@ interface PlayerInterface
 
     public function getInitiative(): float;
 
+    public function getCarryWeightLimit(): int;
+
     public function getInDialogue(): bool;
 
     public function setInDialogue(bool $true): PlayerInterface;
@@ -43,4 +45,6 @@ interface PlayerInterface
     public function setCurrentDialogue(?DialogueInterface $dialogue = null): void;
 
     public function getCurrentDialogue(): ?DialogueInterface;
+
+    public function isOverburdened(): bool;
 }

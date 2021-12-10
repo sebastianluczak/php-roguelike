@@ -2,7 +2,6 @@
 
 namespace App\Model\Loot\Keystone;
 
-use App\Enum\GameIconEnum;
 use App\Model\Stats\Stats;
 
 class PrismaticKeystone extends AbstractKeystone
@@ -13,7 +12,7 @@ class PrismaticKeystone extends AbstractKeystone
     {
         parent::__construct();
 
-        $this->lootPickupMessage = "You've picked up ".GameIconEnum::GEM().' '.$this->getName();
+        $this->lootPickupMessage = "You've picked up ".$this->getFormattedName();
 
         $this->dice = '1d'.random_int(1, $stats->getIntelligence()).'+'.$stats->getLuck();
     }

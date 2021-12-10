@@ -2,8 +2,6 @@
 
 namespace App\Model\Loot\Keystone;
 
-use App\Enum\GameIconEnum;
-
 class BrokenKeystone extends AbstractKeystone
 {
     protected string $name = 'Broken keystone';
@@ -12,7 +10,7 @@ class BrokenKeystone extends AbstractKeystone
     {
         parent::__construct();
 
-        $this->lootPickupMessage = "You've picked up ".GameIconEnum::GEM().' '.$this->getName();
+        $this->lootPickupMessage = "You've picked up ".$this->getFormattedName();
         $this->dice = '1d1';
     }
 }

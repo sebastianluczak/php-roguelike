@@ -102,6 +102,11 @@ class Player implements PlayerInterface
         return $this->getStats()->getPerception() * $this->getStats()->getPerception() - $this->getStats()->getPerception();
     }
 
+    public function getCarryWeightLimit(): int
+    {
+        return (int) sqrt($this->getStats()->getStrength()) * 100 * $this->getMapLevel() + $this->getStats()->getStrength();
+    }
+
     public function getInDialogue(): bool
     {
         return $this->inDialogue;
@@ -122,6 +127,15 @@ class Player implements PlayerInterface
     public function getCurrentDialogue(): ?DialogueInterface
     {
         return $this->currentDialogue;
+    }
+
+    public function isOverburdened(): bool
+    {
+        if ($this->getCarryWeightLimit() - $this->getInventory()->getItemsWeight() >= 0) {
+            return false; // not overburdened
+        }
+
+        return true;
     }
 
     public function draw(): string

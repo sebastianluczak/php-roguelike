@@ -214,6 +214,11 @@ class MapService
         $ycoordinate = null;
 
         // todo change to player instance
+        // This is a big change to be fair, whole logic is based on SpawnTile
+        // We should discuss option to somehow inject spawnTile into Player (PlayerTileRepresentation ?)
+        // and be sure it's coordinates changes or catch all occurences (better option) of SpawnTile and
+        // replace them with $player->getPlayerTileRepresention(): PlayerTileRepresentation extends SpawnTile (to rename)
+        // should work but crazy amount of work, 2h?
         $spawnTile = $this->getSpawnTile();
         // check if valid move
         switch ($direction) {
@@ -267,6 +272,9 @@ class MapService
                 while (true) {
                     // todo sometimes this fails in smaller rooms
                     // as it's PoC i'll leave it as it is
+                    // yeah, it's simple collision detection
+                    // nice piece of work to be fair
+                    // (and I should've used cursor from the beggining...)
                     $xCoordinateRandom = random_int(-1, 1);
                     $yCoordinateRandom = random_int(-1, 1);
                     if ($this->getCityMap()->getTile($xcoordinate - $xCoordinateRandom, $ycoordinate - $yCoordinateRandom)->isPassable()) {

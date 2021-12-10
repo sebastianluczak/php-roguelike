@@ -2,40 +2,21 @@
 
 namespace App\Model\Creature;
 
-use App\Enum\Creature\CreatureClassEnum;
-use App\Enum\GameIconEnum;
-use App\Model\Loot\Armor\CreatureGenericArmor;
 use App\Model\Loot\Gold;
-use App\Model\Loot\Weapon\CreatureMeleeWeapon;
 use App\Model\Player\Inventory\InventoryBagInterface;
 use App\Model\Player\PlayerInterface;
-use App\Model\Stats\Stats;
 
-class Dragon extends AbstractCreature
+class Dragon extends AbstractCommonCreature
 {
-    private const BASE_STRENGTH = 7;
-    private const BASE_ENDURANCE = 5;
+    private const BASE_STRENGTH = 8;
+    private const BASE_ENDURANCE = 6;
     private const BASE_LUCK = 6;
     private const COMMON_NAME = 'Dragon';
 
     public function __construct(int $scale)
     {
-        parent::__construct();
+        parent::__construct(self::COMMON_NAME, $scale, self::BASE_STRENGTH, self::BASE_ENDURANCE, self::BASE_LUCK);
         $this->scale = $scale;
-
-        $this->stats = new Stats();
-        $this->stats->modifyStrength((int) (ceil(self::BASE_STRENGTH * ($this->creatureClass->getValue() / 100)) * sqrt($scale)));
-        $this->stats->modifyEndurance((int) (ceil(self::BASE_ENDURANCE * ($this->creatureClass->getValue() / 100)) * sqrt($scale)));
-        $this->stats->modifyLuck((int) (ceil(self::BASE_LUCK * ($this->creatureClass->getValue() / 100)) * sqrt($scale)));
-        $this->weaponSlot = new CreatureMeleeWeapon($this->stats);
-        $this->armorSlot = new CreatureGenericArmor($this->stats);
-
-        if ($this->creatureClass == CreatureClassEnum::ELITE() || $this->creatureClass == CreatureClassEnum::LEGENDARY()) {
-            $this->name = '<fg=yellow>'.GameIconEnum::SKULL().' '.$this->creatureClass->getKey().' '.self::COMMON_NAME.' '.$this->getRawName().'</>';
-        } else {
-            $this->name = self::COMMON_NAME.' - '.$this->getRawName();
-        }
-        $this->health = (int) ceil($this->stats->getEndurance() * ceil($scale / 2) * ($this->creatureClass->getValue() / 100));
         $this->experience = $this->createRandomNumberInRangeWithScale(20, 50, $scale);
     }
 

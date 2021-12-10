@@ -11,6 +11,7 @@ abstract class AbstractWeapon extends AbstractLoot
     {
         parent::__construct();
 
+        $this->weight = 5;
         $this->lootType = LootTypeEnum::WEAPON();
     }
 }

@@ -12,11 +12,11 @@ abstract class AbstractKeystone extends AbstractLoot
     {
         parent::__construct();
 
+        $this->weight = 5;
         $this->lootType = LootTypeEnum::KEYSTONE();
     }
 
-    // fixme get rid of __toString implementation
-    public function __toString(): string
+    public function getFormattedName(): string
     {
         return sprintf(
             '%s %s',

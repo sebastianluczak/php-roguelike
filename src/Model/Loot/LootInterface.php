@@ -33,4 +33,6 @@ interface LootInterface
     public function getFormattedName(): string;
 
     public function getAmount(): int;
+
+    public function getWeight(): int;
 }

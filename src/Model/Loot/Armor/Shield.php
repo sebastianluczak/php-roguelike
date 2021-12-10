@@ -42,6 +42,7 @@ class Shield extends AbstractArmor
             $this->dice = '2d'.random_int(1, 3 + $playerStats->getLuck()).'+'.(5 - $this->getLootClass()->getValue() + random_int(0, (int) ceil(sqrt($playerStats->getLuck()))));
         }
 
+        $this->priceValue = (int) (ceil(10 * $this->getMaxRollValue() * $this->getAverageRoll() / $this->getMaxRollValue()));
         $this->lootPickupMessage = "You've picked up ".$this->getFormattedName();
     }
 

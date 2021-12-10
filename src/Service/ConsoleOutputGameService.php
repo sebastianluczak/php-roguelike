@@ -79,6 +79,7 @@ class ConsoleOutputGameService
             ' | '.$player->getInventory()->getWeaponSlot()->getFormattedName().
             ' | '.$player->getInventory()->getArmorSlot()->getFormattedName().
             ' | '.$player->getInventory()->getKeystone()->getFormattedName().
+            ' | '.GameIconEnum::WEIGHT().' '.$player->getInventory()->getItemsWeight().'/'.$player->getCarryWeightLimit().
             ' | '.GameIconEnum::MAP().' '.$player->getMapLevel().
             ' | '.GameIconEnum::BUFFS().' '.$this->internalClockService->getActiveGameEventsCount().
             ' | '.GameIconEnum::STATS().' '.$player->getStats()->getFormattedStats().'</>';

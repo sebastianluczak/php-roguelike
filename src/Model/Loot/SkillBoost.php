@@ -8,9 +8,9 @@ class SkillBoost
 {
     protected int $healthAmount;
 
-    public function __construct(int $mapLevel, StatsInterface $stats)
+    public function __construct(int $scale, StatsInterface $stats)
     {
-        $this->healthAmount = random_int(1 * $mapLevel, 10 * $mapLevel + $stats->getLuck());
+        $this->healthAmount = random_int($scale, 10 * $scale + $stats->getLuck());
     }
 
     public function getHealthAmount(): int

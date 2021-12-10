@@ -6,11 +6,14 @@ namespace App\Model\Tile\TileLogic;
 
 use App\Enum\MessageClassEnum;
 use App\Helper\ScaleHelper;
+use App\Model\Creature\AbstractBossCreature;
+use App\Model\Creature\Boss\Alfgard;
 use App\Model\Creature\Boss\Annurabi;
 use App\Model\Creature\CreatureInterface;
 use App\Model\Player\PlayerInterface;
 use App\Model\RandomEvent\RandomEventInterface;
 use App\Model\RandomEvent\ThiefArrivedGameEvent;
+use Irfa\Gatcha\Roll;
 
 class BossRoomTileLogic implements TileLogicInterface
 {
@@ -19,6 +22,12 @@ class BossRoomTileLogic implements TileLogicInterface
     protected MessageClassEnum $messageClass;
     protected CreatureInterface $creature;
     protected RandomEventInterface $event;
+    // TODO factory or generator with yield or strategy pattern
+    // be creative here
+    protected array $availableBosses = [
+        Annurabi::class => 50,
+        Alfgard::class => 50,
+    ];
 
     public function __construct(int $scale)
     {
@@ -30,8 +39,15 @@ class BossRoomTileLogic implements TileLogicInterface
     public function process(PlayerInterface $player): void
     {
         if ($player->getInventory()->getKeystone()->getAverageRoll() > 3) {
+            $bossRolled = Roll::put($this->availableBosses)->spin();
             // FIXME scale is not fine, maybe should be higher or affected by something more?
-            $this->creature = new Annurabi(ScaleHelper::bossEncounterScale($this->scale, 1.2));
+            /* @var CreatureInterface $boss */
+            $boss = new $bossRolled(ScaleHelper::bossEncounterScale($this->scale, 1.2));
+            if ($boss instanceof CreatureInterface && $boss instanceof AbstractBossCreature) {
+                $this->creature = $boss;
+            } else {
+                throw new \LogicException('BossRoomTileLogic can spawn only Boss creatures');
+            }
         } else {
             $this->event = new ThiefArrivedGameEvent($player);
         }

@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Exception\ValidationFailedException;
 /**
  * @TODO add all $scale occurrences
  */
-final class ScaleHelper
+final class ScaleHelper extends StatsCalculatorHelper
 {
     /**
      * @description Basic scale adds current Map Level to current Player Level

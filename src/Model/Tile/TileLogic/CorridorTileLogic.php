@@ -26,10 +26,12 @@ class CorridorTileLogic implements TileLogicInterface
         $this->rawMessage = '';
         $this->messageClass = MessageClassEnum::STANDARD();
 
+        // FIXME very important scale! We need to move it to ScaleHelper
         $scale = (int) ceil(1 + ceil($scale * 0.5));
 
         // allows more creatures to be spawned on later levels
         // should make SMALL difference
+        // FIXME check if this is correct
         $maxChance = 700 - $scale;
         if ($maxChance <= 100) {
             $maxChance = 100;

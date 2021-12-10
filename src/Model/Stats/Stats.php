@@ -7,7 +7,7 @@ class Stats implements StatsInterface
     /**
      *  Affects:
      *  - @TODO base dmg (melee + weapons based of melee)
-     *  - @TODO carrying weight.
+     *  - carrying weight.
      */
     protected int $strength = 1;
 

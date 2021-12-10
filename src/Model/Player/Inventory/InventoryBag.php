@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class InventoryBag implements InventoryBagInterface
 {
+    /** @var ArrayCollection<LootInterface> */
     protected ArrayCollection $items;
 
     public function __construct()

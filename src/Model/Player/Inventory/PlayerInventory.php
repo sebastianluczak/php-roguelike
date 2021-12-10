@@ -35,6 +35,17 @@ class PlayerInventory implements PlayerInventoryInterface
         return $this->weaponSlot;
     }
 
+    public function getItemsWeight(): int
+    {
+        $weight = 0;
+        /** @var LootInterface $itemInBag */
+        foreach ($this->getInventoryBag()->getItems() as $itemInBag) {
+            $weight += $itemInBag->getWeight();
+        }
+
+        return $weight + $this->weaponSlot->getWeight() + $this->armorSlot->getWeight() + $this->keyStone->getWeight();
+    }
+
     public function getSlotOfType(string $lootTypeEnum): LootInterface
     {
         switch ($lootTypeEnum) {

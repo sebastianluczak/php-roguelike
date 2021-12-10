@@ -18,6 +18,7 @@ use App\Message\MessageInterface;
 use App\Message\RegenerateMapMessage;
 use App\Message\ShowPlayerInventoryMessage;
 use App\Message\UseHealingPotionMessage;
+use App\Model\CityMap;
 use App\Model\Dialogue\DialogueInterface;
 use App\Model\Dialogue\EmptyDialogue;
 use App\Model\Map;
@@ -39,8 +40,12 @@ class GameService extends ConsoleOutputGameService
                 break;
             }
 
+            // This logic grows kinda big IMHO
+            // need to refactor it soon, so FIXME please
             if ($player->getInDialogue()) {
                 $this->handlePlayerHasDialogueEvent($player, $output, $mapObject, $buttonPressed);
+            } elseif ($player->isOverburdened()) {
+                $this->handlePlayerIsOverburdened($player, $output, $mapObject, $buttonPressed);
             } else {
                 $this->handleGameTurn($player, $output, $mapObject, $buttonPressed);
             }
@@ -211,6 +216,27 @@ class GameService extends ConsoleOutputGameService
             } catch (NewLevelException $e) {
                 $this->messageBus->dispatch(new AdvanceDungeonProgressMessage($this->getPlayerService()->getPlayer()));
             }
+        }
+    }
+
+    private function handlePlayerIsOverburdened(PlayerInterface $player, OutputInterface $output, ?Map\MapInterface &$mapObject, ?string &$buttonPressed): void
+    {
+        if (!$mapObject instanceof CityMap) {
+            $this->messageBus->dispatch(new AddAdventureLogMessage("You're carrying too many items. Get rid of some one way or the other.", MessageClassEnum::IMPORTANT()));
+            $mapObject = $this->mapService->getMap();
+            $this->printPlayerInfo($player, $output);
+            $this->printMap($mapObject, $output);
+            $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
+
+            $buttonPressed = $this->getPlayerCommand();
+            if (KeyboardMapEnum::USE_HEALING_POTION() == $buttonPressed) {
+                $this->messageBus->dispatch(new UseHealingPotionMessage($this->playerService->getPlayer()));
+            }
+            if (KeyboardMapEnum::CITY_PORTAL() == $buttonPressed) {
+                $this->messageBus->dispatch(new CityPortalMessage($this->playerService->getPlayer()));
+            }
+        } else {
+            $this->handleGameTurn($player, $output, $mapObject, $buttonPressed);
         }
     }
 }

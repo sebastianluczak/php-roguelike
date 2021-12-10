@@ -9,12 +9,13 @@ use Irfa\Gatcha\Roll;
 abstract class AbstractLoot implements LootInterface
 {
     protected int $amount = 1;
+    protected int $weight = 1;
     protected string $name = '[WIP][ITEM][NO_NAMED]';
     protected LootClassEnum $lootClass;
     protected string $lootType;
     protected string $dice;
     protected string $lootPickupMessage;
-    protected int $priceValue = 20;
+    protected int $priceValue = 1;
 
     public function __construct()
     {
@@ -26,7 +27,6 @@ abstract class AbstractLoot implements LootInterface
             LootClassEnum::D()->getKey() => 60,
         ];
 
-        $this->dice = '';
         $lootClassRoll = Roll::put($lootClassChances)->spin();
         $this->lootClass = LootClassEnum::$lootClassRoll();
     }
@@ -125,5 +125,10 @@ abstract class AbstractLoot implements LootInterface
     public function getAmount(): int
     {
         return $this->amount;
+    }
+
+    public function getWeight(): int
+    {
+        return $this->weight;
     }
 }

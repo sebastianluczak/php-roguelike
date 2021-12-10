@@ -17,6 +17,7 @@ use MyCLabs\Enum\Enum;
  * @method static TIME()
  * @method static STATS()
  * @method static INVENTORY()
+ * @method static WEIGHT()
  * @method static SKULL()
  * @method static GEM()
  * @method static POTION()
@@ -35,6 +36,7 @@ class GameIconEnum extends Enum
     public const TIME = '⏰';
     public const STATS = '🧠';
     public const INVENTORY = '🧳';
+    public const WEIGHT = '🎒';
 
     public const SKULL = '💀';
     public const GEM = '💎';
