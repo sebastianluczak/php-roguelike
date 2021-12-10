@@ -37,7 +37,6 @@
         "symfony/yaml": "5.3.*"
     },
     "require-dev": {
-        "php": "*",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.2",
         "phpstan/phpstan-doctrine": "^1.0",

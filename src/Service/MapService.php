@@ -274,7 +274,7 @@ class MapService
                     // as it's PoC i'll leave it as it is
                     // yeah, it's simple collision detection
                     // nice piece of work to be fair
-                    // (and I should've used cursor from the beggining...)
+                    // (and I should've used cursor from the beginning...)
                     $xCoordinateRandom = random_int(-1, 1);
                     $yCoordinateRandom = random_int(-1, 1);
                     if ($this->getCityMap()->getTile($xcoordinate - $xCoordinateRandom, $ycoordinate - $yCoordinateRandom)->isPassable()) {
