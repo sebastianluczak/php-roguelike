@@ -13,6 +13,7 @@ use App\Message\CreatureEncounteredMessage;
 use App\Message\TileInteractionMessage;
 use App\Message\TileLogicMessage;
 use App\Model\CityMap;
+use App\Model\Creature\CreatureInterface;
 use App\Model\Map;
 use App\Model\Player\PlayerCoordinates;
 use App\Model\Player\PlayerInterface;
@@ -35,7 +36,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MapService
 {
-    protected ?Map $map = null;
+    protected Map $map;
     protected CityMap $cityMap;
     protected Map $tempDungeonMap;
 
@@ -62,11 +63,7 @@ class MapService
         $this->messageBus = $messageBus;
         $this->levelParserService = $levelParserService;
         $this->mapErrors = [];
-
-        if (null == $this->map) {
-            $this->createNewLevel();
-        }
-
+        $this->createNewLevel();
         $this->generateCityMapInstance();
     }
 
@@ -404,7 +401,9 @@ class MapService
             $this->messageBus->dispatch(new TileLogicMessage($player, $tileLogic));
 
             if ($tileLogic->hasEncounter()) {
-                $this->messageBus->dispatch(new CreatureEncounteredMessage($tileLogic->getEncounteredCreature(), $player));
+                if ($tileLogic->getEncounteredCreature() instanceof CreatureInterface) {
+                    $this->messageBus->dispatch(new CreatureEncounteredMessage($tileLogic->getEncounteredCreature(), $player));
+                }
             }
 
             if ($tile instanceof ExitTile) {
@@ -442,7 +441,7 @@ class MapService
         $this->tempDungeonMap = $tempDungeonMap;
     }
 
-    public function setMap(?Map $map): MapService
+    public function setMap(Map $map): MapService
     {
         $this->map = $map;
 

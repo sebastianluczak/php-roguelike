@@ -53,7 +53,7 @@ class Leaderboard
         return $this->id;
     }
 
-    public function getPlayerName(): ?string
+    public function getPlayerName(): string
     {
         return $this->playerName;
     }
@@ -65,7 +65,7 @@ class Leaderboard
         return $this;
     }
 
-    public function getPlayerLevel(): ?int
+    public function getPlayerLevel(): int
     {
         return $this->playerLevel;
     }
@@ -77,7 +77,7 @@ class Leaderboard
         return $this;
     }
 
-    public function getDungeonLevel(): ?int
+    public function getDungeonLevel(): int
     {
         return $this->dungeonLevel;
     }
@@ -89,7 +89,7 @@ class Leaderboard
         return $this;
     }
 
-    public function getGoldAmount(): ?int
+    public function getGoldAmount(): int
     {
         return $this->goldAmount;
     }
@@ -101,7 +101,7 @@ class Leaderboard
         return $this;
     }
 
-    public function getKills(): ?int
+    public function getKills(): int
     {
         return $this->kills;
     }
@@ -113,7 +113,7 @@ class Leaderboard
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }

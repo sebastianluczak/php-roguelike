@@ -10,14 +10,15 @@ class AdventureLogMessage implements AdventureLogMessageInterface
 {
     protected string $message;
     protected string $rawMessage;
-    protected ?string $messageClass;
+    protected MessageClassEnum $messageClass;
 
-    public function __construct(string $message, CarbonImmutable $gameStartTime, string $messageClass = null)
+    public function __construct(string $message, CarbonImmutable $gameStartTime, MessageClassEnum $messageClass = null)
     {
         $timestamp = Carbon::now();
-        $this->messageClass = $messageClass;
-        if (null == $this->messageClass) {
+        if (null == $messageClass) {
             $this->messageClass = MessageClassEnum::STANDARD();
+        } else {
+            $this->messageClass = $messageClass;
         }
         $diff = $gameStartTime->diff($timestamp);
         $this->rawMessage = '['.$diff->format('%H:%I:%S').'] '.$message.' ';

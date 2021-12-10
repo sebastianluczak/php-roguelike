@@ -176,7 +176,9 @@ class ConsoleOutputGameService
         $stty_settings = preg_replace('#.*; ?#s', '', $this->stty('--all'));
         $this->stty("cbreak $echo");
         $c = fgetc(STDIN);
-        $this->stty($stty_settings);
+        if ($stty_settings) {
+            $this->stty($stty_settings);
+        }
 
         if (is_string($c)) {
             return $c;

@@ -18,6 +18,7 @@ use App\Message\MessageInterface;
 use App\Message\RegenerateMapMessage;
 use App\Message\ShowPlayerInventoryMessage;
 use App\Message\UseHealingPotionMessage;
+use App\Model\Dialogue\DialogueInterface;
 use App\Model\Player\PlayerInterface;
 use Carbon\Carbon;
 use Symfony\Component\Console\Command\Command;
@@ -39,19 +40,21 @@ class GameService extends ConsoleOutputGameService
                 // player has dialogue event
                 // how to get current dialogue?
                 $dialogue = $player->getCurrentDialogue();
-                $this->messageBus->dispatch(new AddAdventureLogMessage($dialogue->print(), MessageClassEnum::DIALOGUE()));
-                $mapObject = $this->mapService->getMap();
-                $this->printPlayerInfo($player, $output);
-                $this->printMap($mapObject, $output);
-                $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
+                if ($dialogue instanceof DialogueInterface) {
+                    $this->messageBus->dispatch(new AddAdventureLogMessage($dialogue->print(), MessageClassEnum::DIALOGUE()));
+                    $mapObject = $this->mapService->getMap();
+                    $this->printPlayerInfo($player, $output);
+                    $this->printMap($mapObject, $output);
+                    $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
 
-                $buttonPressed = $this->getPlayerCommand();
-                $message = $dialogue->handleButtonPress($buttonPressed);
-                if ($message instanceof MessageInterface) {
-                    $message->setPlayer($player);
-                    $this->messageBus->dispatch($message);
-                    $player->setInDialogue(false);
-                    $player->setCurrentDialogue(null);
+                    $buttonPressed = $this->getPlayerCommand();
+                    $message = $dialogue->handleButtonPress($buttonPressed);
+                    if ($message instanceof MessageInterface) {
+                        $message->setPlayer($player);
+                        $this->messageBus->dispatch($message);
+                        $player->setInDialogue(false);
+                        $player->setCurrentDialogue(null);
+                    }
                 }
 
                 echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
