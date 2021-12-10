@@ -330,7 +330,13 @@ class MapService
     {
         $tileRolled = Roll::put($this->tilesAvailableToSpawnWithChances)->spin();
 
-        return new $tileRolled();
+        $tileToAdd = new $tileRolled();
+
+        if ($tileToAdd instanceof AbstractTile) {
+            return $tileToAdd;
+        }
+
+        throw new \LogicException('Tile should always extend AbstractTile, in: '.__METHOD__);
     }
 
     public function increaseMapLevel(): void

@@ -74,7 +74,7 @@ class CreatureService
         $playerDamageReduction = DiceBag::factory($player->getInventory()->getArmorSlot()->getDice())->getTotal();
         $creatureDamageRoll = DiceBag::factory($creature->getWeaponSlot()->getDice())->getTotal();
 
-        return (int) (ceil($creatureDamageRoll - $playerDamageReduction) > 0) ? ceil($creatureDamageRoll - $playerDamageReduction) : 1;
+        return (int) (ceil($creatureDamageRoll - $playerDamageReduction) > 0) ? (int) (ceil($creatureDamageRoll - $playerDamageReduction)) : 1;
     }
 
     private function calculatePlayerDamage(CreatureInterface $creature, PlayerInterface $player): int
@@ -82,6 +82,6 @@ class CreatureService
         $creatureDamageReduction = ceil(DiceBag::factory($creature->getArmorSlot()->getDice())->getTotal() / 2);
         $playerHitDamageRoll = DiceBag::factory($player->getInventory()->getWeaponSlot()->getDice())->getTotal() + $player->getStats()->getStrength();
 
-        return (int) (ceil($playerHitDamageRoll - $creatureDamageReduction) > 0) ? ceil($playerHitDamageRoll - $creatureDamageReduction) : 1;
+        return (int) (ceil($playerHitDamageRoll - $creatureDamageReduction) > 0) ? (int) (ceil($playerHitDamageRoll - $creatureDamageReduction)) : 1;
     }
 }

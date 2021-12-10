@@ -7,6 +7,7 @@ use App\Enum\GameIconEnum;
 use App\Model\Loot\Armor\CreatureGenericArmor;
 use App\Model\Loot\Armor\Shield;
 use App\Model\Loot\Gold;
+use App\Model\Loot\LootInterface;
 use App\Model\Loot\Potion\HealthPotion;
 use App\Model\Loot\Weapon\CreatureMeleeWeapon;
 use App\Model\Loot\Weapon\Sword;
@@ -53,8 +54,12 @@ class Imp extends AbstractCreature
         if (random_int(0, 10) > 6) {
             $lootItemRoll = Roll::put($this->lootTable)->spin();
             $lootItem = new $lootItemRoll($player->getStats());
-            $this->loot->addItem(new Gold($this->scale));
-            $this->loot->addItem($lootItem);
+            if ($lootItem instanceof LootInterface) {
+                $this->loot->addItem(new Gold($this->scale));
+                $this->loot->addItem($lootItem);
+            } else {
+                throw new \LogicException('Loot should always implement LootInterface, in: '.__METHOD__);
+            }
         }
 
         return $this->loot;

@@ -178,7 +178,11 @@ class ConsoleOutputGameService
         $c = fgetc(STDIN);
         $this->stty($stty_settings);
 
-        return $c;
+        if (is_string($c)) {
+            return $c;
+        }
+
+        throw new \LogicException('Player command stty failed.');
     }
 
     protected function getAdventureLogService(): AdventureLogService

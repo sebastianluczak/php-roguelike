@@ -3,6 +3,7 @@
 namespace App\Generator\Level;
 
 use App\Model\CityMap;
+use App\Model\Tile\AbstractTile;
 use App\Model\Tile\City\WallTile;
 
 class DefaultBoxRoomGenerator
@@ -24,7 +25,12 @@ class DefaultBoxRoomGenerator
             for ($y = $this->roomDefinition['starting_point'][1]; $y < $this->roomDefinition['starting_point'][1] + $this->roomDefinition['size'][1]; ++$y) {
                 if ($this->isSpawnableArea($x, $y) && !empty($this->roomDefinition['logic_tile'])) {
                     $roomLogicTile = $this->roomDefinition['logic_tile'];
-                    $this->map->replaceTile(new $roomLogicTile(), $x, $y);
+                    $tileToAdd = new $roomLogicTile();
+                    if ($tileToAdd instanceof AbstractTile) {
+                        $this->map->replaceTile($tileToAdd, $x, $y);
+                    } else {
+                        throw new \LogicException('Tile should always extend AbstractTile, in: '.__METHOD__);
+                    }
                 }
                 if ($this->isEdgeOfRoom($x, $y)) {
                     if ($x != floor($this->roomDefinition['starting_point'][0] + ($this->roomDefinition['size'][0] / 2))) {
