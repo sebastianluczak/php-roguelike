@@ -5,7 +5,7 @@ namespace App\Model\Tile\City;
 use App\Model\Player\PlayerInterface;
 use App\Model\Stats\StatsInterface;
 use App\Model\Tile\AbstractTile;
-use App\Model\Tile\TileInteraction\EmptyTileInteraction;
+use App\Model\Tile\TileInteraction\AltarTileInteraction;
 use App\Model\Tile\TileInteraction\TileInteractionInterface;
 use App\Model\Tile\TileLogic\NoLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
@@ -42,7 +42,7 @@ class AltarTile extends AbstractTile
 
     public function handleInteraction(PlayerInterface $player): TileInteractionInterface
     {
-        return new EmptyTileInteraction();
+        return new AltarTileInteraction();
     }
 
     public function draw(): string

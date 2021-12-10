@@ -43,7 +43,7 @@ class BossRoomTileLogic implements TileLogicInterface
             // FIXME scale is not fine, maybe should be higher or affected by something more?
             /* @var CreatureInterface $boss */
             $boss = new $bossRolled(ScaleHelper::bossEncounterScale($this->scale, 1.2));
-            if ($boss instanceof CreatureInterface && $boss instanceof AbstractBossCreature) {
+            if ($boss instanceof AbstractBossCreature) {
                 $this->creature = $boss;
             } else {
                 throw new \LogicException('BossRoomTileLogic can spawn only Boss creatures');
