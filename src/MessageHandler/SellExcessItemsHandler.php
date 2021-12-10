@@ -20,7 +20,7 @@ class SellExcessItemsHandler implements MessageHandlerInterface
         $this->messageBus = $messageBus;
     }
 
-    public function __invoke(SellExcessItemsMessage $message)
+    public function __invoke(SellExcessItemsMessage $message): void
     {
         $player = $message->getPlayer();
         $totalPrice = 0;

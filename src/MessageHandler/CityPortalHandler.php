@@ -21,7 +21,7 @@ class CityPortalHandler implements MessageHandlerInterface
         $this->gameService = $gameService;
     }
 
-    public function __invoke(CityPortalMessage $message)
+    public function __invoke(CityPortalMessage $message): void
     {
         if ($this->gameService->getMapService()->getMap() instanceof CityMap) {
             // player is in the city, teleport him to normal map

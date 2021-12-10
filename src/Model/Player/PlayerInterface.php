@@ -12,11 +12,6 @@ interface PlayerInterface
 {
     public function getName(): string;
 
-    /**
-     * @deprecated Please use InventoryBag::getGoldAmount()
-     */
-    public function getGold(): int;
-
     public function getHealth(): PlayerHealthInterface;
 
     public function getKillCount(): int;
@@ -45,7 +40,7 @@ interface PlayerInterface
 
     public function setInDialogue(bool $true): PlayerInterface;
 
-    public function setCurrentDialogue(?DialogueInterface $dialogue = null);
+    public function setCurrentDialogue(?DialogueInterface $dialogue = null): void;
 
     public function getCurrentDialogue(): ?DialogueInterface;
 }

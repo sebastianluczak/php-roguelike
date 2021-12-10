@@ -19,7 +19,7 @@ class CreatureEncounteredHandler implements MessageHandlerInterface
         $this->gameService = $gameService;
     }
 
-    public function __invoke(CreatureEncounteredMessage $message)
+    public function __invoke(CreatureEncounteredMessage $message): void
     {
         try {
             $this->creatureService->handleFight($message->getCreature(), $message->getPlayer());

@@ -1,6 +1,7 @@
 parameters:
-	level: 5
+	level: 7
 	checkMissingIterableValueType: false
+	checkGenericClassInNonGenericObjectType: false
 	doctrine:
 	    objectManagerLoader: tests/object-manager.php
 	universalObjectCratesClasses:

@@ -12,7 +12,7 @@ interface LootInterface
 
     public function setLootType(string $lootType): AbstractLoot;
 
-    public function setLootClass(LootClassEnum $lootClass = null);
+    public function setLootClass(LootClassEnum $lootClass = null): void;
 
     public function getLootClass(): LootClassEnum;
 

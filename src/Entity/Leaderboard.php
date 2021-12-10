@@ -16,37 +16,37 @@ class Leaderboard
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $playerName;
+    private string $playerName;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $playerLevel;
+    private int $playerLevel;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $dungeonLevel;
+    private int $dungeonLevel;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $goldAmount;
+    private int $goldAmount;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $kills;
+    private int $kills;
 
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private $createdAt;
+    private DateTimeImmutable $createdAt;
 
     public function getId(): ?int
     {

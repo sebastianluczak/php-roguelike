@@ -18,7 +18,7 @@ class DefaultBoxRoomGenerator
         $this->createRooms();
     }
 
-    public function createRooms()
+    public function createRooms(): void
     {
         for ($x = $this->roomDefinition['starting_point'][0]; $x < $this->roomDefinition['starting_point'][0] + $this->roomDefinition['size'][0]; ++$x) {
             for ($y = $this->roomDefinition['starting_point'][1]; $y < $this->roomDefinition['starting_point'][1] + $this->roomDefinition['size'][1]; ++$y) {
@@ -60,7 +60,7 @@ class DefaultBoxRoomGenerator
         return $this->map;
     }
 
-    private function isSpawnableArea($x, $y): bool
+    private function isSpawnableArea(int $x, int $y): bool
     {
         if ($this->roomDefinition['starting_point'][0] + ceil($this->roomDefinition['size'][0] / 2) == $x &&
             $this->roomDefinition['starting_point'][1] + ceil($this->roomDefinition['size'][1] / 2) - 1 == $y) {

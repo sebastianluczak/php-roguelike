@@ -34,7 +34,7 @@ class GameCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function clearScreen()
+    private function clearScreen(): void
     {
         echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
     }

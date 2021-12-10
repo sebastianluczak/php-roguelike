@@ -18,7 +18,7 @@ class TileInteractionHandler implements MessageHandlerInterface
         $this->gameService = $gameService;
     }
 
-    public function __invoke(TileInteractionMessage $message)
+    public function __invoke(TileInteractionMessage $message): void
     {
         $player = $message->getPlayer();
         $tileInteraction = $message->getTileInteraction();

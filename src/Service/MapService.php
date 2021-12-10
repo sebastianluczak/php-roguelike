@@ -47,7 +47,7 @@ class MapService
     protected YamlLevelParserService $levelParserService;
     protected array $mapErrors;
     private array $tilesAvailableToSpawnWithChances = [
-        BossRoomTile::class => 100, // change to 100 to have some flashback to '98 and Minesweeper :P
+        BossRoomTile::class => 1, // change to 100 to have some flashback to '98 and Minesweeper :P
         ShopTile::class => 8,
         AltarTile::class => 12,
         RareChestTile::class => 20,
@@ -98,7 +98,7 @@ class MapService
         }
     }
 
-    public function generateDevRoomMap()
+    public function generateDevRoomMap(): void
     {
         $this->map = new Map();
 
@@ -194,7 +194,7 @@ class MapService
         return $currentCoordinates;
     }
 
-    private function isTileEmpty(int $width, int $height)
+    private function isTileEmpty(int $width, int $height): bool
     {
         $tile = $this->map->getTile($width, $height);
         if ($tile instanceof EmptyTile || $tile instanceof CorridorTile || $tile instanceof ChestTile) {
@@ -208,7 +208,7 @@ class MapService
      * @throws NotValidMoveException
      * @throws NewLevelException
      */
-    public function movePlayer(PlayerInterface $player, string $direction, int $mapLevel)
+    public function movePlayer(PlayerInterface $player, string $direction, int $mapLevel): void
     {
         $this->loggerService->log('Moving player: '.$player->getName().' in direction: '.$direction);
         $xcoordinate = null;
@@ -273,7 +273,7 @@ class MapService
         $this->getMap()->addTile(new SpawnTile(), $xcoordinate, $ycoordinate);
     }
 
-    protected function getSpawnTile()
+    protected function getSpawnTile(): array
     {
         foreach ($this->getMap()->getMapInstance() as $xposition => $row) {
             foreach ($row as $yposition => $tile) {
@@ -291,7 +291,7 @@ class MapService
         return $this->cityMap;
     }
 
-    protected function generateCityMapInstance()
+    protected function generateCityMapInstance(): void
     {
         $yamlFilePath = 'resources/levels/Rivermouth_city.yaml';
         $this->levelParserService->setYamlFilePath($yamlFilePath);
@@ -333,12 +333,12 @@ class MapService
         return new $tileRolled();
     }
 
-    public function increaseMapLevel()
+    public function increaseMapLevel(): void
     {
         $this->mapLevel = $this->mapLevel + 1;
     }
 
-    private function addExitTileToMap(array $coordinates)
+    private function addExitTileToMap(array $coordinates): void
     {
         $this->getMap()->replaceTile(new ExitTile(), $coordinates[0], $coordinates[1]);
     }
@@ -388,7 +388,7 @@ class MapService
     /**
      * @throws NewLevelException
      */
-    public function handleTileLogic(AbstractTile $tile, PlayerInterface $player, int $mapLevel)
+    public function handleTileLogic(AbstractTile $tile, PlayerInterface $player, int $mapLevel): void
     {
         $scale = $mapLevel + $player->getLevel()->getLevel();
 
@@ -412,7 +412,7 @@ class MapService
     /**
      * @throws NewLevelException
      */
-    public function handleTileInteraction(AbstractTile $tile, PlayerInterface $player)
+    public function handleTileInteraction(AbstractTile $tile, PlayerInterface $player): void
     {
         $tileInteraction = $tile->handleInteraction($player);
 
@@ -421,7 +421,7 @@ class MapService
         }
     }
 
-    public function resetErrors()
+    public function resetErrors(): void
     {
         $this->mapErrors = [];
     }

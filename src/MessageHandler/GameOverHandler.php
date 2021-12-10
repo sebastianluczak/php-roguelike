@@ -24,7 +24,7 @@ class GameOverHandler implements MessageHandlerInterface
         $this->messageBus = $messageBus;
     }
 
-    public function __invoke(GameOverMessage $message)
+    public function __invoke(GameOverMessage $message): void
     {
         $player = $message->getPlayer();
         try {
@@ -34,7 +34,7 @@ class GameOverHandler implements MessageHandlerInterface
         }
         $this->messageBus->dispatch(
             new AddAdventureLogMessage(
-            $player->getName().' -> 🗺️ '.$player->getMapLevel().' 🧍 '.$player->getLevel()->getLevel().' ☠️ '.$player->getKillCount().' 💰 '.$player->getGold().' ⏲ '.Carbon::now()->format(DATE_RFC822),
+            $player->getName().' -> 🗺️ '.$player->getMapLevel().' 🧍 '.$player->getLevel()->getLevel().' ☠️ '.$player->getKillCount().' 💰 '.$player->getInventory()->getGoldAmount().' ⏲ '.Carbon::now()->format(DATE_RFC822),
             MessageClassEnum::IMPORTANT()
         )
         );

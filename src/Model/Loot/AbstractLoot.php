@@ -46,7 +46,7 @@ abstract class AbstractLoot implements LootInterface
         return $this->lootClass;
     }
 
-    public function setLootClass(LootClassEnum $lootClass = null)
+    public function setLootClass(LootClassEnum $lootClass = null): void
     {
         if (!$lootClass) {
             $this->lootClass = LootClassEnum::D();

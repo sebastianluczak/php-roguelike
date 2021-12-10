@@ -8,5 +8,5 @@ interface AdventureLogInterface
 
     public function getLines(): int;
 
-    public function addMessage(AdventureLogMessageInterface $message);
+    public function addMessage(AdventureLogMessageInterface $message): void;
 }

@@ -15,7 +15,7 @@ class WrongDialogueOptionMessage implements MessageInterface
         return $this->player;
     }
 
-    public function setPlayer(PlayerInterface $player): MessageInterface
+    public function setPlayer(PlayerInterface $player): WrongDialogueOptionMessage
     {
         $this->player = $player;
 

@@ -28,7 +28,7 @@ class InternalClockService
         return $this->gameStartTime;
     }
 
-    public function tick()
+    public function tick(): void
     {
         $eventsToFire = [];
         foreach ($this->gameEvents as $gameEvent) {
@@ -43,7 +43,7 @@ class InternalClockService
         }
     }
 
-    public function addGameEventToEventLoop(RandomEventInterface $event)
+    public function addGameEventToEventLoop(RandomEventInterface $event): void
     {
         $this->gameEvents[] = $event;
     }

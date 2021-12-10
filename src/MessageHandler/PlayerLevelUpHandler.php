@@ -20,7 +20,7 @@ class PlayerLevelUpHandler implements MessageHandlerInterface
         $this->messageBus = $messageBus;
     }
 
-    public function __invoke(PlayerLevelUpMessage $message)
+    public function __invoke(PlayerLevelUpMessage $message): void
     {
         $player = $message->getPlayer();
         $statChosen = $this->specialStats[array_rand($this->specialStats)];

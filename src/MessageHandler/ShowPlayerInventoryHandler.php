@@ -17,7 +17,7 @@ class ShowPlayerInventoryHandler implements MessageHandlerInterface
         $this->messageBus = $messageBus;
     }
 
-    public function __invoke(ShowPlayerInventoryMessage $message)
+    public function __invoke(ShowPlayerInventoryMessage $message): void
     {
         $player = $message->getPlayer();
         $inventory = $player->getInventory();

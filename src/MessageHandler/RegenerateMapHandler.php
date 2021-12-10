@@ -20,7 +20,7 @@ class RegenerateMapHandler implements MessageHandlerInterface
         $this->gameService = $gameService;
     }
 
-    public function __invoke(RegenerateMapMessage $message)
+    public function __invoke(RegenerateMapMessage $message): void
     {
         $this->messageBus->dispatch(new AddAdventureLogMessage('[ADMIN] Map regenerate initiated', MessageClassEnum::DEVELOPER()));
         $this->gameService->getMapService()->resetErrors();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\MessageClassEnum;
@@ -13,7 +15,7 @@ class BossRoomTileLogic implements TileLogicInterface
 {
     protected int $scale;
     protected string $rawMessage;
-    protected string $messageClass;
+    protected MessageClassEnum $messageClass;
     protected CreatureInterface $creature;
     protected RandomEventInterface $event;
 
@@ -24,7 +26,7 @@ class BossRoomTileLogic implements TileLogicInterface
         $this->messageClass = MessageClassEnum::IMPORTANT();
     }
 
-    public function process(PlayerInterface $player)
+    public function process(PlayerInterface $player): void
     {
         if ($player->getInventory()->getKeystone()->getAverageRoll() > 3) {
             // FIXME scale is not fine, maybe should be higher or affected by something more?
@@ -44,7 +46,7 @@ class BossRoomTileLogic implements TileLogicInterface
         return $this->rawMessage;
     }
 
-    public function getAdventureLogMessageClass(): string
+    public function getAdventureLogMessageClass(): MessageClassEnum
     {
         return $this->messageClass;
     }

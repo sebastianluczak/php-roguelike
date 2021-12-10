@@ -18,7 +18,7 @@ class AdvanceDungeonProgressHandler implements MessageHandlerInterface
         $this->mapService = $mapService;
     }
 
-    public function __invoke(AdvanceDungeonProgressMessage $message)
+    public function __invoke(AdvanceDungeonProgressMessage $message): void
     {
         $this->mapService->increaseMapLevel();
         $this->mapService->createNewLevel();

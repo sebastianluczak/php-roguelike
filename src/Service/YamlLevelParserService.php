@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use Exception;
@@ -13,7 +15,7 @@ class YamlLevelParserService
     /**
      * @throws Exception
      */
-    protected function processCurrentYamlFile()
+    protected function processCurrentYamlFile(): void
     {
         if (!$this->yamlFilePath) {
             throw new Exception('Not file specified');
@@ -32,7 +34,7 @@ class YamlLevelParserService
     /**
      * @throws Exception
      */
-    public function getMapName()
+    public function getMapName(): string
     {
         $this->processCurrentYamlFile();
 
@@ -42,7 +44,7 @@ class YamlLevelParserService
     /**
      * @throws Exception
      */
-    public function getMapHeight()
+    public function getMapHeight(): int
     {
         $this->processCurrentYamlFile();
 
@@ -52,14 +54,14 @@ class YamlLevelParserService
     /**
      * @throws Exception
      */
-    public function getMapWidth()
+    public function getMapWidth(): int
     {
         $this->processCurrentYamlFile();
 
         return $this->yamlProcessed['size']['width'];
     }
 
-    public function getRoomsDefinitions()
+    public function getRoomsDefinitions(): array
     {
         return $this->yamlProcessed['places'];
     }

@@ -20,7 +20,7 @@ class TileLogicHandler implements MessageHandlerInterface
         $this->gameService = $gameService;
     }
 
-    public function __invoke(TileLogicMessage $message)
+    public function __invoke(TileLogicMessage $message): void
     {
         $player = $message->getPlayer();
         $tileLogic = $message->getTileLogic();

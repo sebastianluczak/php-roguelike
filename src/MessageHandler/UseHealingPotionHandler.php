@@ -20,7 +20,7 @@ class UseHealingPotionHandler implements MessageHandlerInterface
         $this->messageBus = $messageBus;
     }
 
-    public function __invoke(UseHealingPotionMessage $message)
+    public function __invoke(UseHealingPotionMessage $message): void
     {
         $player = $message->getPlayer();
         $healingPotionInInventoryFilter = $player->getInventory()->getInventoryBag()->getItemsOfType(LootTypeEnum::POTION());

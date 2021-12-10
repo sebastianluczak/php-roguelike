@@ -10,5 +10,5 @@ interface MessageInterface
 {
     public function getPlayer(): PlayerInterface;
 
-    public function setPlayer(PlayerInterface $player);
+    public function setPlayer(PlayerInterface $player): self;
 }

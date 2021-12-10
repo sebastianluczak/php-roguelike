@@ -23,7 +23,7 @@ class GodModeActivatedHandler implements MessageHandlerInterface
         $this->playerService = $playerService;
     }
 
-    public function __invoke(GodModeActivatedMessage $message)
+    public function __invoke(GodModeActivatedMessage $message): void
     {
         $player = $message->getPlayer();
         for ($expBase = 100; $expBase <= 500; ++$expBase) {

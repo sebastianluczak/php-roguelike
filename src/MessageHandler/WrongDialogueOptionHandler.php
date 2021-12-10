@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\MessageHandler;
 
 use App\Enum\MessageClassEnum;
@@ -17,7 +19,7 @@ class WrongDialogueOptionHandler implements MessageHandlerInterface
         $this->messageBus = $messageBus;
     }
 
-    public function __invoke(WrongDialogueOptionMessage $message)
+    public function __invoke(WrongDialogueOptionMessage $message): void
     {
         $this->messageBus->dispatch(
             new AddAdventureLogMessage(

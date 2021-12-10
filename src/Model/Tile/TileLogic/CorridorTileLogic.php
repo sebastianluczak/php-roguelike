@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\MessageClassEnum;
@@ -15,7 +17,7 @@ use App\Model\RandomEvent\ThiefArrivedGameEvent;
 class CorridorTileLogic implements TileLogicInterface
 {
     protected string $rawMessage;
-    protected string $messageClass;
+    protected MessageClassEnum $messageClass;
     protected ?CreatureInterface $creature;
     protected RandomEventInterface $event;
 
@@ -47,7 +49,7 @@ class CorridorTileLogic implements TileLogicInterface
         }
     }
 
-    public function process(PlayerInterface $player)
+    public function process(PlayerInterface $player): void
     {
         if (0 == random_int(0, 1000)) {
             $this->event = new ThiefArrivedGameEvent($player);
@@ -64,7 +66,7 @@ class CorridorTileLogic implements TileLogicInterface
         return $this->rawMessage;
     }
 
-    public function getAdventureLogMessageClass(): string
+    public function getAdventureLogMessageClass(): MessageClassEnum
     {
         return $this->messageClass;
     }

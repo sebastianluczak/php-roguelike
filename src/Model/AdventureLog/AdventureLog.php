@@ -41,7 +41,7 @@ class AdventureLog implements AdventureLogInterface
         return array_reverse($this->messages);
     }
 
-    public function addMessage(AdventureLogMessageInterface $message)
+    public function addMessage(AdventureLogMessageInterface $message): void
     {
         $this->messages[] = $message;
     }

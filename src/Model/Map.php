@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use App\Model\Tile\AbstractTile;
@@ -29,7 +31,7 @@ class Map
         }
     }
 
-    public function addTile(AbstractTile $tile, int $width, int $height)
+    public function addTile(AbstractTile $tile, int $width, int $height): void
     {
         $this->mapInstance[$width][$height] = $tile;
     }
@@ -39,7 +41,7 @@ class Map
         return $this->mapInstance[$width][$height];
     }
 
-    public function replaceTile(AbstractTile $tile, int $width, int $height)
+    public function replaceTile(AbstractTile $tile, int $width, int $height): void
     {
         $this->addTile($tile, $width, $height);
     }

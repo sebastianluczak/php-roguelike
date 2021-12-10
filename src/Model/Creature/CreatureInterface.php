@@ -16,7 +16,7 @@ interface CreatureInterface
 
     public function getLootInventoryBag(PlayerInterface $player): InventoryBagInterface;
 
-    public function decreaseHealth(int $playerHitDamage);
+    public function decreaseHealth(int $playerHitDamage): void;
 
     public function getExperience(): int;
 

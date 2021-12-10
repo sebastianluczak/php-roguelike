@@ -51,7 +51,7 @@ class ConsoleOutputGameService
         return $this->devMode ?? (bool) $_ENV['GAME_DEBUG'];
     }
 
-    protected function printMap(Map $map, OutputInterface $output)
+    protected function printMap(Map $map, OutputInterface $output): void
     {
         foreach ($map->getMapInstance() as $column) {
             $line = '';
@@ -63,16 +63,17 @@ class ConsoleOutputGameService
         }
     }
 
-    protected function printPlayerInfo(PlayerInterface $player, OutputInterface $output)
+    protected function printPlayerInfo(PlayerInterface $player, OutputInterface $output): void
     {
         $devModeSymbol = '';
         if ($this->isDevMode()) {
             $devModeSymbol = GameIconEnum::DEV_MODE();
         }
 
-        $statusLine = $devModeSymbol.' <fg=bright-blue>'.GameIconEnum::HEALTH().' '.$player->getHealth()->getHealth().'/'.$player->getHealth()->getMaxHealth().
+        $statusLine = $devModeSymbol.' <fg=bright-blue>'.GameIconEnum::HEALTH().' '.
+            $this->formatNumberForPlayerInfo($player->getHealth()->getHealth()).'/'.$this->formatNumberForPlayerInfo($player->getHealth()->getMaxHealth()).
             ' | '.GameIconEnum::POTION().' '.count($player->getInventory()->getInventoryBag()->getItemsOfType(LootTypeEnum::POTION())).
-            ' | '.GameIconEnum::GOLD().' '.$player->getGold().
+            ' | '.GameIconEnum::GOLD().' '.$this->formatNumberForPlayerInfo($player->getInventory()->getGoldAmount()).
             ' | '.GameIconEnum::KILLS().' '.$player->getKillCount().
             ' | '.GameIconEnum::PLAYER().' '.$player->getLevel()->getLevel().' '.$player->getLevel()->drawExperienceBar().
             ' | '.$player->getInventory()->getWeaponSlot()->getFormattedName().
@@ -85,7 +86,20 @@ class ConsoleOutputGameService
         $output->writeln($statusLine);
     }
 
-    protected function printAdventureLog(AdventureLogInterface $adventureLog, OutputInterface $output)
+    protected function formatNumberForPlayerInfo(int $number): string
+    {
+        if ($number >= 1000) {
+            $suffix = 'k';
+            $valueAfterDot = $number % 1000;
+            $valueBeforeDot = floor($number / 1000);
+
+            return number_format($valueBeforeDot + ($valueAfterDot / 1000), 2).$suffix;
+        }
+
+        return number_format($number);
+    }
+
+    protected function printAdventureLog(AdventureLogInterface $adventureLog, OutputInterface $output): void
     {
         $terminalWidth = (new Terminal())->getWidth() - 48;
 
@@ -132,7 +146,7 @@ class ConsoleOutputGameService
         }
     }
 
-    protected function printLeaderBoards()
+    protected function printLeaderBoards(): void
     {
         $entries = array_reverse($this->leaderboardService->getBestScores());
         $entriesCount = count($entries);
@@ -147,7 +161,7 @@ class ConsoleOutputGameService
         $this->messageBus->dispatch(new AddAdventureLogMessage(' --- Leaderboards --- ', MessageClassEnum::IMPORTANT()));
     }
 
-    protected function stty($options)
+    protected function stty(string $options): string
     {
         exec($cmd = "stty $options", $output, $el);
         /* @phpstan-ignore-next-line */
@@ -156,7 +170,7 @@ class ConsoleOutputGameService
         return implode(' ', $output);
     }
 
-    protected function getPlayerCommand($echo = false): string
+    protected function getPlayerCommand(bool $echo = false): string
     {
         $echo = $echo ? '' : '-echo';
         $stty_settings = preg_replace('#.*; ?#s', '', $this->stty('--all'));

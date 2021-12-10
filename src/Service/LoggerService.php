@@ -13,7 +13,7 @@ class LoggerService
         $this->logger = $logger;
     }
 
-    public function log(string $message)
+    public function log(string $message): void
     {
         $this->logger->info($message);
     }

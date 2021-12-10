@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\MessageClassEnum;
@@ -12,7 +14,7 @@ class ChestTileLogic implements TileLogicInterface
 {
     protected Gold $gold;
     protected string $rawMessage;
-    protected string $messageClass;
+    protected MessageClassEnum $messageClass;
     protected RandomEventInterface $event;
 
     public function __construct(int $scale)
@@ -22,7 +24,7 @@ class ChestTileLogic implements TileLogicInterface
         $this->messageClass = MessageClassEnum::LOOT();
     }
 
-    public function process(PlayerInterface $player)
+    public function process(PlayerInterface $player): void
     {
         $player->getInventory()->addGoldAmount($this->gold->getAmount());
     }
@@ -37,7 +39,7 @@ class ChestTileLogic implements TileLogicInterface
         return $this->rawMessage;
     }
 
-    public function getAdventureLogMessageClass(): string
+    public function getAdventureLogMessageClass(): MessageClassEnum
     {
         return $this->messageClass;
     }

@@ -25,7 +25,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GameService extends ConsoleOutputGameService
 {
-    public function run(OutputInterface $output)
+    public function run(OutputInterface $output): int
     {
         $this->messageBus->dispatch(new AddAdventureLogMessage('Game started at '.$this->getInternalClockService()->getGameStartTime()->toFormattedDateString()));
         $this->messageBus->dispatch(new AddAdventureLogMessage('DEVELOPER MODE IS ACTIVE', MessageClassEnum::DEVELOPER()));
@@ -89,12 +89,12 @@ class GameService extends ConsoleOutputGameService
         return Command::SUCCESS;
     }
 
-    public function handleGameOver(GameOverException $e, PlayerInterface $player)
+    public function handleGameOver(GameOverException $e, PlayerInterface $player): void
     {
         $this->messageBus->dispatch(new GameOverMessage($player, $e->getReason()));
     }
 
-    public function setDevMode(string $devMode = 'false')
+    public function setDevMode(string $devMode = 'false'): void
     {
         $this->devMode = true;
         if ('false' == $devMode) {

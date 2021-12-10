@@ -34,12 +34,12 @@ class LeaderboardService
         return $records;
     }
 
-    public function addEntry(PlayerInterface $player)
+    public function addEntry(PlayerInterface $player): void
     {
         $leaderboard = new Leaderboard();
         $leaderboard->setCreatedAt(DateTimeImmutable::createFromMutable(new DateTime()));
         $leaderboard->setDungeonLevel($player->getMapLevel());
-        $leaderboard->setGoldAmount($player->getGold());
+        $leaderboard->setGoldAmount($player->getInventory()->getGoldAmount());
         $leaderboard->setKills($player->getKillCount());
         $leaderboard->setPlayerLevel($player->getLevel()->getLevel());
         $leaderboard->setPlayerName($player->getName());

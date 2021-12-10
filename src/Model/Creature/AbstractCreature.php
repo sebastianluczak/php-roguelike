@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Creature;
 
 use App\Enum\Creature\CreatureClassEnum;
@@ -59,7 +61,7 @@ abstract class AbstractCreature implements CreatureInterface
         return $this->health;
     }
 
-    public function decreaseHealth(int $playerHitDamage)
+    public function decreaseHealth(int $playerHitDamage): void
     {
         $this->health = $this->health - $playerHitDamage;
     }
@@ -69,7 +71,7 @@ abstract class AbstractCreature implements CreatureInterface
         return $this->scale;
     }
 
-    public function getRawName()
+    public function getRawName(): string
     {
         return $this->rawName;
     }

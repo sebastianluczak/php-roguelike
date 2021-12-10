@@ -21,7 +21,7 @@ class DevRoomSpawnHandler implements MessageHandlerInterface
         $this->gameService = $gameService;
     }
 
-    public function __invoke(DevRoomSpawnMessage $message)
+    public function __invoke(DevRoomSpawnMessage $message): void
     {
         $this->messageBus->dispatch(new AddAdventureLogMessage('[ADMIN] '.AsciiEmoticonEnum::FLIP_EM_ALL_TABLES().' DevRoom generating.', MessageClassEnum::DEVELOPER()));
         $this->gameService->getMapService()->generateDevRoomMap();

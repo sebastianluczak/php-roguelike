@@ -29,7 +29,7 @@ class CreatureGetsKilledHandler implements MessageHandlerInterface
         $this->playerService = $playerService;
     }
 
-    public function __invoke(CreatureGetsKilledMessage $message)
+    public function __invoke(CreatureGetsKilledMessage $message): void
     {
         $player = $message->getPlayer();
         $creature = $message->getCreature();

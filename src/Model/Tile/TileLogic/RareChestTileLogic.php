@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\Loot\LootTypeEnum;
@@ -23,7 +25,7 @@ class RareChestTileLogic implements TileLogicInterface
 {
     protected int $scale = 1;
     protected string $rawMessage;
-    protected string $messageClass;
+    protected MessageClassEnum $messageClass;
     protected LootInterface $loot;
     protected RandomEventInterface $event;
     protected array $itemChances = [
@@ -58,7 +60,7 @@ class RareChestTileLogic implements TileLogicInterface
         $this->messageClass = MessageClassEnum::LOOT();
     }
 
-    public function process(PlayerInterface $player)
+    public function process(PlayerInterface $player): void
     {
         // TODO, GOOD PRACTICE!!!! Universal via interface
         //$itemInSlot = $player->getInventory()->getSlotOfType($this->loot->getLootType());
@@ -92,7 +94,7 @@ class RareChestTileLogic implements TileLogicInterface
         return false;
     }
 
-    public function getAdventureLogMessageClass(): string
+    public function getAdventureLogMessageClass(): MessageClassEnum
     {
         return $this->messageClass;
     }

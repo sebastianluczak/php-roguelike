@@ -24,7 +24,7 @@ class AdventureLogMessageHandler implements MessageHandlerInterface
         $this->gameService = $gameService;
     }
 
-    public function __invoke(AddAdventureLogMessage $message)
+    public function __invoke(AddAdventureLogMessage $message): void
     {
         try {
             $gameStartTime = $this->gameService->getInternalClockService()->getGameStartTime();

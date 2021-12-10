@@ -41,11 +41,6 @@ class Player implements PlayerInterface
         return $this->name;
     }
 
-    public function getGold(): int
-    {
-        return $this->inventory->getGoldAmount();
-    }
-
     public function getHealth(): PlayerHealthInterface
     {
         return $this->health;
@@ -119,7 +114,7 @@ class Player implements PlayerInterface
         return $this;
     }
 
-    public function setCurrentDialogue(?DialogueInterface $dialogue = null)
+    public function setCurrentDialogue(?DialogueInterface $dialogue = null): void
     {
         $this->currentDialogue = $dialogue;
     }

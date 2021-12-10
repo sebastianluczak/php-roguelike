@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\GameIconEnum;
@@ -14,13 +16,13 @@ class AltarTileLogic implements TileLogicInterface
 {
     protected SkillBoost $skillBoost;
     protected string $rawMessage;
-    protected string $messageClass;
+    protected MessageClassEnum $messageClass;
     protected RandomEventInterface $event;
 
-    public function process(PlayerInterface $player)
+    public function process(PlayerInterface $player): void
     {
-        if ($player->getGold() > 10) {
-            $thrownGold = random_int(1, $player->getGold());
+        if ($player->getInventory()->getGoldAmount() > 10) {
+            $thrownGold = random_int(1, $player->getInventory()->getGoldAmount());
             $player->getInventory()->subtractGoldAmount($thrownGold);
             $this->rawMessage = "🧍 You've thrown ".GameIconEnum::GOLD().' '.$thrownGold.' gold into the altar.';
             $this->messageClass = MessageClassEnum::LOOT();
@@ -45,7 +47,7 @@ class AltarTileLogic implements TileLogicInterface
         return $this->rawMessage;
     }
 
-    public function getAdventureLogMessageClass(): string
+    public function getAdventureLogMessageClass(): MessageClassEnum
     {
         return $this->messageClass;
     }

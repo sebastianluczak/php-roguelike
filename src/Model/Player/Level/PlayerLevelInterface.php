@@ -16,5 +16,5 @@ interface PlayerLevelInterface
 
     public function getPercentageOfLevelExpProgress(): float;
 
-    public function modifyExperience(int $amount, LevelActionEnum $action);
+    public function modifyExperience(int $amount, LevelActionEnum $action): void;
 }

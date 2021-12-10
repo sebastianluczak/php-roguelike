@@ -37,7 +37,7 @@ class PlayerLevel implements PlayerLevelInterface
         return $this;
     }
 
-    public function modifyExperience(int $amount, LevelActionEnum $action)
+    public function modifyExperience(int $amount, LevelActionEnum $action): void
     {
         switch ($action) {
             case LevelActionEnum::INCREASE():

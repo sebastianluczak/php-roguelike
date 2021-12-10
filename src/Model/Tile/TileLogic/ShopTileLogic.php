@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\MessageClassEnum;
@@ -15,7 +17,7 @@ class ShopTileLogic implements TileLogicInterface
 {
     protected SkillBoost $skillBoost;
     protected string $rawMessage;
-    protected string $messageClass;
+    protected MessageClassEnum $messageClass;
     protected RandomEventInterface $event;
 
     public function __construct(int $scale, StatsInterface $stats)
@@ -23,14 +25,14 @@ class ShopTileLogic implements TileLogicInterface
         $this->skillBoost = new SkillBoost($scale, $stats);
     }
 
-    public function process(PlayerInterface $player)
+    public function process(PlayerInterface $player): void
     {
         $amountRequired = $player->getLevel()->getLevel() * random_int(
             50 - (int) (sqrt($player->getStats()->getCharisma() + 2)),
             150 - (int) (sqrt($player->getStats()->getCharisma() + 2))
         );
 
-        if ($player->getGold() >= $amountRequired) {
+        if ($player->getInventory()->getGoldAmount() >= $amountRequired) {
             $this->rawMessage = '🧍 You feel rush of energy after paying '.$amountRequired.' gold to strange man';
             $this->messageClass = MessageClassEnum::SUCCESS();
 
@@ -59,7 +61,7 @@ class ShopTileLogic implements TileLogicInterface
         return $this->rawMessage;
     }
 
-    public function getAdventureLogMessageClass(): string
+    public function getAdventureLogMessageClass(): MessageClassEnum
     {
         return $this->messageClass;
     }
