@@ -15,6 +15,7 @@ abstract class AbstractKeystone extends AbstractLoot
         $this->lootType = LootTypeEnum::KEYSTONE();
     }
 
+    // fixme get rid of __toString implementation
     public function __toString(): string
     {
         return sprintf(

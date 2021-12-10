@@ -13,4 +13,9 @@ class CreatureGenericArmor extends AbstractArmor
         parent::__construct();
         $this->dice = '1d'.random_int(1, $stats->getEndurance()).'+'.$stats->getLuck();
     }
+
+    public function getFormattedName(): string
+    {
+        return $this->name;
+    }
 }

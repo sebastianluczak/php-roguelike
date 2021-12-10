@@ -37,9 +37,6 @@ class AdventureLogMessage implements AdventureLogMessageInterface
         return strlen($this->rawMessage);
     }
 
-    /**
-     * @return string|null
-     */
     public function getMessageClass(): string
     {
         return $this->messageClass;

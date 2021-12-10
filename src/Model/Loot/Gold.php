@@ -25,7 +25,7 @@ class Gold extends AbstractLoot
         $this->lootType = LootTypeEnum::GOLD();
     }
 
-    public function __toString(): string
+    public function getFormattedName(): string
     {
         return sprintf(
             '%s %s gold',

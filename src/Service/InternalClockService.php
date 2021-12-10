@@ -23,9 +23,6 @@ class InternalClockService
         $this->gameEvents = [];
     }
 
-    /**
-     * @return mixed
-     */
     public function getGameStartTime(): CarbonImmutable
     {
         return $this->gameStartTime;

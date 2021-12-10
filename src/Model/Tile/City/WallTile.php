@@ -31,7 +31,7 @@ class WallTile extends AbstractTile
 
     public function handleLogic(int $scale, StatsInterface $stats): TileLogicInterface
     {
-        return new NoLogic($scale);
+        return new NoLogic();
     }
 
     public function draw(): string

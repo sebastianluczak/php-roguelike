@@ -39,11 +39,16 @@ class DefaultBoxRoomGenerator
 
     protected function isEdgeOfRoom(int $x, int $y): bool
     {
-        if ($this->roomDefinition['starting_point'][0] == $x || $this->roomDefinition['starting_point'][1] == $y) {
+        $startingPointX = (int) $this->roomDefinition['starting_point'][0];
+        $startingPointY = (int) $this->roomDefinition['starting_point'][1];
+        $roomSizeX = (int) $this->roomDefinition['size'][0];
+        $roomSizeY = (int) $this->roomDefinition['size'][1];
+
+        if ($startingPointX == $x || $startingPointY == $y) {
             return true;
         }
 
-        if ($this->roomDefinition['starting_point'][0] + $this->roomDefinition['size'][0] == $x + 1 || $this->roomDefinition['starting_point'][1] + $this->roomDefinition['size'][1] == $y + 1) {
+        if ($startingPointX + $roomSizeX == $x + 1 || $startingPointY + $roomSizeY == $y + 1) {
             return true;
         }
 

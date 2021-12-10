@@ -29,4 +29,8 @@ interface LootInterface
     public function getAverageRoll(): float;
 
     public function getPriceValue(): int;
+
+    public function getFormattedName(): string;
+
+    public function getAmount(): int;
 }

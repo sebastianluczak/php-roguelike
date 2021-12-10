@@ -4,6 +4,7 @@ namespace App\Model\Player\Inventory;
 
 use App\Enum\Loot\LootTypeEnum;
 use App\Model\Loot\LootInterface;
+use App\Model\Loot\Potion\HealthPotion;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class InventoryBag implements InventoryBagInterface
@@ -13,6 +14,9 @@ class InventoryBag implements InventoryBagInterface
     public function __construct()
     {
         $this->items = new ArrayCollection();
+
+        $this->addItem(new HealthPotion());
+        $this->addItem(new HealthPotion());
     }
 
     public function addItem(LootInterface $item): InventoryBagInterface

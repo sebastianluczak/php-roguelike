@@ -2,15 +2,18 @@
 
 namespace App\Service;
 
+use App\Enum\Game\KeyboardMapEnum;
 use App\Enum\MessageClassEnum;
 use App\Enum\Player\Health\HealthActionEnum;
 use App\Exception\GameOverException;
 use App\Exception\NewLevelException;
 use App\Exception\NotValidMoveException;
 use App\Message\AddAdventureLogMessage;
+use App\Message\AdvanceDungeonProgressMessage;
 use App\Message\CityPortalMessage;
 use App\Message\DevRoomSpawnMessage;
 use App\Message\GameOverMessage;
+use App\Message\GodModeActivatedMessage;
 use App\Message\MessageInterface;
 use App\Message\RegenerateMapMessage;
 use App\Message\ShowPlayerInventoryMessage;
@@ -76,10 +79,12 @@ class GameService extends ConsoleOutputGameService
             }
         }
 
-        $this->printPlayerInfo($player, $output);
-        $this->printMap($mapObject, $output);
-        $this->printLeaderBoards();
-        $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
+        if (isset($mapObject)) {
+            $this->printPlayerInfo($player, $output);
+            $this->printMap($mapObject, $output);
+            $this->printLeaderBoards();
+            $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
+        }
 
         return Command::SUCCESS;
     }
@@ -99,7 +104,7 @@ class GameService extends ConsoleOutputGameService
 
     private function handleUncommonButtonPresses(string $buttonPressed): bool
     {
-        if ('q' == $buttonPressed) {
+        if (KeyboardMapEnum::GAME_QUIT() == $buttonPressed) {
             $this->messageBus->dispatch(new AddAdventureLogMessage('Game exit at '.Carbon::now()->toFormattedDateString()));
             $this->playerService->getPlayer()->getHealth()->modifyHealth(
                 $this->playerService->getPlayer()->getHealth()->getHealth(),
@@ -115,33 +120,30 @@ class GameService extends ConsoleOutputGameService
             return true;
         }
 
-        if ('i' == $buttonPressed) {
+        if (KeyboardMapEnum::SHOW_INVENTORY() == $buttonPressed) {
             $this->messageBus->dispatch(new ShowPlayerInventoryMessage($this->playerService->getPlayer()));
 
             return true;
         }
 
-        if ('h' == $buttonPressed) {
+        if (KeyboardMapEnum::USE_HEALING_POTION() == $buttonPressed) {
             $this->messageBus->dispatch(new UseHealingPotionMessage($this->playerService->getPlayer()));
 
             return true;
         }
 
-        if ('p' == $buttonPressed) {
-            $this->messageBus->dispatch(new AddAdventureLogMessage('DEV MODE STATUS: '.$this->isDevMode()));
+        if (KeyboardMapEnum::DEV_MODE_SWITCH() == $buttonPressed) {
             if ($this->isDevMode()) {
                 $devMode = 'false';
             } else {
                 $devMode = 'true';
             }
             $this->setDevMode($devMode);
-            $this->messageBus->dispatch(new AddAdventureLogMessage('Dev mode changed at '.Carbon::now()));
-            $this->messageBus->dispatch(new AddAdventureLogMessage('DEV MODE STATUS: '.$this->isDevMode()));
 
             return true;
         }
 
-        if ('l' == $buttonPressed) {
+        if (KeyboardMapEnum::LEADERBOARDS() == $buttonPressed) {
             $this->printLeaderBoards();
 
             echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
@@ -149,7 +151,7 @@ class GameService extends ConsoleOutputGameService
             return true;
         }
 
-        if ('t' == $buttonPressed) {
+        if (KeyboardMapEnum::CITY_PORTAL() == $buttonPressed) {
             $this->messageBus->dispatch(new CityPortalMessage($this->playerService->getPlayer()));
 
             echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
@@ -158,7 +160,7 @@ class GameService extends ConsoleOutputGameService
         }
 
         if ($this->isDevMode()) {
-            if ('r' == $buttonPressed) {
+            if (KeyboardMapEnum::REGENERATE_MAP() == $buttonPressed) {
                 $this->messageBus->dispatch(new AddAdventureLogMessage('Map regenerated at '.Carbon::now(), MessageClassEnum::DEVELOPER()));
                 $this->messageBus->dispatch(new RegenerateMapMessage());
 
@@ -167,9 +169,25 @@ class GameService extends ConsoleOutputGameService
                 return true;
             }
 
-            if ('m' == $buttonPressed) {
+            if (KeyboardMapEnum::DEV_ROOM_SPAWN() == $buttonPressed) {
                 $this->messageBus->dispatch(new AddAdventureLogMessage('[DEV] DevRoom spawned, have fun! At '.Carbon::now(), MessageClassEnum::DEVELOPER()));
                 $this->messageBus->dispatch(new DevRoomSpawnMessage());
+
+                echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+
+                return true;
+            }
+
+            if (KeyboardMapEnum::GOD_MODE() == $buttonPressed) {
+                $this->messageBus->dispatch(new GodModeActivatedMessage($this->getPlayerService()->getPlayer()));
+
+                echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+
+                return true;
+            }
+
+            if (KeyboardMapEnum::RAISE_DUNGEON_LEVEL() == $buttonPressed) {
+                $this->messageBus->dispatch(new AdvanceDungeonProgressMessage($this->getPlayerService()->getPlayer()));
 
                 echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
 

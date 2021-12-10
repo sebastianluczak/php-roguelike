@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Leaderboard;
 use App\Enum\GameIconEnum;
 use App\Enum\Loot\LootTypeEnum;
 use App\Enum\MessageClassEnum;
@@ -12,7 +11,6 @@ use App\Model\AdventureLog\AdventureLogInterface;
 use App\Model\AdventureLog\AdventureLogMessageInterface;
 use App\Model\Map;
 use App\Model\Player\PlayerInterface;
-use App\Model\Tile\AbstractTile;
 use Carbon\Carbon;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
@@ -56,9 +54,6 @@ class ConsoleOutputGameService
     protected function printMap(Map $map, OutputInterface $output)
     {
         foreach ($map->getMapInstance() as $column) {
-            /**
-             * @var AbstractTile $item
-             * @var  $value */
             $line = '';
             foreach ($column as $value) {
                 $line .= $value->draw();
@@ -80,9 +75,9 @@ class ConsoleOutputGameService
             ' | '.GameIconEnum::GOLD().' '.$player->getGold().
             ' | '.GameIconEnum::KILLS().' '.$player->getKillCount().
             ' | '.GameIconEnum::PLAYER().' '.$player->getLevel()->getLevel().' '.$player->getLevel()->drawExperienceBar().
-            ' | '.$player->getInventory()->getWeaponSlot().
-            ' | '.$player->getInventory()->getArmorSlot().
-            ' | '.$player->getInventory()->getKeystone().
+            ' | '.$player->getInventory()->getWeaponSlot()->getFormattedName().
+            ' | '.$player->getInventory()->getArmorSlot()->getFormattedName().
+            ' | '.$player->getInventory()->getKeystone()->getFormattedName().
             ' | '.GameIconEnum::MAP().' '.$player->getMapLevel().
             ' | '.GameIconEnum::BUFFS().' '.$this->internalClockService->getActiveGameEventsCount().
             ' | '.GameIconEnum::STATS().' '.$player->getStats()->getFormattedStats().'</>';
@@ -122,8 +117,8 @@ class ConsoleOutputGameService
                 $output->writeln('');
             }
         } else {
-            /** @var AdventureLogMessageInterface $newMessage */
             $linesPrinted = 0;
+            /** @var AdventureLogMessageInterface $newMessage */
             foreach ($adventureLog->getNewMessages() as $newMessage) {
                 $output->writeln($newMessage->getMessage());
                 ++$linesPrinted;
@@ -140,10 +135,6 @@ class ConsoleOutputGameService
     protected function printLeaderBoards()
     {
         $entries = array_reverse($this->leaderboardService->getBestScores());
-        /**
-         * @var int         $key
-         * @var Leaderboard $entry
-         */
         $entriesCount = count($entries);
         foreach ($entries as $key => $entry) {
             $this->messageBus->dispatch(

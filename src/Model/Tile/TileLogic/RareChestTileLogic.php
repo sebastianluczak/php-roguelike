@@ -21,6 +21,7 @@ use Irfa\Gatcha\Roll;
 
 class RareChestTileLogic implements TileLogicInterface
 {
+    protected int $scale = 1;
     protected string $rawMessage;
     protected string $messageClass;
     protected LootInterface $loot;
@@ -37,6 +38,7 @@ class RareChestTileLogic implements TileLogicInterface
 
     public function __construct(int $scale, StatsInterface $stats)
     {
+        $this->scale = $scale;
         $itemRolled = Roll::put($this->itemChances)->spin();
         /** @var AbstractLoot $itemObject */
         $itemObject = new $itemRolled($stats);
@@ -58,29 +60,18 @@ class RareChestTileLogic implements TileLogicInterface
 
     public function process(PlayerInterface $player)
     {
+        // TODO, GOOD PRACTICE!!!! Universal via interface
+        //$itemInSlot = $player->getInventory()->getSlotOfType($this->loot->getLootType());
         switch ($this->loot->getLootType()) {
-           case LootTypeEnum::WEAPON():
+            case LootTypeEnum::KEYSTONE():
+            case LootTypeEnum::ARMOR():
+            case LootTypeEnum::WEAPON():
                $player->getInventory()->handleLoot($this->loot);
                if (!$player->getInventory()->hasChanged()) {
-                   // todo InventoryBag support
-                   $this->rawMessage = 'You left '.$this->loot." on ground, you're better equipped (".$player->getInventory()->getWeaponSlot().').';
+                   $this->rawMessage = 'You put '.$this->loot->getFormattedName()." in bag, you're better equipped (".$player->getInventory()->getSlotOfType($this->loot->getLootType())->getFormattedName().').';
                }
                break;
-           case LootTypeEnum::ARMOR():
-               $player->getInventory()->handleLoot($this->loot);
-               if (!$player->getInventory()->hasChanged()) {
-                   // todo InventoryBag support
-                   $this->rawMessage = 'You left '.$this->loot." on ground, you're better equipped (".$player->getInventory()->getArmorSlot().').';
-               }
-               break;
-           case LootTypeEnum::KEYSTONE():
-                $player->getInventory()->handleLoot($this->loot);
-               if (!$player->getInventory()->hasChanged()) {
-                   // todo inventory bag support
-                   $this->rawMessage = 'You left '.$this->loot." on ground, you're better equipped (".$player->getInventory()->getKeystone().').';
-               }
-               break;
-           case LootTypeEnum::POTION():
+            case LootTypeEnum::POTION():
                $player->getInventory()->handleLoot($this->loot);
                break;
        }

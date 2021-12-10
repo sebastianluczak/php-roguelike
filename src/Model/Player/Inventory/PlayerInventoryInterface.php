@@ -8,6 +8,8 @@ interface PlayerInventoryInterface
 {
     public function getWeaponSlot(): LootInterface;
 
+    public function getSlotOfType(string $lootTypeEnum): LootInterface;
+
     public function getArmorSlot(): LootInterface;
 
     public function getKeystone(): LootInterface;

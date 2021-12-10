@@ -3,13 +3,12 @@
 namespace App\Model\Loot\Potion;
 
 use App\Enum\GameIconEnum;
-use App\Model\Stats\Stats;
 
 class HealthPotion extends AbstractPotion
 {
     protected string $name = 'Health potion';
 
-    public function __construct(Stats $stats)
+    public function __construct()
     {
         parent::__construct();
 

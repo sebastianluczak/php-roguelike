@@ -25,7 +25,7 @@ class Annurabi extends Dragon
         $this->creatureClass = CreatureClassEnum::BOSS();
 
         $this->stats = new Stats();
-        $this->stats->modifyStrength(ceil(self::BASE_STRENGTH * ($this->creatureClass->getValue() + sqrt($scale)) / 100));
+        $this->stats->modifyStrength(ceil(self::BASE_STRENGTH * ($this->creatureClass->getValue() + sqrt($scale * 2)) / 100));
         $this->stats->modifyEndurance(ceil(self::BASE_ENDURANCE * ($this->creatureClass->getValue() + sqrt($scale)) / 100));
         $this->stats->modifyLuck(ceil(self::BASE_LUCK * ($this->creatureClass->getValue() + sqrt($scale)) / 100));
         $this->weaponSlot = new CreatureMeleeWeapon($this->stats);

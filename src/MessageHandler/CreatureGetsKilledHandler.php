@@ -9,6 +9,7 @@ use App\Message\CreatureGetsKilledMessage;
 use App\Message\PlayerLevelUpMessage;
 use App\Model\Loot\Gold;
 use App\Service\LoggerService;
+use App\Service\PlayerService;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -16,11 +17,16 @@ class CreatureGetsKilledHandler implements MessageHandlerInterface
 {
     protected LoggerService $loggerService;
     protected MessageBusInterface $messageBus;
+    // TODO rethink PlayerService role in this whole mess.
+    // state of reference to an object is pretty complicated here
+    // we should aim at stateless or not?
+    protected PlayerService $playerService;
 
-    public function __construct(LoggerService $loggerService, MessageBusInterface $messageBus)
+    public function __construct(LoggerService $loggerService, MessageBusInterface $messageBus, PlayerService $playerService)
     {
         $this->loggerService = $loggerService;
         $this->messageBus = $messageBus;
+        $this->playerService = $playerService;
     }
 
     public function __invoke(CreatureGetsKilledMessage $message)
@@ -44,9 +50,12 @@ class CreatureGetsKilledHandler implements MessageHandlerInterface
         $currentPlayerLevel = $player->getLevel()->getLevel();
         $player->increaseKillCount();
 
-        // level up handler
+        // level up handler TODO code duplication, GodModeActivate
         if ($currentPlayerLevel > $initialPlayerLevel) {
-            $this->messageBus->dispatch(new PlayerLevelUpMessage($player));
+            $levelsToGain = $player->getLevel()->getLevel() - $initialPlayerLevel;
+            for ($x = 0; $x < $levelsToGain; ++$x) {
+                $this->messageBus->dispatch(new PlayerLevelUpMessage($player));
+            }
         }
 
         if ($player->getHealth()->getHealth() <= $player->getHealth()->getWarningThreshold()) {

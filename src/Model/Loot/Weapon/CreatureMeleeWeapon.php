@@ -13,4 +13,9 @@ class CreatureMeleeWeapon extends AbstractWeapon
         parent::__construct();
         $this->dice = '3d'.random_int(1, $stats->getStrength()).'+'.$stats->getLuck();
     }
+
+    public function getFormattedName(): string
+    {
+        return $this->name;
+    }
 }

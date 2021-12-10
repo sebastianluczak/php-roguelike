@@ -6,7 +6,6 @@ use App\Enum\Loot\LootTypeEnum;
 use App\Model\Loot\Armor\Shield;
 use App\Model\Loot\Keystone\BrokenKeystone;
 use App\Model\Loot\LootInterface;
-use App\Model\Loot\Potion\HealthPotion;
 use App\Model\Loot\Weapon\Sword;
 use App\Model\Stats\Stats;
 
@@ -27,16 +26,27 @@ class PlayerInventory implements PlayerInventoryInterface
         $this->goldAmount = $stats->getIntelligence() * 10;
         $this->weaponSlot = new Sword($stats);
         $this->armorSlot = new Shield($stats);
-        $this->keyStone = new BrokenKeystone($stats);
+        $this->keyStone = new BrokenKeystone();
         $this->inventoryBag = new InventoryBag();
-        // todo move to gamestart event !!!!
-        $this->inventoryBag->addItem(new HealthPotion($stats));
-        $this->inventoryBag->addItem(new HealthPotion($stats));
     }
 
     public function getWeaponSlot(): LootInterface
     {
         return $this->weaponSlot;
+    }
+
+    public function getSlotOfType(string $lootTypeEnum): LootInterface
+    {
+        switch ($lootTypeEnum) {
+            case LootTypeEnum::WEAPON():
+                return $this->weaponSlot;
+            case LootTypeEnum::ARMOR():
+                return $this->armorSlot;
+            case LootTypeEnum::KEYSTONE():
+                return $this->keyStone;
+        }
+
+        return $this->inventoryBag->getItemsOfType(LootTypeEnum::from($lootTypeEnum))[0];
     }
 
     public function getArmorSlot(): LootInterface

@@ -8,7 +8,8 @@ use Irfa\Gatcha\Roll;
 
 abstract class AbstractLoot implements LootInterface
 {
-    protected string $name;
+    protected int $amount = 1;
+    protected string $name = '[WIP][ITEM][NO_NAMED]';
     protected LootClassEnum $lootClass;
     protected string $lootType;
     protected string $dice;
@@ -114,5 +115,15 @@ abstract class AbstractLoot implements LootInterface
     public function getPriceValue(): int
     {
         return $this->priceValue;
+    }
+
+    public function getFormattedName(): string
+    {
+        return $this->name;
+    }
+
+    public function getAmount(): int
+    {
+        return $this->amount;
     }
 }

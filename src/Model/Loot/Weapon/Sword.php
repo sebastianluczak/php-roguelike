@@ -37,10 +37,10 @@ class Sword extends AbstractWeapon
             $this->dice = '2d'.random_int(1, 3 + $playerStats->getLuck()).'+'.(5 - $this->getLootClass()->getValue() + random_int(0, sqrt($playerStats->getLuck())));
         }
 
-        $this->lootPickupMessage = "You've picked up ".$this->__toString();
+        $this->lootPickupMessage = "You've picked up ".$this->getFormattedName();
     }
 
-    public function __toString(): string
+    public function getFormattedName(): string
     {
         return sprintf(
             '%s %s (%s) %s (~%s)',
