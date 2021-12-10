@@ -28,7 +28,7 @@ class BossRoomTileLogic implements TileLogicInterface
     {
         if ($player->getInventory()->getKeystone()->getAverageRoll() > 3) {
             // FIXME scale is not fine, maybe should be higher or affected by something more?
-            $this->creature = new Annurabi($this->scale * 1.2);
+            $this->creature = new Annurabi((int) ceil($this->scale * 1.2));
         } else {
             $this->event = new ThiefArrivedGameEvent($player);
         }

@@ -24,7 +24,7 @@ class CorridorTileLogic implements TileLogicInterface
         $this->rawMessage = '';
         $this->messageClass = MessageClassEnum::STANDARD();
 
-        $scale = ceil(1 + ceil($scale * 0.5));
+        $scale = (int) ceil(1 + ceil($scale * 0.5));
 
         // allows more creatures to be spawned on later levels
         // should make SMALL difference

@@ -26,8 +26,8 @@ class ShopTileLogic implements TileLogicInterface
     public function process(PlayerInterface $player)
     {
         $amountRequired = $player->getLevel()->getLevel() * random_int(
-            50 - (sqrt($player->getStats()->getCharisma() + 2)),
-            150 - (sqrt($player->getStats()->getCharisma() + 2))
+            50 - (int) (sqrt($player->getStats()->getCharisma() + 2)),
+            150 - (int) (sqrt($player->getStats()->getCharisma() + 2))
         );
 
         if ($player->getGold() >= $amountRequired) {

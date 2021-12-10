@@ -25,9 +25,9 @@ class Annurabi extends Dragon
         $this->creatureClass = CreatureClassEnum::BOSS();
 
         $this->stats = new Stats();
-        $this->stats->modifyStrength(ceil(self::BASE_STRENGTH * ($this->creatureClass->getValue() + sqrt($scale * 2)) / 100));
-        $this->stats->modifyEndurance(ceil(self::BASE_ENDURANCE * ($this->creatureClass->getValue() + sqrt($scale)) / 100));
-        $this->stats->modifyLuck(ceil(self::BASE_LUCK * ($this->creatureClass->getValue() + sqrt($scale)) / 100));
+        $this->stats->modifyStrength((int) (ceil(self::BASE_STRENGTH * ($this->creatureClass->getValue() + sqrt($scale * 2)) / 100)));
+        $this->stats->modifyEndurance((int) (ceil(self::BASE_ENDURANCE * ($this->creatureClass->getValue() + sqrt($scale)) / 100)));
+        $this->stats->modifyLuck((int) (ceil(self::BASE_LUCK * ($this->creatureClass->getValue() + sqrt($scale)) / 100)));
         $this->weaponSlot = new CreatureMeleeWeapon($this->stats);
         $this->armorSlot = new CreatureGenericArmor($this->stats);
         $this->name = '<fg=bright-red>'.GameIconEnum::SKULL().' '.self::COMMON_NAME.'</>';
@@ -38,7 +38,7 @@ class Annurabi extends Dragon
 
     public function getLootInventoryBag(PlayerInterface $player): InventoryBagInterface
     {
-        $this->loot->addItem(new Gold(ceil(sqrt($this->scale))));
+        $this->loot->addItem(new Gold((int) ceil(sqrt($this->scale))));
 
         return $this->loot;
     }

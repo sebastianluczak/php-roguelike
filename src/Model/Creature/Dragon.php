@@ -24,9 +24,9 @@ class Dragon extends AbstractCreature
         $this->scale = $scale;
 
         $this->stats = new Stats();
-        $this->stats->modifyStrength(ceil(self::BASE_STRENGTH * ($this->creatureClass->getValue() / 100)) * sqrt($scale));
-        $this->stats->modifyEndurance(ceil(self::BASE_ENDURANCE * ($this->creatureClass->getValue() / 100)) * sqrt($scale));
-        $this->stats->modifyLuck(ceil(self::BASE_LUCK * ($this->creatureClass->getValue() / 100)) * sqrt($scale));
+        $this->stats->modifyStrength((int) (ceil(self::BASE_STRENGTH * ($this->creatureClass->getValue() / 100)) * sqrt($scale)));
+        $this->stats->modifyEndurance((int) (ceil(self::BASE_ENDURANCE * ($this->creatureClass->getValue() / 100)) * sqrt($scale)));
+        $this->stats->modifyLuck((int) (ceil(self::BASE_LUCK * ($this->creatureClass->getValue() / 100)) * sqrt($scale)));
         $this->weaponSlot = new CreatureMeleeWeapon($this->stats);
         $this->armorSlot = new CreatureGenericArmor($this->stats);
 
@@ -41,7 +41,7 @@ class Dragon extends AbstractCreature
 
     public function getLootInventoryBag(PlayerInterface $player): InventoryBagInterface
     {
-        $this->loot->addItem(new Gold(3 * $this->scale));
+        $this->loot->addItem(new Gold((int) ceil(3 * $this->scale)));
 
         return $this->loot;
     }
