@@ -3,10 +3,10 @@
 namespace App\Model\Tile;
 
 use App\Model\Stats\StatsInterface;
-use App\Model\Tile\TileLogic\ShopTileLogic;
+use App\Model\Tile\TileLogic\StrangeManTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
 
-class ShopTile extends AbstractTile
+class StrangeManTile extends AbstractTile
 {
     public function isInteractable(): bool
     {
@@ -30,7 +30,7 @@ class ShopTile extends AbstractTile
 
     public function handleLogic(int $scale, StatsInterface $stats): TileLogicInterface
     {
-        return new ShopTileLogic($scale, $stats);
+        return new StrangeManTileLogic($scale, $stats);
     }
 
     public function draw(): string

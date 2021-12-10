@@ -2,16 +2,17 @@
 
 namespace App\Model\Tile\City;
 
+use App\Model\Npc\City\Shopkeeper;
 use App\Model\Player\PlayerInterface;
 use App\Model\Stats\StatsInterface;
 use App\Model\Tile\AbstractTile;
-use App\Model\Tile\TileInteraction\EmptyTileInteraction;
+use App\Model\Tile\TileInteraction\NpcTileInteraction;
 use App\Model\Tile\TileInteraction\TileInteractionInterface;
 use App\Model\Tile\TileLogic\NoLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
 use App\Traits\Tile\PermanentTileTrait;
 
-class AltarTile extends AbstractTile
+class ShopTile extends AbstractTile
 {
     use PermanentTileTrait;
 
@@ -42,11 +43,11 @@ class AltarTile extends AbstractTile
 
     public function handleInteraction(PlayerInterface $player): TileInteractionInterface
     {
-        return new EmptyTileInteraction();
+        return new NpcTileInteraction($player, new Shopkeeper());
     }
 
     public function draw(): string
     {
-        return '<fg=red>¥</>';
+        return '<fg=yellow>æ</>';
     }
 }

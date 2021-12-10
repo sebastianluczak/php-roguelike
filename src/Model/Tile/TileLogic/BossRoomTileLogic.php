@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\MessageClassEnum;
+use App\Helper\ScaleHelper;
 use App\Model\Creature\Boss\Annurabi;
 use App\Model\Creature\CreatureInterface;
 use App\Model\Player\PlayerInterface;
@@ -30,7 +31,7 @@ class BossRoomTileLogic implements TileLogicInterface
     {
         if ($player->getInventory()->getKeystone()->getAverageRoll() > 3) {
             // FIXME scale is not fine, maybe should be higher or affected by something more?
-            $this->creature = new Annurabi((int) ceil($this->scale * 1.2));
+            $this->creature = new Annurabi(ScaleHelper::bossEncounterScale($this->scale, 1.2));
         } else {
             $this->event = new ThiefArrivedGameEvent($player);
         }

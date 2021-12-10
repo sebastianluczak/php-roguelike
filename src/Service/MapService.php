@@ -8,6 +8,7 @@ use App\Exception\MapFiniteException;
 use App\Exception\NewLevelException;
 use App\Exception\NotValidMoveException;
 use App\Generator\Level\DefaultBoxRoomGenerator;
+use App\Helper\ScaleHelper;
 use App\Message\AddAdventureLogMessage;
 use App\Message\CreatureEncounteredMessage;
 use App\Message\TileInteractionMessage;
@@ -26,8 +27,9 @@ use App\Model\Tile\CorridorTile;
 use App\Model\Tile\EmptyTile;
 use App\Model\Tile\ExitTile;
 use App\Model\Tile\RareChestTile;
-use App\Model\Tile\ShopTile;
 use App\Model\Tile\SpawnTile;
+use App\Model\Tile\StrangeManTile;
+use App\Traits\Tile\PermanentTileTrait;
 use Exception;
 use Irfa\Gatcha\Roll;
 use Symfony\Component\Console\Terminal;
@@ -49,7 +51,7 @@ class MapService
     protected array $mapErrors;
     private array $tilesAvailableToSpawnWithChances = [
         BossRoomTile::class => 1, // change to 100 to have some flashback to '98 and Minesweeper :P
-        ShopTile::class => 8,
+        StrangeManTile::class => 8,
         AltarTile::class => 12,
         RareChestTile::class => 20,
         ChestTile::class => 20,
@@ -261,6 +263,19 @@ class MapService
 
         // remove player from previous tile
         if ($this->getMap() instanceof CityMap) {
+            if (in_array(PermanentTileTrait::class, array_keys((new \ReflectionClass(get_class($tile)))->getTraits()))) {
+                while (true) {
+                    // todo sometimes this fails in smaller rooms
+                    // as it's PoC i'll leave it as it is
+                    $xCoordinateRandom = random_int(-1, 1);
+                    $yCoordinateRandom = random_int(-1, 1);
+                    if ($this->getCityMap()->getTile($xcoordinate - $xCoordinateRandom, $ycoordinate - $yCoordinateRandom)->isPassable()) {
+                        $this->getMap()->replaceTile($tile, $xcoordinate - $xCoordinateRandom, $ycoordinate - $yCoordinateRandom);
+
+                        break;
+                    }
+                }
+            }
             $this->getMap()->replaceTile(new PavementTile(), $spawnTile[0], $spawnTile[1]);
         } else {
             $this->getMap()->replaceTile(new CorridorTile(), $spawnTile[0], $spawnTile[1]);
@@ -393,8 +408,7 @@ class MapService
      */
     public function handleTileLogic(AbstractTile $tile, PlayerInterface $player, int $mapLevel): void
     {
-        $scale = $mapLevel + $player->getLevel()->getLevel();
-
+        $scale = ScaleHelper::basicScale($mapLevel, $player->getLevel()->getLevel());
         $tileLogic = $tile->handleLogic($scale, $player->getStats());
 
         if ($tile->hasLogic()) {

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Model\Map\MapInterface;
 use App\Model\Tile\AbstractTile;
 use App\Model\Tile\EmptyTile;
 
-class Map
+class Map implements MapInterface
 {
     protected string $name;
     protected int $width;

@@ -13,7 +13,7 @@ use App\Model\RandomEvent\PleasedTheGodsGameEvent;
 use App\Model\RandomEvent\RandomEventInterface;
 use App\Model\Stats\StatsInterface;
 
-class ShopTileLogic implements TileLogicInterface
+class StrangeManTileLogic implements TileLogicInterface
 {
     protected SkillBoost $skillBoost;
     protected string $rawMessage;

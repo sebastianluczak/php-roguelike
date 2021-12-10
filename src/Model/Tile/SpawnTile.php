@@ -15,7 +15,7 @@ class SpawnTile extends AbstractTile
 
     public function isPassable(): bool
     {
-        return true;
+        return false;
     }
 
     public function isSpawn(): bool

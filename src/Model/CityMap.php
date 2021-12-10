@@ -4,7 +4,7 @@ namespace App\Model;
 
 use App\Model\Tile\City\PavementTile;
 
-class CityMap extends Map
+final class CityMap extends Map
 {
     protected function createMapInstance(): void
     {

@@ -4,26 +4,29 @@ size:
   width: 140
 
 places:
+  shop:
+    generation_class: App\Generator\Level\DefaultBoxRoomGenerator
+    logic_tile: App\Model\Tile\City\ShopTile
+    size: [ 7, 7 ]
+    starting_point: [ 21, 49 ]
+
   church:
     generation_class: App\Generator\Level\DefaultBoxRoomGenerator
     logic_tile: App\Model\Tile\City\AltarTile
-    size: [ 8, 8 ]
-    starting_point: [ 9, 13 ]
+    size: [ 9, 9 ]
+    starting_point: [ 3, 6 ]
 
   stables:
     generation_class: App\Generator\Level\DefaultBoxRoomGenerator
-    logic_tile: App\Model\Tile\City\AltarTile
-    size: [ 8, 8 ]
+    size: [ 9, 9 ]
     starting_point: [ 2, 49 ]
 
   tavern:
     generation_class: App\Generator\Level\DefaultBoxRoomGenerator
-    logic_tile: App\Model\Tile\City\AltarTile
-    size: [ 8, 8 ]
+    size: [ 9, 9 ]
     starting_point: [ 21, 12 ]
 
   cathedral:
     generation_class: App\Generator\Level\DefaultBoxRoomGenerator
-    logic_tile: App\Model\Tile\City\AltarTile
-    size: [ 8, 8 ]
+    size: [ 9, 9 ]
     starting_point: [ 11, 82 ]

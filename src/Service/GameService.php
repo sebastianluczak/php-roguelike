@@ -19,6 +19,8 @@ use App\Message\RegenerateMapMessage;
 use App\Message\ShowPlayerInventoryMessage;
 use App\Message\UseHealingPotionMessage;
 use App\Model\Dialogue\DialogueInterface;
+use App\Model\Dialogue\EmptyDialogue;
+use App\Model\Map;
 use App\Model\Player\PlayerInterface;
 use Carbon\Carbon;
 use Symfony\Component\Console\Command\Command;
@@ -36,50 +38,13 @@ class GameService extends ConsoleOutputGameService
             if ($player->getHealth()->getHealth() <= 0) {
                 break;
             }
+
             if ($player->getInDialogue()) {
-                // player has dialogue event
-                // how to get current dialogue?
-                $dialogue = $player->getCurrentDialogue();
-                if ($dialogue instanceof DialogueInterface) {
-                    $this->messageBus->dispatch(new AddAdventureLogMessage($dialogue->print(), MessageClassEnum::DIALOGUE()));
-                    $mapObject = $this->mapService->getMap();
-                    $this->printPlayerInfo($player, $output);
-                    $this->printMap($mapObject, $output);
-                    $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
-
-                    $buttonPressed = $this->getPlayerCommand();
-                    $message = $dialogue->handleButtonPress($buttonPressed);
-                    if ($message instanceof MessageInterface) {
-                        $message->setPlayer($player);
-                        $this->messageBus->dispatch($message);
-                        $player->setInDialogue(false);
-                        $player->setCurrentDialogue(null);
-                    }
-                }
-
-                echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+                $this->handlePlayerHasDialogueEvent($player, $output, $mapObject, $buttonPressed);
             } else {
-                $this->internalClockService->tick();
-
-                $mapObject = $this->mapService->getMap();
-                $this->printPlayerInfo($player, $output);
-                $this->printMap($mapObject, $output);
-                $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
-
-                $buttonPressed = $this->getPlayerCommand();
-                if (!$this->handleUncommonButtonPresses($buttonPressed)) {
-                    try {
-                        $this->mapService->movePlayer($player, $buttonPressed, $this->mapService->getMapLevel());
-                    } catch (NotValidMoveException $e) {
-                        $this->messageBus->dispatch(new AddAdventureLogMessage("You can't move in this direction"));
-                    } catch (NewLevelException $e) {
-                        // todo move to dispatch queue
-                        $this->getMapService()->increaseMapLevel();
-                        $this->getMapService()->createNewLevel();
-                    }
-                }
-                echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+                $this->handleGameTurn($player, $output, $mapObject, $buttonPressed);
             }
+            echo chr(27).chr(91).'H'.chr(27).chr(91).'J';
         }
 
         if (isset($mapObject)) {
@@ -199,5 +164,53 @@ class GameService extends ConsoleOutputGameService
         }
 
         return false;
+    }
+
+    private function handlePlayerHasDialogueEvent(
+        PlayerInterface $player,
+        OutputInterface $output,
+        ?Map\MapInterface &$mapObject,
+        ?string &$buttonPressed): void
+    {
+        $dialogue = $player->getCurrentDialogue();
+        if ($dialogue instanceof DialogueInterface) {
+            if (!$dialogue instanceof EmptyDialogue) {
+                $this->messageBus->dispatch(new AddAdventureLogMessage($dialogue->print(), MessageClassEnum::DIALOGUE()));
+                $mapObject = $this->mapService->getMap();
+                $this->printPlayerInfo($player, $output);
+                $this->printMap($mapObject, $output);
+                $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
+
+                $buttonPressed = $this->getPlayerCommand();
+                $message = $dialogue->handleButtonPress($buttonPressed);
+                if ($message instanceof MessageInterface) {
+                    $message->setPlayer($player);
+                    $this->messageBus->dispatch($message);
+                }
+            }
+            $player->setInDialogue(false);
+            $player->setCurrentDialogue(null);
+        }
+    }
+
+    private function handleGameTurn(PlayerInterface $player, OutputInterface $output, ?Map\MapInterface &$mapObject, ?string &$buttonPressed): void
+    {
+        $this->internalClockService->tick();
+
+        $mapObject = $this->mapService->getMap();
+        $this->printPlayerInfo($player, $output);
+        $this->printMap($mapObject, $output);
+        $this->printAdventureLog($this->adventureLogService->getAdventureLog(), $output);
+
+        $buttonPressed = $this->getPlayerCommand();
+        if (!$this->handleUncommonButtonPresses($buttonPressed)) {
+            try {
+                $this->mapService->movePlayer($player, $buttonPressed, $this->mapService->getMapLevel());
+            } catch (NotValidMoveException $e) {
+                $this->messageBus->dispatch(new AddAdventureLogMessage("You can't move in this direction"));
+            } catch (NewLevelException $e) {
+                $this->messageBus->dispatch(new AdvanceDungeonProgressMessage($this->getPlayerService()->getPlayer()));
+            }
+        }
     }
 }

@@ -25,11 +25,13 @@ class DefaultBoxRoomGenerator
             for ($y = $this->roomDefinition['starting_point'][1]; $y < $this->roomDefinition['starting_point'][1] + $this->roomDefinition['size'][1]; ++$y) {
                 if ($this->isSpawnableArea($x, $y) && !empty($this->roomDefinition['logic_tile'])) {
                     $roomLogicTile = $this->roomDefinition['logic_tile'];
-                    $tileToAdd = new $roomLogicTile();
-                    if ($tileToAdd instanceof AbstractTile) {
-                        $this->map->replaceTile($tileToAdd, $x, $y);
-                    } else {
-                        throw new \LogicException('Tile should always extend AbstractTile, in: '.__METHOD__);
+                    if (is_string($roomLogicTile)) {
+                        $tileToAdd = new $roomLogicTile();
+                        if ($tileToAdd instanceof AbstractTile) {
+                            $this->map->replaceTile($tileToAdd, $x - 1, $y);
+                        } else {
+                            throw new \LogicException('Tile should always extend AbstractTile, in: '.__METHOD__);
+                        }
                     }
                 }
                 if ($this->isEdgeOfRoom($x, $y)) {
