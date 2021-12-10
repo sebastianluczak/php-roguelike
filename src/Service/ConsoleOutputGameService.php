@@ -150,6 +150,7 @@ class ConsoleOutputGameService
     protected function stty($options)
     {
         exec($cmd = "stty $options", $output, $el);
+        /* @phpstan-ignore-next-line */
         $el and exit("exec($cmd) failed");
 
         return implode(' ', $output);

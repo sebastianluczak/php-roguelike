@@ -1,9 +1,8 @@
-includes:
-	- vendor/timeweb/phpstan-enum/extension.neon
-
 parameters:
-	level: 3
+	level: 4
 	checkMissingIterableValueType: false
+	doctrine:
+	    objectManagerLoader: tests/object-manager.php
 	universalObjectCratesClasses:
 	    - RPGFaker\RPGFaker
 	paths:
