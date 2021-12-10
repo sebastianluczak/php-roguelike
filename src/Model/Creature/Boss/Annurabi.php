@@ -32,7 +32,7 @@ class Annurabi extends Dragon
         $this->armorSlot = new CreatureGenericArmor($this->stats);
         $this->name = '<fg=bright-red>'.GameIconEnum::SKULL().' '.self::COMMON_NAME.'</>';
 
-        $this->health = ceil($this->stats->getEndurance() * ceil($scale / 2) * ($this->creatureClass->getValue() / 100));
+        $this->health = (int) ceil($this->stats->getEndurance() * ceil($scale / 2) * ($this->creatureClass->getValue() / 100));
         $this->experience = $this->createRandomNumberInRangeWithScale(100, 200, $scale);
     }
 

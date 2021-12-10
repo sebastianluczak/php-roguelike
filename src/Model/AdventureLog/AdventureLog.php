@@ -10,7 +10,7 @@ class AdventureLog implements AdventureLogInterface
     public const MAX_NUMBER_OF_MESSAGES = 12;
 
     /**
-     * @var AdventureLogMessage[]
+     * @var AdventureLogMessageInterface[]
      */
     protected array $messages;
 
@@ -28,7 +28,7 @@ class AdventureLog implements AdventureLogInterface
     }
 
     /**
-     * @return AdventureLogMessage[]
+     * @return AdventureLogMessageInterface[]
      */
     public function getNewMessages(): array
     {

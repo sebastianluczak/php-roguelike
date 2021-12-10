@@ -46,7 +46,7 @@ class PlayerHealth implements PlayerHealthInterface
 
     public function getWarningThreshold(): int
     {
-        return ceil($this->getMaxHealth() / 4);
+        return (int) ceil($this->getMaxHealth() / 4);
     }
 
     public function getHealth(): int

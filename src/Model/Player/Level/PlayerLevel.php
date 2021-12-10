@@ -17,7 +17,7 @@ class PlayerLevel implements PlayerLevelInterface
     {
         $level = sqrt($this->experiencePoints) / 7;
 
-        return ceil($level);
+        return (int) ceil($level);
     }
 
     public function getPercentageOfLevelExpProgress(): float

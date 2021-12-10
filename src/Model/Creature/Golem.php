@@ -35,7 +35,7 @@ class Golem extends AbstractCreature
         } else {
             $this->name = self::COMMON_NAME.' - '.$this->getRawName();
         }
-        $this->health = ceil($this->stats->getEndurance() * ceil($scale / 2) * ($this->creatureClass->getValue() / 100));
+        $this->health = (int) ceil($this->stats->getEndurance() * ceil($scale / 2) * ($this->creatureClass->getValue() / 100));
         $this->experience = $this->createRandomNumberInRangeWithScale(20, 50, $scale);
     }
 

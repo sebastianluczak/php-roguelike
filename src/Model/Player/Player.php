@@ -19,15 +19,10 @@ class Player implements PlayerInterface
     protected int $mapLevel = 1;
     protected bool $inDialogue = false;
 
-    /** @var PlayerCoordinates */
     protected PlayerCoordinatesInterface $coordinates;
-    /** @var PlayerHealth */
     protected PlayerHealthInterface $health;
-    /** @var StatsInterface|Stats */
     protected StatsInterface $stats;
-    /** @var PlayerInventory */
     protected PlayerInventoryInterface $inventory;
-    /** @var PlayerLevel */
     protected PlayerLevelInterface $level;
     protected ?DialogueInterface $currentDialogue;
 
