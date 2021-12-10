@@ -27,7 +27,7 @@ class ThiefArrivedGameEvent extends AbstractRandomEvent
 
     public function getDescription(): string
     {
-        return "You spotted a thief searching through your bags.";
+        return 'You spotted a thief searching through your bags.';
     }
 
     public function applyEffect(): void

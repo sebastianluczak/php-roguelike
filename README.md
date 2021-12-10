@@ -1,6 +1,6 @@
 # php-roguelike
+![Logo](docs/images/logo.png)
 
-Worst game on the planet.
 
 ## What is this?
 
@@ -21,8 +21,16 @@ This game is done as a part of side-project to show'up some programming skills i
 
 ## Purpose
 
-Ok, so I'm a middle aged PHP developer looking for a project or a job. This project should give me head start. :)
-Also, it's so fun to fiddle with some side-project and have a time sink for myself.
+It's so fun to fiddle with some side-project and have a time sink for myself. I was missing side project and playground/testing area to experiment and keep on track with everything.
+I'll produce a roadmap in some time to see some final goal and keep myself motivated.
+
+## Influences
+
+Ok, so in fact I've gathered a few ideas from different games. Most notably you'll see elements from:
+- Dungeons and Dragons
+- Fallout
+- ADOM
+- Enter the Gungeon
 
 ## Run & build
 
@@ -40,6 +48,7 @@ bin/build.sh
 
 ## Keymap
 
+See: [Keymap](https://github.com/sebastianluczak/php-roguelike/blob/feature/cities-dlc/src/Enum/Game/KeyboardMapEnum.php)
 ```shell
 W/A/S/D - Movement of character
 I - Player Interface (WIP)
@@ -53,6 +62,8 @@ R - regenerates the level
 P - switches DevMode (required for some output and commands)
 R - regenerate a map (DEV_MODE required) 
 M - DevRoom :D (╯°□°)╯︵ ┻━┻ 
+G - God Mode!
+K - Increase MapLevel
 ```
 
 ## Win/Lose conditions
@@ -61,7 +72,7 @@ As all roguelikes - you'll die eventually. It's just part of the process. Your s
 
 ## Legend
 
-There're multiple tiles with scattered logic all around the board.
+There are multiple tiles with scattered logic all around the board.
 
 ```shell
 # - Chest or RareChest - guaranteed drop of Item, Gold or Health Potion
@@ -69,7 +80,7 @@ $ - Mysterious Man - can do good things for you
 * - Boss Fight - be prepared!
 o - Altar, drop some gold for a buff or curse
 ```
-TODO: {LEGEND_OF_TILES_AND_SUMMARY_OF_MECHANICS}
+Go figure the rest by yourself, see [here](https://github.com/sebastianluczak/php-roguelike/tree/feature/cities-dlc/src/Model/Tile) to get started. No documentation folks :).
 
 ## Win strategy
 1. Go for Luck > 1

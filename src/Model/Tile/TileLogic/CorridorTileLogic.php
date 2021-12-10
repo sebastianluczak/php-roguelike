@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\MessageClassEnum;
@@ -15,19 +17,21 @@ use App\Model\RandomEvent\ThiefArrivedGameEvent;
 class CorridorTileLogic implements TileLogicInterface
 {
     protected string $rawMessage;
-    protected string $messageClass;
+    protected MessageClassEnum $messageClass;
     protected ?CreatureInterface $creature;
     protected RandomEventInterface $event;
 
     public function __construct(int $scale)
     {
-        $this->rawMessage = "";
+        $this->rawMessage = '';
         $this->messageClass = MessageClassEnum::STANDARD();
 
-        $scale = ceil(1 + ceil($scale * 0.5));
+        // FIXME very important scale! We need to move it to ScaleHelper
+        $scale = (int) ceil(1 + ceil($scale * 0.5));
 
         // allows more creatures to be spawned on later levels
         // should make SMALL difference
+        // FIXME check if this is correct
         $maxChance = 700 - $scale;
         if ($maxChance <= 100) {
             $maxChance = 100;
@@ -35,21 +39,21 @@ class CorridorTileLogic implements TileLogicInterface
         $roll = random_int(0, $maxChance);
         if ($roll <= 1) {
             $this->creature = new Dragon($scale);
-        } else if ($roll <= 5) {
+        } elseif ($roll <= 5) {
             $this->creature = new Golem($scale);
-        } else if ($roll <= 50) {
+        } elseif ($roll <= 50) {
             $this->creature = new Goblin($scale);
-        } else if ($roll <= 200) {
+        } elseif ($roll <= 200) {
             $this->creature = new Imp($scale);
         } else {
             $this->creature = null;
-            $this->rawMessage = "Nothing happens ...";
+            $this->rawMessage = 'Nothing happens ...';
         }
     }
 
-    public function process(PlayerInterface $player)
+    public function process(PlayerInterface $player): void
     {
-        if (random_int(0, 1000) == 0) {
+        if (0 == random_int(0, 1000)) {
             $this->event = new ThiefArrivedGameEvent($player);
         }
     }
@@ -64,7 +68,7 @@ class CorridorTileLogic implements TileLogicInterface
         return $this->rawMessage;
     }
 
-    public function getAdventureLogMessageClass(): string
+    public function getAdventureLogMessageClass(): MessageClassEnum
     {
         return $this->messageClass;
     }

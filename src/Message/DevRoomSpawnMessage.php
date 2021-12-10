@@ -4,9 +4,8 @@ namespace App\Message;
 
 /**
  * Used at:
- * DevRoomSpawnHandler::__invoke()
+ * DevRoomSpawnHandler::__invoke().
  */
 class DevRoomSpawnMessage
 {
-
 }

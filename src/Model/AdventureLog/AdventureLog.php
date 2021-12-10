@@ -2,23 +2,17 @@
 
 namespace App\Model\AdventureLog;
 
-// todo change to repository (it's not stupid idea after all)
-use App\Service\LoggerService;
-
 class AdventureLog implements AdventureLogInterface
 {
     public const MAX_NUMBER_OF_MESSAGES = 12;
 
     /**
-     * @var AdventureLogMessage[]
+     * @var AdventureLogMessageInterface[]
      */
     protected array $messages;
 
-    protected LoggerService $loggerService;
-
-    public function __construct(LoggerService $loggerService)
+    public function __construct()
     {
-        $this->loggerService = $loggerService;
         $this->messages = [];
     }
 
@@ -28,7 +22,7 @@ class AdventureLog implements AdventureLogInterface
     }
 
     /**
-     * @return AdventureLogMessage[]
+     * @return AdventureLogMessageInterface[]
      */
     public function getNewMessages(): array
     {
@@ -41,7 +35,7 @@ class AdventureLog implements AdventureLogInterface
         return array_reverse($this->messages);
     }
 
-    public function addMessage(AdventureLogMessageInterface $message)
+    public function addMessage(AdventureLogMessageInterface $message): void
     {
         $this->messages[] = $message;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Creature;
 
 use App\Enum\Creature\CreatureClassEnum;
@@ -32,7 +34,7 @@ abstract class AbstractCreature implements CreatureInterface
         $classEnumChances = [
             CreatureClassEnum::NORMAL()->getKey() => 30,
             CreatureClassEnum::ELITE()->getKey() => 2,
-            CreatureClassEnum::LEGENDARY()->getKey() => 1
+            CreatureClassEnum::LEGENDARY()->getKey() => 1,
         ];
 
         $classEnumChancesSpin = Roll::put($classEnumChances)->spin();
@@ -41,7 +43,9 @@ abstract class AbstractCreature implements CreatureInterface
         $nameFaker = new RPGFaker(['count' => 1]);
         $this->faker = FakerFactory::create('ja_JP');
         $this->loot = new InventoryBag();
-        $this->rawName = $nameFaker->name;
+        if (is_string($generatedName = $nameFaker->name)) {
+            $this->rawName = $generatedName;
+        }
     }
 
     public function getExperience(): int
@@ -59,7 +63,7 @@ abstract class AbstractCreature implements CreatureInterface
         return $this->health;
     }
 
-    public function decreaseHealth(int $playerHitDamage)
+    public function decreaseHealth(int $playerHitDamage): void
     {
         $this->health = $this->health - $playerHitDamage;
     }
@@ -69,7 +73,7 @@ abstract class AbstractCreature implements CreatureInterface
         return $this->scale;
     }
 
-    public function getRawName()
+    public function getRawName(): string
     {
         return $this->rawName;
     }
@@ -94,9 +98,6 @@ abstract class AbstractCreature implements CreatureInterface
         return $this->armorSlot;
     }
 
-    /**
-     * @return CreatureClassEnum
-     */
     public function getCreatureClass(): CreatureClassEnum
     {
         return $this->creatureClass;

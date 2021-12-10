@@ -17,6 +17,7 @@ class PlayerCoordinates implements PlayerCoordinatesInterface
     {
         return $this->x;
     }
+
     public function getY(): int
     {
         return $this->y;

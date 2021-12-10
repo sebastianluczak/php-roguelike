@@ -19,9 +19,6 @@ class LeaderboardRepository extends ServiceEntityRepository
         parent::__construct($registry, Leaderboard::class);
     }
 
-    /**
-     * @return array|Leaderboard[]
-     */
     public function getBest(): array
     {
         $query = $this->createQueryBuilder('l')

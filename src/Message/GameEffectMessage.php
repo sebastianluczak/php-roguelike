@@ -13,9 +13,6 @@ class GameEffectMessage
         $this->event = $event;
     }
 
-    /**
-     * @return RandomEventInterface
-     */
     public function getEvent(): RandomEventInterface
     {
         return $this->event;

@@ -1,0 +1,12 @@
+parameters:
+	level: 9
+	checkMissingIterableValueType: false
+	checkGenericClassInNonGenericObjectType: false
+	doctrine:
+	    objectManagerLoader: tests/object-manager.php
+	universalObjectCratesClasses:
+	    - RPGFaker\RPGFaker
+	paths:
+		- src
+	ignoreErrors:
+	    - '#. but returns mixed.#'

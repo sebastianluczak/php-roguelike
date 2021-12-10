@@ -35,6 +35,6 @@ class ExitTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<fg=bright-blue>&</>";
+        return '<fg=bright-blue>&</>';
     }
 }

@@ -4,15 +4,20 @@ namespace App\Model\Player\Inventory;
 
 use App\Enum\Loot\LootTypeEnum;
 use App\Model\Loot\LootInterface;
+use App\Model\Loot\Potion\HealthPotion;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class InventoryBag implements InventoryBagInterface
 {
+    /** @var ArrayCollection<LootInterface> */
     protected ArrayCollection $items;
 
     public function __construct()
     {
         $this->items = new ArrayCollection();
+
+        $this->addItem(new HealthPotion());
+        $this->addItem(new HealthPotion());
     }
 
     public function addItem(LootInterface $item): InventoryBagInterface
@@ -30,13 +35,12 @@ class InventoryBag implements InventoryBagInterface
     }
 
     /**
-     * @param LootTypeEnum $lootTypeEnum
      * @return array|LootInterface[]
      */
     public function getItemsOfType(LootTypeEnum $lootTypeEnum): array
     {
         $searchedItems = $this->items->filter(function (LootInterface $loot) use ($lootTypeEnum) {
-           return $loot->getLootType() == $lootTypeEnum->getValue();
+            return $loot->getLootType() == $lootTypeEnum->getValue();
         });
 
         return $searchedItems->toArray();
@@ -47,9 +51,6 @@ class InventoryBag implements InventoryBagInterface
         return $this->items->count();
     }
 
-    /**
-     * @return ArrayCollection
-     */
     public function getItems(): ArrayCollection
     {
         return $this->items;

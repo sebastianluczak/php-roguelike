@@ -6,35 +6,58 @@ use App\Enum\Loot\LootTypeEnum;
 use App\Model\Loot\Armor\Shield;
 use App\Model\Loot\Keystone\BrokenKeystone;
 use App\Model\Loot\LootInterface;
-use App\Model\Loot\Potion\HealthPotion;
 use App\Model\Loot\Weapon\Sword;
 use App\Model\Stats\Stats;
 
 class PlayerInventory implements PlayerInventoryInterface
 {
     protected InventoryBagInterface $inventoryBag;
+    /** @var LootInterface|Sword */
     protected LootInterface $weaponSlot;
     protected LootInterface $armorSlot;
     protected LootInterface $keyStone;
     protected bool $hasChanged;
     protected int $goldAmount;
 
-    public function __construct(Stats $stats)
+    public function __construct()
     {
+        $stats = new Stats();
         $this->hasChanged = false;
         $this->goldAmount = $stats->getIntelligence() * 10;
         $this->weaponSlot = new Sword($stats);
         $this->armorSlot = new Shield($stats);
-        $this->keyStone = new BrokenKeystone($stats);
+        $this->keyStone = new BrokenKeystone();
         $this->inventoryBag = new InventoryBag();
-        // todo move to gamestart event !!!!
-        $this->inventoryBag->addItem(new HealthPotion($stats));
-        $this->inventoryBag->addItem(new HealthPotion($stats));
     }
 
     public function getWeaponSlot(): LootInterface
     {
         return $this->weaponSlot;
+    }
+
+    public function getItemsWeight(): int
+    {
+        $weight = 0;
+        /** @var LootInterface $itemInBag */
+        foreach ($this->getInventoryBag()->getItems() as $itemInBag) {
+            $weight += $itemInBag->getWeight();
+        }
+
+        return $weight + $this->weaponSlot->getWeight() + $this->armorSlot->getWeight() + $this->keyStone->getWeight();
+    }
+
+    public function getSlotOfType(string $lootTypeEnum): LootInterface
+    {
+        switch ($lootTypeEnum) {
+            case LootTypeEnum::WEAPON():
+                return $this->weaponSlot;
+            case LootTypeEnum::ARMOR():
+                return $this->armorSlot;
+            case LootTypeEnum::KEYSTONE():
+                return $this->keyStone;
+        }
+
+        return $this->inventoryBag->getItemsOfType(LootTypeEnum::from($lootTypeEnum))[0];
     }
 
     public function getArmorSlot(): LootInterface
@@ -116,9 +139,6 @@ class PlayerInventory implements PlayerInventoryInterface
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getGoldAmount(): int
     {
         return $this->goldAmount;

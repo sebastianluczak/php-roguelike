@@ -12,13 +12,14 @@ abstract class AbstractKeystone extends AbstractLoot
     {
         parent::__construct();
 
+        $this->weight = 5;
         $this->lootType = LootTypeEnum::KEYSTONE();
     }
 
-    public function __toString(): string
+    public function getFormattedName(): string
     {
         return sprintf(
-            "%s %s",
+            '%s %s',
             GameIconEnum::GEM(),
             $this->getName()
         );

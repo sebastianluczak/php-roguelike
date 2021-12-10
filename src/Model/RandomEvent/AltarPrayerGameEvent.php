@@ -17,9 +17,8 @@ class AltarPrayerGameEvent extends AbstractRandomEvent
     {
         parent::__construct();
         $this->player = $player;
-        // todo add changeable events
-        $this->effect = new RegenHealthEffect($player, sqrt($player->getStats()->getIntelligence()));
-        $this->lastsForSeconds = $this->lastsForSeconds + sqrt($player->getStats()->getIntelligence());
+        $this->effect = new RegenHealthEffect($player, (int) ceil(sqrt($player->getStats()->getIntelligence())));
+        $this->lastsForSeconds = (int) ceil(($this->lastsForSeconds + ceil(sqrt($player->getStats()->getIntelligence()))));
 
         $this->type = RandomEventEffectTypeEnum::POSITIVE();
         $this->lastsFrom = CarbonImmutable::now();
@@ -29,7 +28,7 @@ class AltarPrayerGameEvent extends AbstractRandomEvent
 
     public function getDescription(): string
     {
-        return "You have pleased the Gods...";
+        return 'You feel rush of energy flowing through your body';
     }
 
     public function applyEffect(): void

@@ -16,44 +16,44 @@ class Leaderboard
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $playerName;
+    private string $playerName;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $playerLevel;
+    private int $playerLevel;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $dungeonLevel;
+    private int $dungeonLevel;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $goldAmount;
+    private int $goldAmount;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $kills;
+    private int $kills;
 
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private $createdAt;
+    private DateTimeImmutable $createdAt;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPlayerName(): ?string
+    public function getPlayerName(): string
     {
         return $this->playerName;
     }
@@ -65,7 +65,7 @@ class Leaderboard
         return $this;
     }
 
-    public function getPlayerLevel(): ?int
+    public function getPlayerLevel(): int
     {
         return $this->playerLevel;
     }
@@ -77,7 +77,7 @@ class Leaderboard
         return $this;
     }
 
-    public function getDungeonLevel(): ?int
+    public function getDungeonLevel(): int
     {
         return $this->dungeonLevel;
     }
@@ -89,7 +89,7 @@ class Leaderboard
         return $this;
     }
 
-    public function getGoldAmount(): ?int
+    public function getGoldAmount(): int
     {
         return $this->goldAmount;
     }
@@ -101,7 +101,7 @@ class Leaderboard
         return $this;
     }
 
-    public function getKills(): ?int
+    public function getKills(): int
     {
         return $this->kills;
     }
@@ -113,7 +113,7 @@ class Leaderboard
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }

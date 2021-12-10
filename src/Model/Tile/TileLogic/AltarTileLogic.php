@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\GameIconEnum;
@@ -14,51 +16,51 @@ class AltarTileLogic implements TileLogicInterface
 {
     protected SkillBoost $skillBoost;
     protected string $rawMessage;
-    protected string $messageClass;
+    protected MessageClassEnum $messageClass;
     protected RandomEventInterface $event;
 
-    public function process(PlayerInterface $player)
-   {
-       if ($player->getGold() > 10) {
-           $thrownGold = random_int(1, $player->getGold());
-           $player->getInventory()->subtractGoldAmount($thrownGold);
-           $this->rawMessage = "🧍 You've thrown " . GameIconEnum::GOLD() . " " . $thrownGold . " gold into the altar.";
-           $this->messageClass = MessageClassEnum::LOOT();
+    public function process(PlayerInterface $player): void
+    {
+        if ($player->getInventory()->getGoldAmount() > 10) {
+            $thrownGold = random_int(1, $player->getInventory()->getGoldAmount());
+            $player->getInventory()->subtractGoldAmount($thrownGold);
+            $this->rawMessage = "🧍 You've thrown ".GameIconEnum::GOLD().' '.$thrownGold.' gold into the altar.';
+            $this->messageClass = MessageClassEnum::LOOT();
 
-           $roll = random_int(1, 10) + sqrt($player->getStats()->getIntelligence());
-           if ($roll >= 5) {
-               $this->event = new AltarPrayerGameEvent($player);
-           }
-       } else {
-           $this->rawMessage = "🧍 You've angered the gods...";
-           $this->messageClass = MessageClassEnum::IMPORTANT();
-       }
-   }
+            $roll = random_int(1, 10) + sqrt($player->getStats()->getIntelligence());
+            if ($roll >= 5) {
+                $this->event = new AltarPrayerGameEvent($player);
+            }
+        } else {
+            $this->rawMessage = "🧍 You've angered the gods...";
+            $this->messageClass = MessageClassEnum::IMPORTANT();
+        }
+    }
 
-   public function hasAdventureLogMessage(): bool
-   {
-       return !empty($this->rawMessage);
-   }
+    public function hasAdventureLogMessage(): bool
+    {
+        return !empty($this->rawMessage);
+    }
 
-   public function getAdventureLogMessage(): string
-   {
-       return $this->rawMessage;
-   }
+    public function getAdventureLogMessage(): string
+    {
+        return $this->rawMessage;
+    }
 
-   public function getAdventureLogMessageClass(): string
-   {
+    public function getAdventureLogMessageClass(): MessageClassEnum
+    {
         return $this->messageClass;
-   }
+    }
 
-   public function hasEncounter(): bool
-   {
-       return false;
-   }
+    public function hasEncounter(): bool
+    {
+        return false;
+    }
 
-   public function getEncounteredCreature(): ?CreatureInterface
-   {
-       return null;
-   }
+    public function getEncounteredCreature(): ?CreatureInterface
+    {
+        return null;
+    }
 
     public function getEvent(): RandomEventInterface
     {

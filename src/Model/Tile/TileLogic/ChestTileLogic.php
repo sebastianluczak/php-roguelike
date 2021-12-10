@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Tile\TileLogic;
 
 use App\Enum\MessageClassEnum;
@@ -12,45 +14,45 @@ class ChestTileLogic implements TileLogicInterface
 {
     protected Gold $gold;
     protected string $rawMessage;
-    protected string $messageClass;
+    protected MessageClassEnum $messageClass;
     protected RandomEventInterface $event;
 
     public function __construct(int $scale)
     {
         $this->gold = new Gold($scale);
-        $this->rawMessage = "You've picked up 💰 " . $this->gold->getAmount() . " gold.";
+        $this->rawMessage = "You've picked up 💰 ".$this->gold->getAmount().' gold.';
         $this->messageClass = MessageClassEnum::LOOT();
     }
 
-    public function process(PlayerInterface $player)
-   {
-       $player->getInventory()->addGoldAmount($this->gold->getAmount());
-   }
+    public function process(PlayerInterface $player): void
+    {
+        $player->getInventory()->addGoldAmount($this->gold->getAmount());
+    }
 
-   public function hasAdventureLogMessage(): bool
-   {
-       return !empty($this->rawMessage);
-   }
+    public function hasAdventureLogMessage(): bool
+    {
+        return !empty($this->rawMessage);
+    }
 
-   public function getAdventureLogMessage(): string
-   {
-       return $this->rawMessage;
-   }
+    public function getAdventureLogMessage(): string
+    {
+        return $this->rawMessage;
+    }
 
-   public function getAdventureLogMessageClass(): string
-   {
+    public function getAdventureLogMessageClass(): MessageClassEnum
+    {
         return $this->messageClass;
-   }
+    }
 
-   public function hasEncounter(): bool
-   {
-       return false;
-   }
+    public function hasEncounter(): bool
+    {
+        return false;
+    }
 
-   public function getEncounteredCreature(): ?CreatureInterface
-   {
-       return null;
-   }
+    public function getEncounteredCreature(): ?CreatureInterface
+    {
+        return null;
+    }
 
     public function getEvent(): RandomEventInterface
     {

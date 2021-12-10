@@ -4,7 +4,6 @@ namespace App\Command;
 
 use App\Service\GameService;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -35,7 +34,7 @@ class GameCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function clearScreen()
+    private function clearScreen(): void
     {
         echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
     }

@@ -17,26 +17,28 @@ use MyCLabs\Enum\Enum;
  * @method static TIME()
  * @method static STATS()
  * @method static INVENTORY()
+ * @method static WEIGHT()
  * @method static SKULL()
  * @method static GEM()
  * @method static POTION()
  */
 class GameIconEnum extends Enum
 {
-    private const DEV_MODE = '🦄';
-    private const GOLD = '💰';
-    private const HEALTH = '💗';
-    private const KILLS = '☠️';
-    private const WEAPON = '🗡️';
-    private const SHIELD = '🛡️';
-    private const BUFFS = '💊';
-    private const PLAYER = '🧍';
-    private const MAP = '🗺️';
-    private const TIME = '⏰';
-    private const STATS = '🧠';
-    private const INVENTORY = '🧳';
+    public const DEV_MODE = '🦄';
+    public const GOLD = '💰';
+    public const HEALTH = '💗';
+    public const KILLS = '☠️';
+    public const WEAPON = '🗡️';
+    public const SHIELD = '🛡️';
+    public const BUFFS = '💊';
+    public const PLAYER = '🧍';
+    public const MAP = '🗺️';
+    public const TIME = '⏰';
+    public const STATS = '🧠';
+    public const INVENTORY = '🧳';
+    public const WEIGHT = '🎒';
 
-    private const SKULL = '💀';
-    private const GEM = '💎';
-    private const POTION = '🧪';
+    public const SKULL = '💀';
+    public const GEM = '💎';
+    public const POTION = '🧪';
 }

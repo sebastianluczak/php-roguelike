@@ -2,9 +2,6 @@
 
 namespace App\Model\Tile;
 
-use App\Model\Creature\Dragon;
-use App\Model\Creature\Golem;
-use App\Model\Creature\Imp;
 use App\Model\Stats\StatsInterface;
 use App\Model\Tile\TileLogic\CorridorTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
@@ -38,6 +35,6 @@ class CorridorTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<fg=gray>.</>";
+        return '<fg=gray>.</>';
     }
 }

@@ -10,21 +10,22 @@ class AdventureLogMessage implements AdventureLogMessageInterface
 {
     protected string $message;
     protected string $rawMessage;
-    protected ?string $messageClass;
+    protected MessageClassEnum $messageClass;
 
-    public function __construct(string $message, CarbonImmutable $gameStartTime, string $messageClass = null)
+    public function __construct(string $message, CarbonImmutable $gameStartTime, MessageClassEnum $messageClass = null)
     {
         $timestamp = Carbon::now();
-        $this->messageClass = $messageClass;
-        if ($this->messageClass == null) {
+        if (null == $messageClass) {
             $this->messageClass = MessageClassEnum::STANDARD();
+        } else {
+            $this->messageClass = $messageClass;
         }
         $diff = $gameStartTime->diff($timestamp);
-        $this->rawMessage = "[" . $diff->format("%H:%I:%S") . "] " . $message . " ";
+        $this->rawMessage = '['.$diff->format('%H:%I:%S').'] '.$message.' ';
 
-        $styleBegin = "<fg=" . $this->getImportance() . '>';
-        $styleEnd = "</>";
-        $this->message = $styleBegin . "[" . $diff->format("%H:%I:%S") . "] " . $message . $styleEnd;
+        $styleBegin = '<fg='.$this->getImportance().'>';
+        $styleEnd = '</>';
+        $this->message = $styleBegin.'['.$diff->format('%H:%I:%S').'] '.$message.$styleEnd;
     }
 
     public function getMessage(): string
@@ -37,9 +38,6 @@ class AdventureLogMessage implements AdventureLogMessageInterface
         return strlen($this->rawMessage);
     }
 
-    /**
-     * @return string|null
-     */
     public function getMessageClass(): string
     {
         return $this->messageClass;

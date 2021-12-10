@@ -7,7 +7,7 @@ use App\Model\Player\PlayerInterface;
 
 /**
  * Used at:
- * CreatureEncounteredHandler::__invoke()
+ * CreatureEncounteredHandler::__invoke().
  */
 class CreatureEncounteredMessage
 {
@@ -20,17 +20,11 @@ class CreatureEncounteredMessage
         $this->player = $player;
     }
 
-    /**
-     * @return CreatureInterface
-     */
     public function getCreature(): CreatureInterface
     {
         return $this->creature;
     }
 
-    /**
-     * @return PlayerInterface
-     */
     public function getPlayer(): PlayerInterface
     {
         return $this->player;

@@ -8,11 +8,14 @@ use Irfa\Gatcha\Roll;
 
 abstract class AbstractLoot implements LootInterface
 {
-    protected string $name;
+    protected int $amount = 1;
+    protected int $weight = 1;
+    protected string $name = '[WIP][ITEM][NO_NAMED]';
     protected LootClassEnum $lootClass;
     protected string $lootType;
     protected string $dice;
     protected string $lootPickupMessage;
+    protected int $priceValue = 1;
 
     public function __construct()
     {
@@ -21,7 +24,7 @@ abstract class AbstractLoot implements LootInterface
             LootClassEnum::A()->getKey() => 1,
             LootClassEnum::B()->getKey() => 2,
             LootClassEnum::C()->getKey() => 10,
-            LootClassEnum::D()->getKey() => 60
+            LootClassEnum::D()->getKey() => 60,
         ];
 
         $lootClassRoll = Roll::put($lootClassChances)->spin();
@@ -43,7 +46,7 @@ abstract class AbstractLoot implements LootInterface
         return $this->lootClass;
     }
 
-    public function setLootClass(LootClassEnum $lootClass = null)
+    public function setLootClass(LootClassEnum $lootClass = null): void
     {
         if (!$lootClass) {
             $this->lootClass = LootClassEnum::D();
@@ -92,7 +95,7 @@ abstract class AbstractLoot implements LootInterface
     }
 
     public function getMinRollValue(): int
-    { 
+    {
         $minRoll = 0;
         $diceBag = DiceBag::factory($this->getDice());
         foreach ($diceBag->getDicePools() as $dicePool) {
@@ -107,5 +110,25 @@ abstract class AbstractLoot implements LootInterface
     public function getAverageRoll(): float
     {
         return ($this->getMinRollValue() + $this->getMaxRollValue()) / 2;
+    }
+
+    public function getPriceValue(): int
+    {
+        return $this->priceValue;
+    }
+
+    public function getFormattedName(): string
+    {
+        return $this->name;
+    }
+
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
+
+    public function getWeight(): int
+    {
+        return $this->weight;
     }
 }

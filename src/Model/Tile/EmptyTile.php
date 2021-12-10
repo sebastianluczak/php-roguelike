@@ -35,6 +35,6 @@ class EmptyTile extends AbstractTile
 
     public function draw(): string
     {
-        return " ";
+        return ' ';
     }
 }

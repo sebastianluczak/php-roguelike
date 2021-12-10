@@ -29,47 +29,28 @@ class CreatureService
     public function handleFight(CreatureInterface $creature, PlayerInterface $player): void
     {
         $this->messageBus->dispatch(new AddAdventureLogMessage(
-            "☠️ Encountered " . $creature->getName() . " 💗" . $creature->getHealth() . "/🗡️" . $creature->getWeaponSlot()->getAverageRoll() . "/🛡️" . $creature->getArmorSlot()->getAverageRoll(),
+            '☠️ Encountered '.$creature->getName().' 💗'.$creature->getHealth().'/🗡️'.$creature->getWeaponSlot()->getAverageRoll().'/🛡️'.$creature->getArmorSlot()->getAverageRoll(),
             MessageClassEnum::IMPORTANT()
         ));
 
         $turn = 1;
         while ($creature->getHealth() >= 0) {
-            if ($turn > 21) {
-                // TODO critical issue
-                break;
-            }
-
-            // check initiative
-            // todo initiative rolls
             // todo add critical hits
-
             // calculate creature hit damage
-            $playerDamageReduction = DiceBag::factory($player->getInventory()->getArmorSlot()->getDice())->getTotal();
-            $creatureDamageRoll =  DiceBag::factory($creature->getWeaponSlot()->getDice())->getTotal();
-            $creatureHitDamage = (ceil($creatureDamageRoll - $playerDamageReduction) > 0)?ceil($creatureDamageRoll - $playerDamageReduction):1;
-
+            $creatureHitDamage = $this->calculateCreatureHitDamage($player, $creature);
             // calculate player damage
-            $creatureDamageReduction = ceil(DiceBag::factory($creature->getArmorSlot()->getDice())->getTotal() / 2);
-            $playerHitDamageRoll = DiceBag::factory($player->getInventory()->getWeaponSlot()->getDice())->getTotal() + $player->getStats()->getStrength();
-            $playerHitDamage = (ceil($playerHitDamageRoll - $creatureDamageReduction) > 0)?ceil($playerHitDamageRoll - $creatureDamageReduction):1;
-            /*$this->messageBus->dispatch(
-                new AddAdventureLogMessage(
-                    "CreatureDamageReduction: " . $creatureDamageReduction . ", playerHitDamageRoll: " . $playerHitDamageRoll . ", playerHitDamage: " . $playerHitDamage . " // " .
-                    "PlayerDamageReduction: " . $playerDamageReduction . ", creatureDamageRoll: " . $creatureDamageRoll . ", creatureHitDamage: " . $creatureHitDamage,
-                    MessageClassEnum::STANDARD()
-                )
-            );*/
+            $playerHitDamage = $this->calculatePlayerDamage($creature, $player);
+
             $this->messageBus->dispatch(
                 new AddAdventureLogMessage(
-                    "🗡️ Turn " . $turn . " - " . $creature->getName() . " (💗" . $creature->getHealth() . "/🗡".$creatureHitDamage.") vs. " . $player->getPlayerName() . " (💗" . $player->getHealth()->getHealth() . "/🗡".$playerHitDamage.")",
+                    '[SCALE:'.$creature->getScale().'] 🗡️ Turn '.$turn.' - '.$creature->getName().' (💗'.$creature->getHealth().'/🗡'.$creatureHitDamage.') vs. '.$player->getName().' (💗'.$player->getHealth()->getHealth().'/🗡'.$playerHitDamage.')',
                     MessageClassEnum::STANDARD()
                 )
             );
 
             $playerInitiative = $player->getInitiative();
             $creatureInitiative = $creature->getInitiative();
-            // this check doesn't really matter
+
             if ($playerInitiative < $creatureInitiative) {
                 $player->getHealth()->modifyHealth($creatureHitDamage, HealthActionEnum::DECREASE());
                 $creature->decreaseHealth($playerHitDamage);
@@ -82,12 +63,25 @@ class CreatureService
                 throw new GameOverException($creature);
             }
 
-            $turn++;
+            ++$turn;
         }
 
-        if ($creature->getHealth() <= 0) {
-            // messageBus
-            $this->messageBus->dispatch(new CreatureGetsKilledMessage($creature, $player));
-        }
+        $this->messageBus->dispatch(new CreatureGetsKilledMessage($creature, $player));
+    }
+
+    private function calculateCreatureHitDamage(PlayerInterface $player, CreatureInterface $creature): int
+    {
+        $playerDamageReduction = DiceBag::factory($player->getInventory()->getArmorSlot()->getDice())->getTotal();
+        $creatureDamageRoll = DiceBag::factory($creature->getWeaponSlot()->getDice())->getTotal();
+
+        return (int) (ceil($creatureDamageRoll - $playerDamageReduction) > 0) ? (int) (ceil($creatureDamageRoll - $playerDamageReduction)) : 1;
+    }
+
+    private function calculatePlayerDamage(CreatureInterface $creature, PlayerInterface $player): int
+    {
+        $creatureDamageReduction = ceil(DiceBag::factory($creature->getArmorSlot()->getDice())->getTotal() / 2);
+        $playerHitDamageRoll = DiceBag::factory($player->getInventory()->getWeaponSlot()->getDice())->getTotal() + $player->getStats()->getStrength();
+
+        return (int) (ceil($playerHitDamageRoll - $creatureDamageReduction) > 0) ? (int) (ceil($playerHitDamageRoll - $creatureDamageReduction)) : 1;
     }
 }

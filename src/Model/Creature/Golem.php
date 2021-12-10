@@ -2,16 +2,11 @@
 
 namespace App\Model\Creature;
 
-use App\Enum\Creature\CreatureClassEnum;
-use App\Enum\GameIconEnum;
-use App\Model\Loot\Armor\CreatureGenericArmor;
 use App\Model\Loot\Gold;
-use App\Model\Loot\Weapon\CreatureMeleeWeapon;
 use App\Model\Player\Inventory\InventoryBagInterface;
 use App\Model\Player\PlayerInterface;
-use App\Model\Stats\Stats;
 
-class Golem extends AbstractCreature
+class Golem extends AbstractCommonCreature
 {
     private const BASE_STRENGTH = 4;
     private const BASE_ENDURANCE = 8;
@@ -20,28 +15,14 @@ class Golem extends AbstractCreature
 
     public function __construct(int $scale)
     {
-        parent::__construct();
+        parent::__construct(self::COMMON_NAME, $scale, self::BASE_STRENGTH, self::BASE_ENDURANCE, self::BASE_LUCK);
         $this->scale = $scale;
-
-        $this->stats = new Stats();
-        $this->stats->modifyStrength(ceil(self::BASE_STRENGTH * ($this->creatureClass->getValue() / 100)) * sqrt($scale));
-        $this->stats->modifyEndurance(ceil(self::BASE_ENDURANCE * ($this->creatureClass->getValue() / 100)) * sqrt($scale));
-        $this->stats->modifyLuck(ceil(self::BASE_LUCK * ($this->creatureClass->getValue() / 100)) * sqrt($scale));
-        $this->weaponSlot = new CreatureMeleeWeapon($this->stats);
-        $this->armorSlot = new CreatureGenericArmor($this->stats);
-
-        if ($this->creatureClass == CreatureClassEnum::ELITE() || $this->creatureClass == CreatureClassEnum::LEGENDARY()) {
-            $this->name = "<fg=yellow>" . GameIconEnum::SKULL() . " " . $this->creatureClass->getKey() . " " . self::COMMON_NAME . " " . $this->getRawName() . "</>";
-        } else {
-            $this->name = self::COMMON_NAME . " - " . $this->getRawName();
-        }
-        $this->health = ceil($this->stats->getEndurance() * ceil($scale/2) * ($this->creatureClass->getValue() / 100));
         $this->experience = $this->createRandomNumberInRangeWithScale(20, 50, $scale);
     }
 
     public function getLootInventoryBag(PlayerInterface $player): InventoryBagInterface
     {
-        $this->loot->addItem(new Gold(1.5 * $this->scale));
+        $this->loot->addItem(new Gold((int) ceil(1.5 * $this->scale)));
 
         return $this->loot;
     }

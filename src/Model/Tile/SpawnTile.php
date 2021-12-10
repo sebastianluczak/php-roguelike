@@ -3,8 +3,8 @@
 namespace App\Model\Tile;
 
 use App\Model\Stats\StatsInterface;
-use App\Model\Tile\TileLogic\TileLogicInterface;
 use App\Model\Tile\TileLogic\NoLogic;
+use App\Model\Tile\TileLogic\TileLogicInterface;
 
 class SpawnTile extends AbstractTile
 {
@@ -15,7 +15,7 @@ class SpawnTile extends AbstractTile
 
     public function isPassable(): bool
     {
-        return true;
+        return false;
     }
 
     public function isSpawn(): bool
@@ -35,6 +35,6 @@ class SpawnTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<options=bold,blink;fg=bright-red>@</>";
+        return '<options=bold,blink;fg=bright-red>@</>';
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Model\Player;
 
+use App\Model\Dialogue\DialogueInterface;
 use App\Model\Player\Health\PlayerHealth;
 use App\Model\Player\Health\PlayerHealthInterface;
 use App\Model\Player\Inventory\PlayerInventory;
@@ -16,34 +17,28 @@ class Player implements PlayerInterface
     protected string $name;
     protected int $killCount = 0;
     protected int $mapLevel = 1;
+    protected bool $inDialogue = false;
 
     protected PlayerCoordinatesInterface $coordinates;
     protected PlayerHealthInterface $health;
     protected StatsInterface $stats;
     protected PlayerInventoryInterface $inventory;
     protected PlayerLevelInterface $level;
+    protected ?DialogueInterface $currentDialogue;
 
-    public function __construct(string $name, PlayerCoordinatesInterface $coordinates, int $health = 100)
+    public function __construct(string $name, PlayerCoordinatesInterface $coordinates)
     {
         $this->name = $name;
-        $this->health = new PlayerHealth($health);
+        $this->health = new PlayerHealth();
         $this->level = new PlayerLevel();
         $this->coordinates = $coordinates;
         $this->stats = new Stats();
-        $this->inventory = new PlayerInventory($this->stats);
+        $this->inventory = new PlayerInventory();
     }
 
-    public function getPlayerName(): string
+    public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGold(): int
-    {
-        return $this->inventory->getGoldAmount();
     }
 
     public function getHealth(): PlayerHealthInterface
@@ -107,8 +102,44 @@ class Player implements PlayerInterface
         return $this->getStats()->getPerception() * $this->getStats()->getPerception() - $this->getStats()->getPerception();
     }
 
+    public function getCarryWeightLimit(): int
+    {
+        return (int) sqrt($this->getStats()->getStrength()) * 100 * $this->getMapLevel() + $this->getStats()->getStrength();
+    }
+
+    public function getInDialogue(): bool
+    {
+        return $this->inDialogue;
+    }
+
+    public function setInDialogue(bool $true): PlayerInterface
+    {
+        $this->inDialogue = $true;
+
+        return $this;
+    }
+
+    public function setCurrentDialogue(?DialogueInterface $dialogue = null): void
+    {
+        $this->currentDialogue = $dialogue;
+    }
+
+    public function getCurrentDialogue(): ?DialogueInterface
+    {
+        return $this->currentDialogue;
+    }
+
+    public function isOverburdened(): bool
+    {
+        if ($this->getCarryWeightLimit() - $this->getInventory()->getItemsWeight() >= 0) {
+            return false; // not overburdened
+        }
+
+        return true;
+    }
+
     public function draw(): string
     {
-        return "<color=bright-red>@</color>";
+        return '<color=bright-red>@</color>';
     }
 }

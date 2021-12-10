@@ -1,0 +1,46 @@
+name: "Rivermouth"
+size:
+  height: 34
+  width: 140
+
+places:
+  shop:
+    generation_class: App\Generator\Level\DefaultBoxRoomGenerator
+    logic_tile: App\Model\Tile\City\ShopTile
+    size: [ 7, 7 ]
+    starting_point: [ 21, 49 ]
+
+  church:
+    generation_class: App\Generator\Level\DefaultBoxRoomGenerator
+    logic_tile: App\Model\Tile\City\AltarTile
+    size: [ 9, 9 ]
+    starting_point: [ 3, 6 ]
+
+  # TBD of scope and shape and purpose
+  stables:
+    generation_class: App\Generator\Level\DefaultBoxRoomGenerator
+    size: [ 9, 9 ]
+    starting_point: [ 2, 49 ]
+
+  # TBD of scope and shape and purpose
+  # - buy health potions?
+  # - take quests? <---- I LIKE IT
+  tavern:
+    generation_class: App\Generator\Level\DefaultBoxRoomGenerator
+    size: [ 9, 9 ]
+    starting_point: [ 21, 12 ]
+
+  # TBD of scope and shape and purpose
+  # - Change allignment ?
+  # - get rid of curses <--- I LIKE IT
+  cathedral:
+    generation_class: App\Generator\Level\DefaultBoxRoomGenerator
+    size: [ 9, 9 ]
+    starting_point: [ 11, 82 ]
+
+  # Just an idea, could be good
+  #river:
+  #  generation_class: App\Generator\Level\RiverGenerator
+  #  size: 10
+  #  starting_point: [ 0, 60 ]
+  #  fluctuation: 4

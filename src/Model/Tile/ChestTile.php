@@ -2,7 +2,6 @@
 
 namespace App\Model\Tile;
 
-use App\Model\Loot\Gold;
 use App\Model\Stats\StatsInterface;
 use App\Model\Tile\TileLogic\ChestTileLogic;
 use App\Model\Tile\TileLogic\TileLogicInterface;
@@ -11,7 +10,7 @@ class ChestTile extends AbstractTile
 {
     public function isInteractable(): bool
     {
-        return true;
+        return false;
     }
 
     public function isPassable(): bool
@@ -36,6 +35,6 @@ class ChestTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<fg=bright-white>#</>";
+        return '<fg=bright-white>#</>';
     }
 }

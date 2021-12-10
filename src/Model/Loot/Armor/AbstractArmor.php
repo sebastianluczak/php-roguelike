@@ -11,6 +11,7 @@ abstract class AbstractArmor extends AbstractLoot
     {
         parent::__construct();
 
+        $this->weight = 10;
         $this->lootType = LootTypeEnum::ARMOR();
     }
 }

@@ -18,7 +18,7 @@ abstract class AbstractPotion extends AbstractLoot
     public function __toString(): string
     {
         return sprintf(
-            "%s %s",
+            '%s %s',
             GameIconEnum::POTION(),
             $this->getName()
         );

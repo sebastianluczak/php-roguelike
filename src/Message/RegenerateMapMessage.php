@@ -4,9 +4,8 @@ namespace App\Message;
 
 /**
  * Used at:
- * RegenerateMapHandler::__invoke()
+ * RegenerateMapHandler::__invoke().
  */
 class RegenerateMapMessage
 {
-
 }

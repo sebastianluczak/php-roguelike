@@ -35,6 +35,6 @@ class BossRoomTile extends AbstractTile
 
     public function draw(): string
     {
-        return "<fg=bright-red>x</>";
+        return '<fg=bright-red>x</>';
     }
 }
