@@ -1,0 +1,15 @@
+api_platform:
+    # The title of the API.
+    title: 'PHP-roguelike API'
+    version: '0.0.1'
+    enable_swagger: true
+    enable_swagger_ui: true
+    enable_docs: true
+    enable_profiler: true
+
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity']
+    patch_formats:
+        json: ['application/merge-patch+json']
+    swagger:
+        versions: [3]
