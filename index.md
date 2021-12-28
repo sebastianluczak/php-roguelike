@@ -2,7 +2,7 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/sebastianluczak/php-roguelike/badge)](https://www.codefactor.io/repository/github/sebastianluczak/php-roguelike)  ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/sebastianluczak/php-roguelike) ![GitHub repo size](https://img.shields.io/github/repo-size/sebastianluczak/php-roguelike) ![GitHub Sponsors](https://img.shields.io/github/sponsors/sebastianluczak) ![GitHub closed issues](https://img.shields.io/github/issues-closed/sebastianluczak/php-roguelike) ![GitHub issues](https://img.shields.io/github/issues/sebastianluczak/php-roguelike) ![GitHub](https://img.shields.io/github/license/sebastianluczak/php-roguelike) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/sebastianluczak/php-roguelike) ![Website](https://img.shields.io/website?url=https%3A%2F%2Fbrodaty.dev) ![GitHub last commit](https://img.shields.io/github/last-commit/sebastianluczak/php-roguelike)
 
-![Logo](docs/images/logo.png)
+![Logo](https://github.com/sebastianluczak/php-roguelike/blob/master/docs/images/logo.png?raw=true)
 
 
 ## What is this?
@@ -20,7 +20,7 @@ This game is done as a part of side-project to show'up some programming skills i
 > 
 > Meanwhile, ADOM at home:
 
-![Screenshot](docs/images/screenshot.png)
+![Screenshot](https://github.com/sebastianluczak/php-roguelike/blob/master/docs/images/screenshot.png?raw=true)
 
 ## Purpose
 
