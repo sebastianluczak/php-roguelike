@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f2a6066ea19f3e3ae181520d25d663f",
+    "content-hash": "9f8a74171f1df4a097d607800d31854e",
     "packages": [
         {
             "name": "andreasindal/rpgfaker",
@@ -8255,7 +8255,8 @@
     "platform": {
         "php": ">=7.4",
         "ext-ctype": "*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "ext-json": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "1.1.0"

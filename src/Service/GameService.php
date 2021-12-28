@@ -21,8 +21,15 @@ use App\Message\UseHealingPotionMessage;
 use App\Model\CityMap;
 use App\Model\Dialogue\DialogueInterface;
 use App\Model\Dialogue\EmptyDialogue;
+use App\Model\Game\StateOfGameModel;
+use App\Model\Loot\LootInterface;
 use App\Model\Map;
+use App\Model\Player\Inventory\InventoryBag;
+use App\Model\Player\Player;
+use App\Model\Player\PlayerCoordinates;
 use App\Model\Player\PlayerInterface;
+use App\Model\Stats\Stats;
+use App\Model\Stats\StatsInterface;
 use Carbon\Carbon;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,6 +43,8 @@ class GameService extends ConsoleOutputGameService
 
         while (true) {
             $player = $this->getPlayerService()->getPlayer();
+            $this->stateOfGameService->saveGameStateForPlayer($player);
+
             if ($player->getHealth()->getHealth() <= 0) {
                 break;
             }

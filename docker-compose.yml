@@ -35,6 +35,7 @@ services:
     volumes:
       - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+      - ./docker/supervisor/messenger-worker.conf:/etc/supervisor/conf.d/messenger-worker.conf
       - .:/app_current
 
   web:

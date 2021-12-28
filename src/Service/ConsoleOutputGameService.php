@@ -11,6 +11,7 @@ use App\Model\AdventureLog\AdventureLogInterface;
 use App\Model\AdventureLog\AdventureLogMessageInterface;
 use App\Model\Map;
 use App\Model\Player\PlayerInterface;
+use App\Service\Game\StateOfGameService;
 use Carbon\Carbon;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
@@ -25,6 +26,8 @@ class ConsoleOutputGameService
     protected MessageBusInterface $messageBus;
     protected LeaderboardService $leaderboardService;
     protected InternalClockService $internalClockService;
+    protected StateOfGameService $stateOfGameService;
+
     protected SerializerInterface $serializer;
     protected bool $devMode;
 
@@ -35,6 +38,7 @@ class ConsoleOutputGameService
         MessageBusInterface $messageBus,
         LeaderboardService $leaderboardService,
         InternalClockService $internalClockService,
+        StateOfGameService $stateOfGameService,
         SerializerInterface $serializer
     ) {
         $this->mapService = $mapService;
@@ -43,6 +47,7 @@ class ConsoleOutputGameService
         $this->messageBus = $messageBus;
         $this->leaderboardService = $leaderboardService;
         $this->internalClockService = $internalClockService;
+        $this->stateOfGameService = $stateOfGameService;
         $this->serializer = $serializer;
     }
 

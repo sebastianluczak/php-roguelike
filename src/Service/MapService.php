@@ -58,8 +58,12 @@ class MapService
         CorridorTile::class => 6000,
     ];
 
-    public function __construct(PlayerService $playerService, LoggerService $loggerService, MessageBusInterface $messageBus, YamlLevelParserService $levelParserService)
-    {
+    public function __construct(
+        PlayerService $playerService,
+        LoggerService $loggerService,
+        MessageBusInterface $messageBus,
+        YamlLevelParserService $levelParserService
+    ) {
         $this->playerService = $playerService;
         $this->loggerService = $loggerService;
         $this->messageBus = $messageBus;
@@ -76,7 +80,12 @@ class MapService
 
         $mapValid = $this->isMapValid();
         if (!$mapValid) {
-            $this->messageBus->dispatch(new AddAdventureLogMessage('Map regenerated due to errors: '.implode(', ', $this->mapErrors), MessageClassEnum::DEVELOPER()));
+            $this->messageBus->dispatch(
+                new AddAdventureLogMessage(
+                    'Map regenerated due to errors: '.implode(', ', $this->mapErrors),
+                    MessageClassEnum::DEVELOPER()
+                )
+            );
             $this->createNewLevel();
         } else {
             $this->mapErrors = [];
@@ -268,7 +277,9 @@ class MapService
 
         // remove player from previous tile
         if ($this->getMap() instanceof CityMap) {
-            if (in_array(PermanentTileTrait::class, array_keys((new \ReflectionClass(get_class($tile)))->getTraits()))) {
+            if (in_array(
+                PermanentTileTrait::class, array_keys((new \ReflectionClass(get_class($tile))
+                )->getTraits()))) {
                 while (true) {
                     // todo sometimes this fails in smaller rooms
                     // as it's PoC i'll leave it as it is
@@ -277,8 +288,15 @@ class MapService
                     // (and I should've used cursor from the beginning...)
                     $xCoordinateRandom = random_int(-1, 1);
                     $yCoordinateRandom = random_int(-1, 1);
-                    if ($this->getCityMap()->getTile($xcoordinate - $xCoordinateRandom, $ycoordinate - $yCoordinateRandom)->isPassable()) {
-                        $this->getMap()->replaceTile($tile, $xcoordinate - $xCoordinateRandom, $ycoordinate - $yCoordinateRandom);
+                    if ($this->getCityMap()->getTile(
+                        $xcoordinate - $xCoordinateRandom,
+                        $ycoordinate - $yCoordinateRandom
+                    )->isPassable()) {
+                        $this->getMap()->replaceTile(
+                            $tile,
+                            $xcoordinate - $xCoordinateRandom,
+                            $ycoordinate - $yCoordinateRandom
+                        );
 
                         break;
                     }
@@ -381,7 +399,8 @@ class MapService
         $allTiles = 0;
         foreach ($this->getMap()->getMapInstance() as $arrayOfTiles) {
             foreach ($arrayOfTiles as $mapTile) {
-                $mapTileStatistics[get_class($mapTile)] = (isset($mapTileStatistics[get_class($mapTile)])) ? $mapTileStatistics[get_class($mapTile)] + 1 : 1;
+                $mapTileStatistics[get_class($mapTile)] =
+                    (isset($mapTileStatistics[get_class($mapTile)])) ? $mapTileStatistics[get_class($mapTile)] + 1 : 1;
                 ++$allTiles;
             }
         }
@@ -424,12 +443,16 @@ class MapService
 
             if ($tileLogic->hasEncounter()) {
                 if ($tileLogic->getEncounteredCreature() instanceof CreatureInterface) {
-                    $this->messageBus->dispatch(new CreatureEncounteredMessage($tileLogic->getEncounteredCreature(), $player));
+                    $this->messageBus->dispatch(
+                        new CreatureEncounteredMessage($tileLogic->getEncounteredCreature(), $player)
+                    );
                 }
             }
 
             if ($tile instanceof ExitTile) {
-                $this->messageBus->dispatch(new AddAdventureLogMessage("You've reached new dungeon level", MessageClassEnum::SUCCESS()));
+                $this->messageBus->dispatch(
+                    new AddAdventureLogMessage("You've reached new dungeon level", MessageClassEnum::SUCCESS())
+                );
 
                 throw new NewLevelException();
             }
