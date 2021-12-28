@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Service\Game;
+
 use App\Factory\Game\StateOfGameFactory;
-use App\Message\AddAdventureLogMessage;
 use App\Message\SaveGameMessage;
 use App\Model\Game\StateOfGameModel;
 use App\Model\Player\PlayerInterface;
@@ -25,9 +27,6 @@ class StateOfGameService
         $this->stateOfGameModel = $this->stateOfGameFactory->create();
     }
 
-    /**
-     * @return ArrayCollection
-     */
     protected function getGameState(): ArrayCollection
     {
         $gameState = new ArrayCollection();

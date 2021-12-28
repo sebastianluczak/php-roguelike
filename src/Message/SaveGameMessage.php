@@ -15,9 +15,6 @@ class SaveGameMessage
         $this->stateOfGame = $stateOfGame;
     }
 
-    /**
-     * @return ArrayCollection
-     */
     public function getStateOfGame(): ArrayCollection
     {
         return $this->stateOfGame;

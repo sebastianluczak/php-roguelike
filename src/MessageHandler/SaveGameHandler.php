@@ -2,12 +2,7 @@
 
 namespace App\MessageHandler;
 
-use App\Enum\MessageClassEnum;
-use App\Message\AddAdventureLogMessage;
-use App\Message\CityPortalMessage;
 use App\Message\SaveGameMessage;
-use App\Model\CityMap;
-use App\Service\GameService;
 use App\Service\LoggerService;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -27,7 +22,7 @@ class SaveGameHandler implements MessageHandlerInterface
     {
         // save it to database todo
         foreach ($message->getStateOfGame()->toArray() as $serializerClass => $data) {
-            $this->loggerService->log("Class: " . $serializerClass . " for deserialization with data: " . $data);
+            $this->loggerService->log('Class: '.$serializerClass.' for deserialization with data: '.$data);
         }
     }
 }
