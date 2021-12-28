@@ -178,8 +178,8 @@ class GameService extends ConsoleOutputGameService
         PlayerInterface $player,
         OutputInterface $output,
         ?Map\MapInterface &$mapObject,
-        ?string &$buttonPressed): void
-    {
+        ?string &$buttonPressed
+    ): void {
         $dialogue = $player->getCurrentDialogue();
         if ($dialogue instanceof DialogueInterface) {
             if (!$dialogue instanceof EmptyDialogue) {

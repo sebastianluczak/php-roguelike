@@ -66,15 +66,15 @@ class RareChestTileLogic implements TileLogicInterface
             case LootTypeEnum::KEYSTONE():
             case LootTypeEnum::ARMOR():
             case LootTypeEnum::WEAPON():
-               $player->getInventory()->handleLoot($this->loot);
-               if (!$player->getInventory()->hasChanged()) {
-                   $this->rawMessage = 'You put '.$this->loot->getFormattedName()." in bag, you're better equipped (".$player->getInventory()->getSlotOfType($this->loot->getLootType())->getFormattedName().').';
-               }
-               break;
+                $player->getInventory()->handleLoot($this->loot);
+                if (!$player->getInventory()->hasChanged()) {
+                    $this->rawMessage = 'You put '.$this->loot->getFormattedName()." in bag, you're better equipped (".$player->getInventory()->getSlotOfType($this->loot->getLootType())->getFormattedName().').';
+                }
+                break;
             case LootTypeEnum::POTION():
-               $player->getInventory()->handleLoot($this->loot);
-               break;
-       }
+                $player->getInventory()->handleLoot($this->loot);
+                break;
+        }
     }
 
     public function hasAdventureLogMessage(): bool
