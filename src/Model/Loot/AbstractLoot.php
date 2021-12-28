@@ -13,7 +13,7 @@ abstract class AbstractLoot implements LootInterface
     protected string $name = '[WIP][ITEM][NO_NAMED]';
     protected LootClassEnum $lootClass;
     protected string $lootType;
-    protected string $dice;
+    protected string $dice = '1d1'; // TODO sort out all the dices and make some accessor for them
     protected string $lootPickupMessage;
     protected int $priceValue = 1;
 

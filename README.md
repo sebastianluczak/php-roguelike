@@ -1,4 +1,7 @@
 # php-roguelike
+
+[![CodeFactor](https://www.codefactor.io/repository/github/sebastianluczak/php-roguelike/badge)](https://www.codefactor.io/repository/github/sebastianluczak/php-roguelike)  ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/sebastianluczak/php-roguelike) ![GitHub repo size](https://img.shields.io/github/repo-size/sebastianluczak/php-roguelike) ![GitHub Sponsors](https://img.shields.io/github/sponsors/sebastianluczak) ![GitHub closed issues](https://img.shields.io/github/issues-closed/sebastianluczak/php-roguelike) ![GitHub issues](https://img.shields.io/github/issues/sebastianluczak/php-roguelike) ![GitHub](https://img.shields.io/github/license/sebastianluczak/php-roguelike) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/sebastianluczak/php-roguelike) ![Website](https://img.shields.io/website?url=https%3A%2F%2Fbrodaty.dev) ![GitHub last commit](https://img.shields.io/github/last-commit/sebastianluczak/php-roguelike)
+
 ![Logo](docs/images/logo.png)
 
 
@@ -93,3 +96,15 @@ Go figure the rest by yourself, see [here](https://github.com/sebastianluczak/ph
 8. Fight BOSS
 9. Die and repeat
 10. PROFIT
+
+## API
+
+> WHAT THE HECK?! RPG cli game in PHP with API?!
+
+Visit [127.0.0.1/api](https://127.0.0.1/api) and check and check out some neat features we're planning, like:
+- complete access to current state of the game being played via API
+- custom, high risk - high reward type one hit dungeons/mazes
+- NPC Dialogue API and CreatureProvider moved to microservice
+
+My plan is to be able to change/update/set state of player dynamically via API.
+I know I'm far from it because logic is inside loop of the game but ...
